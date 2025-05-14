@@ -5,4 +5,20 @@
   --brand-yellow: #ffc117;
   --brand-white: #f1f2f5;
   --error: #eb3e3e;
+  --font-pretendard:
+    "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+    system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo",
+    "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", sans-serif;
+}
+
+/* TODO : 브레이크 포인트 정의 해주기 */
+
+@layer base {
+  html {
+    font-family: var(--font-pretendard);
+  }
+  body {
+    font-family: var(--font-pretendard);
+  }
 }
