@@ -10,6 +10,20 @@ const pretendard = localFont({
   variable: "--font-pretendard",
 });
 
+const quanticoRegular = localFont({
+  src: '../assets/font/QuanticoRegular.ttf',
+  display: 'swap',
+  weight: '400',
+  variable: '--font-quantico-regular',
+});
+
+const quanticoBold = localFont({
+  src: '../assets/font/QuanticoBold.ttf',
+  display: 'swap',
+  weight: '700',
+  variable: '--font-quantico-bold',
+});
+
 export default function RootLayout({ children }) {
   return (
     <html lang="ko">
