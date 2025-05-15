@@ -15,7 +15,7 @@ export default function DevNavigation() {
     // 사용자 관련 라우트
     { path: "/signIn", name: "로그인" },
     { path: "/signUp", name: "회원가입" },
-    { path: "/article", name: "문서 목록" },
+    { path: "/article", name: "작업물" },
     { path: "/challenge", name: "챌린지" },
     // 관리자 관련 라우트
     { path: "/admin", name: "관리자 메인" },

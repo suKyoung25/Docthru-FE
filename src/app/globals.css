@@ -1,24 +1,54 @@
 @import "tailwindcss";
 
-:root {
-  --brand-black: #262626;
-  --brand-yellow: #ffc117;
-  --brand-white: #f1f2f5;
-  --error: #eb3e3e;
+/* ===========================
+   🌈 Theme Variables
+   =========================== */
+@theme {
+  /* ✅ Brand Colors */
+  --color-brand-black: #262626;
+  --color-brand-yellow: #ffc117;
+  --color-brand-white: #f1f2f5;
+
+  /* ✅ Grayscale (Design 시안 기반) */
+  --color-gray-900: #171717;
+  --color-gray-800: #262626;
+  --color-gray-700: #404040;
+  --color-gray-600: #525252;
+  --color-gray-500: #737373;
+  --color-gray-400: #a3a3a3;
+  --color-gray-300: #d4d4d4;
+  --color-gray-200: #e5e5e5;
+  --color-gray-100: #e8ebed;
+  --color-gray-50: #fafafa;
+
+  /* ✅ Utility Colors */
+  --color-error: #eb3e3e;
+
+  /* ✅ Typography */
   --font-pretendard:
     "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
     system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo",
     "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji",
     "Segoe UI Symbol", sans-serif;
+
+  /* ✅ Tailwind Breakpoint 대응 Container Size */
+
+  --container-sm: 450px; /* 모바일 */
+  --container-md: 768px; /* 태블릿 (iPad Mini) */
+  --container-xl: 1280px; /* 데스크탑 */
 }
 
-/* TODO : 브레이크 포인트 정의 해주기 */
-
+/* ===========================
+   🔤 Base Typography
+   =========================== */
 @layer base {
   html {
     font-family: var(--font-pretendard);
   }
+
   body {
     font-family: var(--font-pretendard);
+    background-color: var(--color-brand-white); /* 예시 */
+    color: var(--color-gray-900);
   }
 }
