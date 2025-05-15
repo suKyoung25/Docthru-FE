@@ -15,11 +15,12 @@ export default function DevNavigation() {
     // 사용자 관련 라우트
     { path: "/signIn", name: "로그인" },
     { path: "/signUp", name: "회원가입" },
-    { path: "/article", name: "작업물" },
-    { path: "/challenge", name: "챌린지" },
+    { path: "/challenges", name: "챌린지" },
+    { path: "/challenges/create", name: "챌린지 생성" },
     // 관리자 관련 라우트
     { path: "/admin", name: "관리자 메인" },
-    { path: "/admin/management", name: "관리자 대시보드" },
+    { path: "/admin/managements", name: "관리자 대시보드" },
+    { path: "/admin/challenges", name: "챌린지 관리" },
   ];
 
   return (
