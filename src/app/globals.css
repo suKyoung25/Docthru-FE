@@ -58,6 +58,10 @@
     color: var(--color-gray-900);
   }
 
+  button {
+    cursor: pointer;
+  }
+
   .font-quantico-regular {
     font-family: var(--font-quantico-regular);
     font-weight: 400;
