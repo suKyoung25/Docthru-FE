@@ -4,7 +4,7 @@ export default function Home() {
   // 랜딩에선 따로 헤더 넣어주기
   return (
     <Container>
-      <div className="bg-gray-100 xl:bg-red-500">랜딩 페이지</div>
+      <div className="bg-error">랜딩 페이지</div>
     </Container>
   );
 }
