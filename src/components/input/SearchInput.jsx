@@ -8,7 +8,7 @@ function SearchInput({ text }) {
       <div className="relative flex items-center">
         <Image
           src={search}
-          class="absolute left-[8px] h-[24px] w-[24px]"
+          className="absolute left-[8px] h-[24px] w-[24px]"
           alt="검색 돋보기"
         />
         <input
