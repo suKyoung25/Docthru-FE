@@ -51,16 +51,17 @@ const page = () => {
           <h2 className="text-3xl font-bold">BtnRoundedWithIcon</h2>
           <div>
             <div>
-              <div className={`${themesTitle}`}>
-                iconType = "continueChallenge" (default 설정)
-              </div>
-              <BtnRoundedWithIcon>내 작업물 보기</BtnRoundedWithIcon>
-            </div>
-            <div>
               <div className={`${themesTitle}`}>iconType = "goToMyWork"</div>
               <BtnRoundedWithIcon iconType="goToMyWork">
-                도전 계속하기
+                내 작업물 보기
               </BtnRoundedWithIcon>
+            </div>
+            <div>
+              <div className={`${themesTitle}`}>
+                {" "}
+                iconType = "continueChallenge" (default 설정)
+              </div>
+              <BtnRoundedWithIcon>도전 계속하기</BtnRoundedWithIcon>
             </div>
           </div>
         </div>
