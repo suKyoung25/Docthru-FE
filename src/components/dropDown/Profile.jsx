@@ -7,14 +7,14 @@ import { useRouter } from "next/navigation";
 // import adminImage from "@/assets/img/profile_admin.svg"
 
 function Profile() {
-  const router = useRouter;
+  const router = useRouter();
 
   const handleClickMychallenge = () => {
     //디버깅
     console.log("나의 챌린지 페이지로 이동");
 
     // Url은 아직 미정입니다. 아래는 예시입니다
-    router.push("/my/challanges");
+    router.push("/my/challenges");
   };
 
   const handleClickLogout = () => {
