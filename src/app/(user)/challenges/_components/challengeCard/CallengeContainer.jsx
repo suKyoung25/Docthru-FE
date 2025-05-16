@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
-import clock from "@/assets/clock.svg";
-import callengers from "@/assets/_status=small.svg";
+import clock from "@/assets/icon/ic_clock.svg";
+import callengers from "@/assets/icon/ic_person.svg";
 
 export default function CallengeContainerd({ height, type }) {
   return (
