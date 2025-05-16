@@ -1,7 +1,15 @@
 import Container from "@/components/container/PageContainer";
+import CallengeContainerd from "./_components/challengeCard/CallengeContainer";
 
 const page = () => {
-  return <Container>챌린지 페이지</Container>;
+  return (
+    <>
+      <Container>
+        챌린지 컨테이너 (type="slim" or "" 가능)
+        <CallengeContainerd height={"h-[176px]"} type={"slim"} />
+      </Container>
+    </>
+  );
 };
 
 export default page;
