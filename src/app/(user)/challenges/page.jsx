@@ -3,7 +3,7 @@ import CallengeContainerd from "./_components/challengeCard/CallengeContainer";
 import SearchInput from "@/components/input/SearchInput";
 import Profile from "@/components/dropDown/Profile";
 
-const page = () => {
+function page() {
   return (
     <>
       <Container>
@@ -20,6 +20,6 @@ const page = () => {
       </Container>
     </>
   );
-};
+}
 
 export default page;
