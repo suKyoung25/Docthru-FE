@@ -3,11 +3,11 @@ import Image from "next/image";
 import clock from "@/assets/clock.svg";
 import callengers from "@/assets/_status=small.svg";
 
-export default function CallengeContainerd({ width, height, type }) {
+export default function CallengeContainerd({ height, type }) {
   return (
     <>
       <div
-        className={`${height} ${width} flex- row flex items-center rounded-2xl bg-[var(--color-gray-50)] font-[var(--font-pretendard)]`}
+        className={`${height} flex items-center rounded-2xl bg-[var(--color-gray-50)] font-[var(--font-pretendard)]`}
       >
         <div
           className={`flex w-full flex-col items-center gap-[16px] px-[16px] ${type === "slim" ? "py-[12px]" : "py-[24px]"}`}
