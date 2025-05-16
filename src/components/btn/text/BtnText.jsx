@@ -1,9 +1,9 @@
 import React from "react";
 import Image from "next/image";
-import iconWithDraw from "@/assets/icon_withdraw.svg";
-import iconLink from "@/assets/icon_arrow_right_up.svg";
-import goToMyWork from "@/assets/icon_arrow_right.svg";
-import continueChallenge from "@/assets/icon_document.svg";
+import iconWithDraw from "@/assets/icon/ic_withdraw.svg";
+import iconLink from "@/assets/icon/ic_arrow_right_up.svg";
+import goToMyWork from "@/assets/icon/ic_arrow_right.svg";
+import continueChallenge from "@/assets/icon/ic_document.svg";
 
 const themes = {
   tonal: "bg-[#FFE7E7] text-[#fe4744]  sm:h-10 md:h-12 gap-1",
