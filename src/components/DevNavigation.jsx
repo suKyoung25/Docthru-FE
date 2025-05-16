@@ -16,10 +16,12 @@ export default function DevNavigation() {
     { path: "/signIn", name: "로그인" },
     { path: "/signUp", name: "회원가입" },
     { path: "/article", name: "작업물" },
-    { path: "/challenge", name: "챌린지" },
+    { path: "/challenges", name: "챌린지" },
     // 관리자 관련 라우트
     { path: "/admin", name: "관리자 메인" },
-    { path: "/admin/management", name: "관리자 대시보드" },
+    { path: "/admin/managements", name: "관리자 대시보드" },
+    // 공통 컴포넌트 관련 라우트
+    { path: "/componentsExample", name: "공통컴포넌트" },
   ];
 
   return (
