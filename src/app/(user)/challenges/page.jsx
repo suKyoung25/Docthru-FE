@@ -10,7 +10,7 @@ const page = () => {
         <CallengeContainerd height={"h-[176px]"} type={""} />
       </Container>
       <Container>
-        챌린지 검색창
+        챌린지 검색창 placeholder 텍스트 사이즈 변경 가능
         <SearchInput text={"text-[14px]"} />
       </Container>
     </>
