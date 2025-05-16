@@ -6,7 +6,7 @@ const page = () => {
     <>
       <Container>
         챌린지 컨테이너 (type="slim" or "" 가능)
-        <CallengeContainerd height={"h-[176px]"} type={"slim"} />
+        <CallengeContainerd height={"h-[176px]"} type={""} />
       </Container>
     </>
   );
