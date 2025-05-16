@@ -18,9 +18,8 @@ export default function DevNavigation() {
     { path: "/challenges", name: "챌린지" },
     { path: "/challenges/create", name: "챌린지 생성" },
     // 관리자 관련 라우트
-    { path: "/admin", name: "관리자 메인" },
-    { path: "/admin/managements", name: "관리자 대시보드" },
-    { path: "/admin/challenges", name: "챌린지 관리" },
+    { path: "/admin/management", name: "관리자 챌린지 관리" },
+    { path: "/admin/challenges", name: "관리자 챌린지 목록" },
   ];
 
   return (
