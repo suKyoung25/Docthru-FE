@@ -4,16 +4,14 @@ import CallengeContainerd from "./_components/challengeCard/CallengeContainer";
 const page = () => {
   return (
     <>
-      {" "}
       <Container>
-        챌린지 컨테이너 (type="slim"/"" 가능)
+        챌린지 컨테이너 (type="slim" or "" 가능)
         <CallengeContainerd
-          width={"w-[343px]"}
-          height={"h-[104px]"}
-          type={"slim"}
+          width={"w-[285px]"}
+          height={"h-[176px]"}
+          type={""}
         />
       </Container>
-      ;
     </>
   );
 };
