@@ -26,12 +26,12 @@ const iconMap = {
 };
 
 // 사용법
-export default function BtnText({ children, theme = "white", icon = "false" }) {
+export default function BtnText({ children, theme = "white", icon}) {
   return (
     <div
       className={`flex h-8 w-full items-center justify-center rounded-[10px] text-sm font-semibold sm:rounded-xl sm:text-base ${themes[theme]}`}
     >
-      {icon === "true" && theme === "tonal" ? (
+      {icon && theme === "tonal" ? (
         <div className="hidden sm:inline">{children}</div>
       ) : (
         <div>{children}</div>
@@ -39,7 +39,7 @@ export default function BtnText({ children, theme = "white", icon = "false" }) {
 
       {
         // icon이 true면서 theme가 tonal일 경우 포기 아이콘 보여주기
-        icon === "true" && theme === "tonal" && (
+        icon && theme === "tonal" && (
           <div>
             <Image
               src={iconWithDraw}
@@ -55,19 +55,6 @@ export default function BtnText({ children, theme = "white", icon = "false" }) {
         theme === "link" && (
           <div>
             <Image src={iconLink} alt="링크" className="h-6 w-6" />
-          </div>
-        )
-      }
-
-      {
-        // icon이 true면서 theme가 outlineWithIcon일 경우 포기 아이콘 보여주기
-        theme === "outlineWithIcon" && (
-          <div>
-            <Image
-              src={iconWithDraw}
-              alt="포기하기"
-              className="h-3 w-4 sm:h-5 sm:w-6"
-            />
           </div>
         )
       }

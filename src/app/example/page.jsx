@@ -16,15 +16,13 @@ const page = () => {
           <div>
             <div className={`${themesTitle}`}>
               theme = "tonal"
-              <br />
-              icon = "false" (default) - 입력하지 않으면 기본값
             </div>
             <BtnText theme="tonal">신청 거절</BtnText>
           </div>
           <div>
             <div className={`${themesTitle}`}>
               theme = "tonal" <br />
-              icon = "true"
+              icon = &#123;true&#125; 아이콘 노출
             </div>
             <BtnText theme="tonal" icon="true">
               포기
