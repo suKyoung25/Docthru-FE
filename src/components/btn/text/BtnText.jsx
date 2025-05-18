@@ -13,6 +13,18 @@ const themes = {
   link: "bg-opacity-50 sm:h-10 bg-[#F6F8FA] text-gray-700",
 };
 
+
+const iconMap = {
+  goToMyWork : {
+    src: goToMyWork,
+    alt: "내 작업물 보기"
+  },
+  continueChallenge : {
+    src: continueChallenge,
+    alt: "도전 계속하기"
+  }
+};
+
 // 사용법
 export default function BtnText({ children, theme = "white", icon = "false" }) {
   return (
@@ -63,6 +75,7 @@ export default function BtnText({ children, theme = "white", icon = "false" }) {
   );
 }
 
+
 export function BtnRoundedWithIcon({
   children,
   iconType = "continueChallenge",
@@ -72,19 +85,9 @@ export function BtnRoundedWithIcon({
       className={`flex h-8 w-full items-center justify-center gap-1 rounded-full border border-gray-800 bg-[var(--color-gray-50)] text-sm font-semibold sm:rounded-full`}
     >
       <div>{children}</div>
-      {iconType === "goToMyWork" ? (
-        <div>
-          <Image src={goToMyWork} alt="내 작업물 보기" className="h-4 w-4" />
-        </div>
-      ) : (
-        <div>
-          <Image
-            src={continueChallenge}
-            alt="도전 계속하기"
-            className="h-4 w-4"
-          />
-        </div>
-      )}
+      <div>
+        <Image src={iconMap[iconType].src} alt={iconMap[iconType].alt} className="h-4 w-4" />
+      </div>
     </div>
   );
 }
