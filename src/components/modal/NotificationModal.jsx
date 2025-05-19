@@ -8,7 +8,7 @@ export default function NotificationModal({ notifications = [], onClose }) {
       onClick={onClose} //모달 바깥영역 눌렀을 때 모달창 닫힘
     >
       <div
-        className="h-[465px] w-[343px] rounded-lg border border-gray-200 bg-white p-4 shadow-xl"
+        className="h-[465px] w-[343px] rounded-lg border-2 border-gray-200 bg-white p-4 shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-3 text-base font-semibold text-gray-800">알림</div>
@@ -22,7 +22,7 @@ export default function NotificationModal({ notifications = [], onClose }) {
               notifications.map((item) => (
                 <li
                   key={item.id}
-                  className="border-b border-gray-100 py-3 last:border-b-0"
+                  className="border-b border-gray-200 py-3 last:border-b-0"
                 >
                   <div className="mb-2 text-sm font-normal text-gray-800">
                     {item.message}
