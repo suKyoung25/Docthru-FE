@@ -3,6 +3,8 @@ import React from 'react'
 
 import DropdownListLeftLarge from '@/components/dropdown/list/DropdownListLeftLarge'
 import DropdownListMiddleLarge from '@/components/dropdown/list/DropdownListMiddleLarge'
+import DropdownListLeftSmall from '@/components/dropdown/list/DropdownListLeftSmall'
+import DropdownListMiddleSmall from '@/components/dropdown/list/DropdownListMiddleSmall'
 
 function page() {
   return (
@@ -10,7 +12,9 @@ function page() {
       {/* <CategoryClosed />
       <CategoryOpened />
       <CategoryItems /> */}
-      <DropdownListLeftLarge />
+      {/* <DropdownListLeftLarge /> */}
+      {/* <DropdownListLeftSmall /> */}
+      <DropdownListMiddleSmall />
       {/* <DropdownListMiddleLarge /> */}
       {/* <BlogChip />
       <OfficialDocChip />
