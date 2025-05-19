@@ -4,7 +4,7 @@ import React from "react";
 import check from "@/assets/icon/check.svg";
 import { useRouter } from "next/navigation";
 
-export default function DeleteModal({ onCancel, onConfirm, isLoggedIn }) {
+export default function DeleteModal({ text, onCancel, onConfirm, isLoggedIn }) {
   const router = useRouter();
 
   return (
@@ -19,7 +19,7 @@ export default function DeleteModal({ onCancel, onConfirm, isLoggedIn }) {
             </div>
             <div className="text-center text-base font-medium text-gray-800">
               {isLoggedIn ? (
-                "정말 삭제하시겠어요?"
+                text
               ) : (
                 <>
                   {"로그인이 필요한 기능이에요,"}
