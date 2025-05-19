@@ -1,6 +1,4 @@
 import React from "react";
-import icToggleDown from "../../assets/icon/ic_toggle_down.svg"
-import Image from "next/image";
 
 export default function CategoryItems() {
   return <div className="flex flex-col bg-white w-200 h-14 border-[#E5E5E5] border items-center justify-between rounded-lg">
