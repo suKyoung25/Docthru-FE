@@ -2,37 +2,25 @@ import React, { useState } from "react";
 import EyeIcon from "@/assets/icon/ic_eye_on.svg";
 import EyeOffIcon from "@/assets/icon/ic_eye_off.svg";
 
-export default function PasswordInput({ value, onChange, error }) {
+export default function ConfirmPasswordInput({ value, onChange, error }) {
   const [showPassword, setShowPassword] = useState(false);
-
-  const renderErrorMessage = () => {
-    if (error === "length") {
-      return (
-        <p className="mt-2 text-xs text-gray-900">8자 이상 입력해주세요</p>
-      );
-    }
-    if (error === "invalid") {
-      return <p className="text-error mt-2 text-xs">잘못된 비밀번호입니다.</p>;
-    }
-    return null;
-  };
 
   return (
     <div className="flex w-full max-w-[343px] flex-col md:max-w-[518px]">
       <label
-        htmlFor="password"
+        htmlFor="confirmPassword"
         className="mb-2 text-sm font-medium text-gray-900"
       >
-        비밀번호
+        비밀번호 확인
       </label>
 
       <div className="relative">
         <input
           type={showPassword ? "text" : "password"}
-          id="password"
+          id="confirmPassword"
           value={value}
           onChange={onChange}
-          placeholder="비밀번호를 입력하세요"
+          placeholder="비밀번호를 다시 입력하세요"
           className={`h-12 w-full rounded-[12px] border bg-white px-3 py-2 pr-10 text-sm outline-none ${
             error ? "border-error" : "border-gray-200"
           }`}
@@ -41,7 +29,7 @@ export default function PasswordInput({ value, onChange, error }) {
           type="button"
           onClick={() => setShowPassword((prev) => !prev)}
           className="absolute top-1/2 right-3 -translate-y-1/2"
-          aria-label="비밀번호 보기 토글"
+          aria-label="비밀번호 확인 보기 토글"
         >
           <img
             src={showPassword ? EyeIcon.src : EyeOffIcon.src}
@@ -51,7 +39,9 @@ export default function PasswordInput({ value, onChange, error }) {
         </button>
       </div>
 
-      {renderErrorMessage()}
+      {error && (
+        <p className="text-error mt-2 text-xs">비밀번호가 일치하지 않습니다.</p>
+      )}
     </div>
   );
 }
