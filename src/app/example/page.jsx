@@ -1,5 +1,6 @@
 import BtnText, { BtnRoundedWithIcon } from "@/components/btn/text/BtnText";
 import Container from "@/components/container/PageContainer";
+import Sort from "@/components/sort/Sort";
 
 const themesTitle = "mb-1 font-[600]";
 const page = () => {
@@ -14,9 +15,7 @@ const page = () => {
             분리함
           </span>
           <div>
-            <div className={`${themesTitle}`}>
-              theme = "tonal"
-            </div>
+            <div className={`${themesTitle}`}>theme = "tonal"</div>
             <BtnText theme="tonal">신청 거절</BtnText>
           </div>
           <div>
@@ -45,7 +44,7 @@ const page = () => {
             <BtnText theme="solidwhite">승인하기</BtnText>
           </div>
         </div>
-        <div className="m-10 mb-30 flex flex-col gap-4 bg-white p-4">
+        <div className="m-10 flex flex-col gap-4 bg-white p-4">
           <h2 className="text-3xl font-bold">BtnRoundedWithIcon</h2>
           <div>
             <div>
@@ -60,6 +59,27 @@ const page = () => {
                 iconType = "continueChallenge" (default 설정)
               </div>
               <BtnRoundedWithIcon>도전 계속하기</BtnRoundedWithIcon>
+            </div>
+          </div>
+        </div>
+        <div className="m-10 flex flex-col gap-4 bg-white p-4">
+          <h2 className="text-3xl font-bold">Sort</h2>
+          <div className={themesTitle}>
+            isAdminStatus: true - 승인대기 / false - 필터
+            <br />
+            isFiltered: true - 검은배경, 필터링 갯수(count)
+            <br />
+            onClick: params로 넘겨주시면 됩니다
+          </div>
+          <div className="flex flex-col gap-2">
+            <div>
+              <Sort isAdminStatus={true} />
+            </div>
+            <div>
+              <Sort />
+            </div>
+            <div>
+              <Sort isFiltered={true} count={3} />
             </div>
           </div>
         </div>

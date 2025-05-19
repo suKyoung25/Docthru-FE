@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import EyeIcon from "@/assets/ic_eye_on.svg";
-import EyeOffIcon from "@/assets/ic_eye_off.svg";
+import EyeIcon from "@/assets/icon/ic_eye_on.svg";
+import EyeOffIcon from "@/assets/icon/ic_eye_off.svg";
 
 export default function ConfirmPasswordInput({ value, onChange, error }) {
   const [showPassword, setShowPassword] = useState(false);
