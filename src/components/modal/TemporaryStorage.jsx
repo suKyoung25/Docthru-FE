@@ -84,7 +84,7 @@ export default function TemporaryStorage({
         <DeleteModal
           text="이전 작업물을 불러오시겠어요?"
           isLoggedIn={isLoggedIn}
-          onCancel={() => setSelectedIdx(null)}
+          onClose={() => setSelectedIdx(null)}
           onConfirm={handleLoadAndDelete}
         />
       )}
