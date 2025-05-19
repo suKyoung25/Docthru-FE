@@ -1,5 +1,134 @@
-import React from "react";
+"use client";
 
-export default function Reply() {
-  return <div>Reply</div>;
+import React, { useState, useRef, useEffect } from "react";
+import menuIcon from "@/assets/icon/ic_menu.svg";
+import profileImg from "@/assets/img/profile_member.svg";
+import Image from "next/image";
+import TextBox from "./TextBox";
+
+/**
+ * Reply 컴포넌트
+ *
+ * @param {Object} props
+ * @param {string} props.userName - 작성자 이름
+ * @param {string} props.timestamp - 작성 시간 문자열
+ * @param {string} props.content - 댓글 내용
+ * @param {(edited: string) => void} props.onEdit - 수정 완료 시 호출되는 함수
+ * @param {() => void} props.onDelete - 삭제하기 버튼 클릭 시 호출되는 함수
+ */
+export default function Reply({
+  userName = "익명",
+  timestamp = "방금 전",
+  content = "이건 테스트 입니다 이건 테스트 입니다...",
+  onEdit = () => {},
+  onDelete = () => {},
+}) {
+  const [isReplyMenu, setIsReplyMenu] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editedContent, setEditedContent] = useState(content);
+  const menuRef = useRef(null);
+
+  const handleMoreClick = () => {
+    setIsReplyMenu((prev) => !prev);
+  };
+
+  const handleEditClick = () => {
+    setIsEditMode(true);
+    setIsReplyMenu(false);
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditMode(false);
+    setEditedContent(content); // 원래 내용으로 복원
+  };
+
+  const handleSubmitEdit = () => {
+    onEdit(editedContent); // 부모에게 수정 내용 전달
+    setIsEditMode(false);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsReplyMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div className="relative w-full rounded-xl bg-white p-4">
+      <div className="mb-3 flex items-center justify-between">
+        {/* 유저 이름과 시간 */}
+        <div className="flex items-center gap-2">
+          <figure className="h-[32px] w-[32px] rounded-full bg-gray-200">
+            <Image src={profileImg} alt="프로필 이미지" />
+          </figure>
+          <div className="flex flex-col">
+            <span className="text-sm font-medium">{userName}</span>
+            <span className="text-sm text-gray-400">{timestamp}</span>
+          </div>
+        </div>
+
+        {/* 메뉴 or 수정 버튼 */}
+        {!isEditMode ? (
+          <div className="relative" ref={menuRef}>
+            <button
+              onClick={handleMoreClick}
+              className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-600"
+            >
+              <Image src={menuIcon} alt="더보기" />
+            </button>
+
+            {isReplyMenu && (
+              <div className="absolute top-7 right-0 z-10 w-[139px] rounded-md border border-gray-200 bg-white shadow-md">
+                <button
+                  onClick={handleEditClick}
+                  className="flex w-full items-center justify-center px-4 py-2 text-left text-[16px] text-gray-500 hover:text-gray-700"
+                >
+                  수정하기
+                </button>
+                <hr className="w-full border-gray-200" />
+                <button
+                  onClick={onDelete}
+                  className="flex w-full items-center justify-center px-4 py-2 text-left text-[16px] text-gray-500 hover:text-red-500"
+                >
+                  삭제하기
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="mt-2 flex justify-end gap-2 text-sm">
+            <button
+              onClick={handleCancelEdit}
+              className="px-5 py-2 font-bold text-gray-500"
+            >
+              취소
+            </button>
+            <button
+              onClick={handleSubmitEdit}
+              className="bg-brand-black rounded-xl px-3 py-2 text-[14px] font-bold text-white"
+            >
+              수정 완료
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* 내용 or 수정창 */}
+      {isEditMode ? (
+        <TextBox
+          value={editedContent}
+          onChange={(e) => setEditedContent(e.target.value)}
+          onSubmit={handleSubmitEdit}
+        />
+      ) : (
+        <p className="text-[16px] whitespace-pre-wrap text-gray-700">
+          {editedContent}
+        </p>
+      )}
+    </div>
+  );
 }
