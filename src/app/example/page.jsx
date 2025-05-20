@@ -27,6 +27,7 @@ const MODAL_COMPONENTS = {
 const themesTitle = "mb-1 font-[600]";
 const page = () => {
   const [openModal, setOpenModal] = useState(null);
+  const [selected, setSelected] = useState("option1");
 
   const handleOpen = (modalName) => setOpenModal(modalName);
   const handleClose = () => setOpenModal(null);
@@ -130,8 +131,7 @@ const page = () => {
             <div>
               <div className={`${themesTitle}`}>
               </div>
-              <BtnCheckbox checked={true} />
-              <BtnCheckbox />
+              <BtnCheckbox isChecked={true}>테스트</BtnCheckbox>
             </div>
           </div>
         </div>
@@ -141,8 +141,25 @@ const page = () => {
             <div>
               <div className={`${themesTitle}`}>
               </div>
-              <BtnRadio clicked={true} />
-              <BtnRadio />
+              <div>
+                <h2 className="text-lg font-semibold mb-4">옵션 선택</h2>
+
+                <BtnRadio
+                  value="option1"
+                  checked={selected === "option1"}
+                  onChange={setSelected}
+                >
+                  옵션 1
+                </BtnRadio>
+
+                <BtnRadio
+                  value="option2"
+                  checked={selected === "option2"}
+                  onChange={setSelected}
+                >
+                  옵션 2
+                </BtnRadio>
+              </div>
             </div>
           </div>
         </div>

@@ -1,15 +1,29 @@
-import clickedRadio from "@/assets/btn/btn_radio_click.svg";
-import nonClickedRadio from "@/assets/btn/btn_radio.svg"
-import Image from "next/image";
+import React, { useState } from "react";
 
+export default function BtnRadio ({ children, label, value, checked, onChange = () => {} }) {
 
-export default function BtnRadio ({clicked}) {
-    return (
-        <div>
-            {clicked ?
-                ( <Image src={clickedRadio} alt="클릭된상태" width={18} height={18}/> ) :
-                ( <Image src={nonClickedRadio} alt="클릭안된상태" width={18} height={18} /> )
-            }
+  return (
+   
+    <label className="inline-flex items-center cursor-pointer select-none mr-4">
+    <input
+        type="radio"
+        name="customRadio"
+        value={value}
+        checked={checked}
+        onChange={() => onChange(value)}
+        className="hidden"
+    />
+        <div
+        className={`w-[18px] h-[18px] rounded-full border flex items-center justify-center 
+            ${checked ? "bg-gray-800 border-gray-800" : "bg-gray-100 border-gray-200"}`}
+        >
+        <div
+            className={`w-2 h-2 bg-white rounded-full transition-opacity ${
+            checked ? "opacity-100" : "opacity-0"
+            }`}
+        />
         </div>
-    )
+        <span className="ml-2">{children}</span>
+    </label>
+  );
 }

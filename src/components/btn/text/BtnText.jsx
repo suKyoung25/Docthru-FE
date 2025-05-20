@@ -26,9 +26,10 @@ const iconMap = {
 };
 
 // 사용법
-export default function BtnText({ children, theme = "white", icon}) {
+export default function BtnText({ children, theme , icon, onClick}) {
   return (
-    <div
+    <button
+      onClick={onClick}
       className={`flex h-8 w-full items-center justify-center rounded-[10px] text-sm font-semibold sm:rounded-xl sm:text-base ${themes[theme]}`}
     >
       {icon && theme === "tonal" ? (
@@ -58,7 +59,7 @@ export default function BtnText({ children, theme = "white", icon}) {
           </div>
         )
       }
-    </div>
+    </button>
   );
 }
 
@@ -68,14 +69,14 @@ export function BtnRoundedWithIcon({
   iconType = "continueChallenge",
 }) {
   return (
-    <div
+    <button
       className={`flex h-8 w-full items-center justify-center gap-1 rounded-full border border-gray-800 bg-[var(--color-gray-50)] text-sm font-semibold sm:rounded-full`}
     >
       <div>{children}</div>
       <div>
         <Image src={iconMap[iconType].src} alt={iconMap[iconType].alt} className="h-4 w-4" />
       </div>
-    </div>
+    </button>
   );
 }
  
