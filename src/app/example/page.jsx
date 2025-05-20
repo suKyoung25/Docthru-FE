@@ -1,4 +1,5 @@
 "use client";
+import BtnPage from "@/components/btn/pagination/BtnPage";
 import BtnText, { BtnRoundedWithIcon } from "@/components/btn/text/BtnText";
 import Container from "@/components/container/PageContainer";
 import DeclineModal from "@/components/modal/DeclineModal";
@@ -9,6 +10,10 @@ import SignupModal from "@/components/modal/SignupModal";
 import TemporaryStorage from "@/components/modal/TemporaryStorage";
 import Sort from "@/components/sort/Sort";
 import { useState } from "react";
+import IconBtnRight, { IconBtnDown } from "@/components/btn/icon/BtnArrow";
+import IconPasswordVisible from "@/components/btn/icon/BtnIcon";
+import BtnCheckbox from "@/components/btn/form/BtnCheckbox";
+import BtnRadio from "@/components/btn/form/BtnRadio";
 
 const MODAL_COMPONENTS = {
   decline: DeclineModal,
@@ -82,6 +87,62 @@ const page = () => {
                 iconType = "continueChallenge" (default 설정)
               </div>
               <BtnRoundedWithIcon>도전 계속하기</BtnRoundedWithIcon>
+            </div>
+          </div>
+        </div>
+        <div className="m-10 flex flex-col gap-4 bg-white p-4">
+          <h2 className="text-3xl font-bold">BtnPage</h2>
+          <div>
+            <div>
+              <div className={`${themesTitle}`}>
+              </div>
+              <BtnPage>1</BtnPage>
+              <BtnPage theme="white">1</BtnPage>
+            </div>
+          </div>
+        </div>
+        <div className="m-10 flex flex-col gap-4 bg-white p-4">
+          <h2 className="text-3xl font-bold">BtnArrow</h2>
+          <div>
+            <div>
+              <div className={`${themesTitle}`}>
+              </div>
+              <IconBtnRight />
+              <IconBtnDown />
+              <IconBtnDown inactive={true} />
+            </div>
+          </div>
+        </div>
+        <div className="m-10 flex flex-col gap-4 bg-white p-4">
+          <h2 className="text-3xl font-bold">BtnIcon</h2>
+          <div>
+            <div>
+              <div className={`${themesTitle}`}>
+              </div>
+              <IconPasswordVisible />
+              <IconPasswordVisible on={true}/>
+            </div>
+          </div>
+        </div>
+         <div className="m-10 flex flex-col gap-4 bg-white p-4">
+          <h2 className="text-3xl font-bold">BtnCheckbox</h2>
+          <div>
+            <div>
+              <div className={`${themesTitle}`}>
+              </div>
+              <BtnCheckbox checked={true} />
+              <BtnCheckbox />
+            </div>
+          </div>
+        </div>
+         <div className="m-10 flex flex-col gap-4 bg-white p-4">
+          <h2 className="text-3xl font-bold">BtnRadio</h2>
+          <div>
+            <div>
+              <div className={`${themesTitle}`}>
+              </div>
+              <BtnRadio clicked={true} />
+              <BtnRadio />
             </div>
           </div>
         </div>
