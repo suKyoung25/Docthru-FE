@@ -1,5 +1,6 @@
 "use client";
-import BtnPage from "@/components/btn/pagination/BtnPage";
+
+import { useState } from "react";
 import BtnText, { BtnRoundedWithIcon } from "@/components/btn/text/BtnText";
 import Container from "@/components/container/PageContainer";
 import DeclineModal from "@/components/modal/DeclineModal";
@@ -9,22 +10,22 @@ import NotificationModal from "@/components/modal/NotificationModal";
 import SignupModal from "@/components/modal/SignupModal";
 import TemporaryStorage from "@/components/modal/TemporaryStorage";
 import Sort from "@/components/sort/Sort";
-import { useState } from "react";
-import IconBtnRight, { IconBtnDown } from "@/components/btn/icon/BtnArrow";
+import RankingListItem from "@/components/list/RankingListItem";
+import Reply from "@/components/reply/Reply";
 import IconPasswordVisible from "@/components/btn/icon/BtnIcon";
 import BtnCheckbox from "@/components/btn/form/BtnCheckbox";
 import BtnRadio from "@/components/btn/form/BtnRadio";
 
+const themesTitle = "mb-1 font-[600]";
 const MODAL_COMPONENTS = {
+  signup: SignupModal,
   decline: DeclineModal,
   delete: DeleteModal,
-  filter: FilterModal,
   notification: NotificationModal,
-  signup: SignupModal,
+  filter: FilterModal,
   temp: TemporaryStorage,
 };
 
-const themesTitle = "mb-1 font-[600]";
 const page = () => {
   const [openModal, setOpenModal] = useState(null);
 
@@ -91,55 +92,37 @@ const page = () => {
           </div>
         </div>
         <div className="m-10 flex flex-col gap-4 bg-white p-4">
-          <h2 className="text-3xl font-bold">BtnPage</h2>
-          <div>
-            <div>
-              <div className={`${themesTitle}`}>
-              </div>
-              <BtnPage>1</BtnPage>
-              <BtnPage theme="white">1</BtnPage>
-            </div>
-          </div>
-        </div>
-        <div className="m-10 flex flex-col gap-4 bg-white p-4">
-          <h2 className="text-3xl font-bold">BtnArrow</h2>
-          <div>
-            <div>
-              <div className={`${themesTitle}`}>
-              </div>
-              <IconBtnRight />
-              <IconBtnDown />
-              <IconBtnDown inactive={true} />
-            </div>
-          </div>
-        </div>
-        <div className="m-10 flex flex-col gap-4 bg-white p-4">
           <h2 className="text-3xl font-bold">BtnIcon</h2>
           <div>
             <div>
               <div className={`${themesTitle}`}>
+                비밀번호 보기/숨기기 토글 버튼
               </div>
               <IconPasswordVisible />
-              <IconPasswordVisible on={true}/>
+              <IconPasswordVisible on={true} />
             </div>
           </div>
         </div>
-         <div className="m-10 flex flex-col gap-4 bg-white p-4">
+        <div className="m-10 flex flex-col gap-4 bg-white p-4">
           <h2 className="text-3xl font-bold">BtnCheckbox</h2>
           <div>
             <div>
               <div className={`${themesTitle}`}>
+                checked={true} - 체크된 상태 / checked={false} - 체크되지 않은
+                상태
               </div>
               <BtnCheckbox checked={true} />
               <BtnCheckbox />
             </div>
           </div>
         </div>
-         <div className="m-10 flex flex-col gap-4 bg-white p-4">
+        <div className="m-10 flex flex-col gap-4 bg-white p-4">
           <h2 className="text-3xl font-bold">BtnRadio</h2>
           <div>
             <div>
               <div className={`${themesTitle}`}>
+                clicked={true} - 선택된 상태 / clicked={false} - 선택되지 않은
+                상태
               </div>
               <BtnRadio clicked={true} />
               <BtnRadio />
@@ -167,46 +150,116 @@ const page = () => {
             </div>
           </div>
         </div>
-      </div>
-      <div className="m-10 flex flex-col gap-4 bg-white p-4">
-        <h2 className="text-3xl font-bold">Modal</h2>
-        <div className="flex flex-wrap gap-2">
-          <button
-            className="rounded-lg bg-gray-100 px-4 py-2 font-semibold text-gray-800 hover:bg-gray-200"
-            onClick={() => handleOpen("signup")}
-          >
-            회원가입
-          </button>
-          <button
-            className="rounded-lg bg-gray-100 px-4 py-2 font-semibold text-gray-800 hover:bg-gray-200"
-            onClick={() => handleOpen("decline")}
-          >
-            거절 사유
-          </button>
-          <button
-            className="rounded-lg bg-gray-100 px-4 py-2 font-semibold text-gray-800 hover:bg-gray-200"
-            onClick={() => handleOpen("delete")}
-          >
-            삭제
-          </button>
-          <button
-            className="rounded-lg bg-gray-100 px-4 py-2 font-semibold text-gray-800 hover:bg-gray-200"
-            onClick={() => handleOpen("notification")}
-          >
-            알림
-          </button>
-          <button
-            className="rounded-lg bg-gray-100 px-4 py-2 font-semibold text-gray-800 hover:bg-gray-200"
-            onClick={() => handleOpen("filter")}
-          >
-            필터
-          </button>
-          <button
-            className="rounded-lg bg-gray-100 px-4 py-2 font-semibold text-gray-800 hover:bg-gray-200"
-            onClick={() => handleOpen("temp")}
-          >
-            임시저장
-          </button>
+
+        {/* RankingListItem 컴포넌트 설명 */}
+        <div className="m-10 flex flex-col gap-4 bg-white p-4">
+          <h2 className="text-3xl font-bold">RankingListItem</h2>
+          <div className={themesTitle}>
+            좋아요 수 기준으로 유저를 정렬한 랭킹 리스트 항목 UI
+            <br />
+            - 하트 아이콘 클릭 시 애니메이션 효과
+            <br />
+            - 1등인 경우 왕관 아이콘 표시
+            <br />- 좋아요 수가 10000 이상인 경우 "9999+" 로 표시
+          </div>
+          <div className="flex flex-col gap-2">
+            <RankingListItem
+              item={{
+                rank: 1,
+                userName: "홍길동",
+                userRole: "프로그래머",
+                likes: 10000,
+                isLiked: false,
+                workId: 1,
+              }}
+              toggleLike={() => {}}
+            />
+            <RankingListItem
+              item={{
+                rank: 2,
+                userName: "김코딩",
+                userRole: "디자이너",
+                likes: 8500,
+                isLiked: true,
+                workId: 2,
+              }}
+              toggleLike={() => {}}
+            />
+          </div>
+        </div>
+
+        {/* Reply 컴포넌트 설명 */}
+        <div className="m-10 flex flex-col gap-4 bg-white p-4">
+          <h2 className="text-3xl font-bold">Reply</h2>
+          <div className={themesTitle}>
+            댓글 컴포넌트
+            <br />
+            - 수정/삭제 버튼 클릭 시 모달 오픈 (기능은 콜백함수로 구현)
+            <br />
+            - 프로필 이미지, 작성자 이름, 작성 시간 표시
+            <br />
+            - 수정 모드에서 TextBox 컴포넌트 사용
+            <br />- Enter로 제출, Shift + Enter로 줄바꿈
+          </div>
+          <div className="flex flex-col gap-2">
+            <Reply
+              userName="홍길동"
+              timestamp="방금 전"
+              content="이것은 예시 댓글입니다."
+              onEdit={() => {}}
+              onDelete={() => {}}
+            />
+            <Reply
+              userName="김코딩"
+              timestamp="1시간 전"
+              content="여러 줄 작성이 가능한\n댓글 예시입니다."
+              onEdit={() => {}}
+              onDelete={() => {}}
+            />
+          </div>
+        </div>
+
+        {/* Modal 컴포넌트 설명 */}
+        <div className="m-10 flex flex-col gap-4 bg-white p-4">
+          <h2 className="text-3xl font-bold">Modal</h2>
+          <div className="flex flex-wrap gap-2">
+            <button
+              className="rounded-lg bg-gray-100 px-4 py-2 font-semibold text-gray-800 hover:bg-gray-200"
+              onClick={() => handleOpen("signup")}
+            >
+              회원가입
+            </button>
+            <button
+              className="rounded-lg bg-gray-100 px-4 py-2 font-semibold text-gray-800 hover:bg-gray-200"
+              onClick={() => handleOpen("decline")}
+            >
+              거절 사유
+            </button>
+            <button
+              className="rounded-lg bg-gray-100 px-4 py-2 font-semibold text-gray-800 hover:bg-gray-200"
+              onClick={() => handleOpen("delete")}
+            >
+              삭제
+            </button>
+            <button
+              className="rounded-lg bg-gray-100 px-4 py-2 font-semibold text-gray-800 hover:bg-gray-200"
+              onClick={() => handleOpen("notification")}
+            >
+              알림
+            </button>
+            <button
+              className="rounded-lg bg-gray-100 px-4 py-2 font-semibold text-gray-800 hover:bg-gray-200"
+              onClick={() => handleOpen("filter")}
+            >
+              필터
+            </button>
+            <button
+              className="rounded-lg bg-gray-100 px-4 py-2 font-semibold text-gray-800 hover:bg-gray-200"
+              onClick={() => handleOpen("temp")}
+            >
+              임시저장
+            </button>
+          </div>
         </div>
       </div>
       {ModalComponent && <ModalComponent onClose={handleClose} />}
