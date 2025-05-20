@@ -4,7 +4,7 @@ import React from "react";
 // theme을 black, white로 설정 가능
 const themes = {
   black: "text-[var(--color-brand-yellow)] bg-gray-800",
-  white: "bg-gray-200 text-gray-400",
+  white: "text-gray-400",
 };
 
 export default function BtnPage({ children, theme = "black" }) {
