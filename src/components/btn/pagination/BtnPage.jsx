@@ -7,12 +7,13 @@ const themes = {
   white: "text-gray-400",
 };
 
-export default function BtnPage({ children, theme = "black" }) {
+export default function BtnPage({ children, theme = "black", onClick }) {
   return (
-    <div
+    <button
+      onClick={onClick}
       className={`flex h-8 w-8 items-center justify-center rounded-lg text-sm font-semibold sm:h-10 sm:w-10 ${themes[theme]}`}
     >
       {children}
-    </div>
+    </button>
   );
 }

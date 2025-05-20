@@ -28,6 +28,7 @@ const MODAL_COMPONENTS = {
 
 const page = () => {
   const [openModal, setOpenModal] = useState(null);
+  const [selected, setSelected] = useState("option1");
 
   const handleOpen = (modalName) => setOpenModal(modalName);
   const handleClose = () => setOpenModal(null);
@@ -111,8 +112,7 @@ const page = () => {
                 checked={true} - 체크된 상태 / checked={false} - 체크되지 않은
                 상태
               </div>
-              <BtnCheckbox checked={true} />
-              <BtnCheckbox />
+              <BtnCheckbox isChecked={true}>테스트</BtnCheckbox>
             </div>
           </div>
         </div>
@@ -124,8 +124,25 @@ const page = () => {
                 clicked={true} - 선택된 상태 / clicked={false} - 선택되지 않은
                 상태
               </div>
-              <BtnRadio clicked={true} />
-              <BtnRadio />
+              <div>
+                <h2 className="text-lg font-semibold mb-4">옵션 선택</h2>
+
+                <BtnRadio
+                  value="option1"
+                  checked={selected === "option1"}
+                  onChange={setSelected}
+                >
+                  옵션 1
+                </BtnRadio>
+
+                <BtnRadio
+                  value="option2"
+                  checked={selected === "option2"}
+                  onChange={setSelected}
+                >
+                  옵션 2
+                </BtnRadio>
+              </div>
             </div>
           </div>
         </div>

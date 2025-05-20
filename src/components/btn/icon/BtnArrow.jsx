@@ -6,19 +6,19 @@ import Image from "next/image";
 
 export default function IconBtnRight() {
   return (
-    <div>
-      <Image src={iconBtnRight} alt="오른쪽" className="w-6 h-6 sm:w-10 sm:h-10"/>
-    </div>
+    <button className="w-6 h-6 sm:w-10 sm:h-10">
+      <Image src={iconBtnRight} alt="오른쪽" />
+    </button>
   )
 }
 
 
 export function IconBtnDown({inactive}) {
   return (
-    <div>
+    <button>
       { inactive ?
         <Image src={iconBtnDownInactive} alt="아래로" /> : <Image src={iconBtnDown} alt="아래로" />
       }
-    </div>
+    </button>
   )
 }
