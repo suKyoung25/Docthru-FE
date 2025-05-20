@@ -1,7 +1,5 @@
 import Container, {RootLandingPageContainer} from "@/components/container/PageContainer";
 import Gnb from "@/layout/_components/Gnb";
-import titleDoct from "@/assets/img/img_title_doct.svg"
-import Image from "next/image";
 
 
 export default function Home() {
