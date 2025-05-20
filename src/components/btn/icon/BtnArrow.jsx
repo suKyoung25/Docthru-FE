@@ -1,6 +1,6 @@
 import React from "react";
 import iconBtnRight from "@/assets/btn/btn_right.svg";
-import iconBtnDown from "@/assets/btn/btn_Down.svg";
+import iconBtnDown from "@/assets/btn/btn_down.svg";
 import iconBtnDownInactive from "@/assets/btn/btn_down_inactive.svg";
 import Image from "next/image";
 
