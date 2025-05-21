@@ -1,11 +1,13 @@
-import React from 'react'
+import React from "react";
 
 function NextjsChip() {
   return (
-    <div className='flex itmes-center justify-center w-[73px] h-[26px] bg-[#79E16A] rounded-[8px] pt-[3px] pr-[12px] pb-[3px] pl-[12px] gap-[10px]'>
-      <span className='font-quantico-bold text-[#525252] font-bold text-[14px] leading-4.5'>Next.js</span>
+    <div className="itmes-center flex h-6.5 w-18 justify-center rounded-lg bg-[#79E16A] py-1">
+      <div className="flex items-center font-quantico-bold text-[14px] font-bold text-[#525252]">
+        <div>Next.js</div>
+      </div>
     </div>
-  )
+  );
 }
 
-export default NextjsChip
+export default NextjsChip;

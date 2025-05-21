@@ -1,7 +1,6 @@
 import Container from "@/components/container/PageContainer";
+import React from "react";
 
-const page = () => {
+export default function page() {
   return <Container>챌린지 생성 페이지</Container>;
-};
-
-export default page;
+}
