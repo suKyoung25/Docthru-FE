@@ -9,7 +9,7 @@ const themes = {
   tonal: "bg-[#FFE7E7] text-[#fe4744]",
   solidblack: "bg-[var(--color-brand-black)] text-white",
   solidwhite: "bg-gray-200 text-gray-500",
-  outline: " border border-gray-800 bg-white text-gray-800",
+  outline: " border border-gray-800 bg-gray-50 text-gray-800",
   link: "bg-opacity-50 bg-[#F6F8FA] text-gray-700",
 };
 

@@ -30,7 +30,7 @@ export default function DevNavigation() {
     { path: "/challenges/create", name: "챌린지 생성", group: "user" },
     { path: "/challenges/[challengeId]", name: "챌린지 상세", group: "user" },
     {
-      path: "/challenges/[challengeId]/create",
+      path: "/challenges/[challengeId]/work/create",
       name: "작업물 생성",
       group: "user",
     },
