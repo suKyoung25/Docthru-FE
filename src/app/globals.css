@@ -54,7 +54,7 @@
 
   body {
     font-family: var(--font-pretendard);
-    background-color: var(--color-brand-white);
+    background-color: white;
     color: var(--color-gray-900);
   }
 
@@ -70,5 +70,16 @@
   .font-quantico-bold {
     font-family: var(--font-quantico-bold);
     font-weight: 700;
+  }
+
+  /* styles/globals.css */
+  /* editor 순서, 비순서 정렬 css 서식 */
+  .ProseMirror ul {
+    list-style-type: disc;
+    padding-left: 1.25rem;
+  }
+  .ProseMirror ol {
+    list-style-type: decimal;
+    padding-left: 1.25rem;
   }
 }
