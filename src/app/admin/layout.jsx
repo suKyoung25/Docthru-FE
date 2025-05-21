@@ -1,4 +1,4 @@
-import Gnb from "@/layout/_components/Gnb";
+import Gnb from "@/layout/Gnb";
 import React from "react";
 
 export default function AdminLayout({ children }) {

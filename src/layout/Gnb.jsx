@@ -2,13 +2,13 @@
 
 import Image from "next/image";
 import React from "react";
-import logo from "@/assets/img/img_logo.svg";
 import notiOff from "@/assets/icon/ic_noti_off.svg";
 import notiOn from "@/assets/icon/ic_noti_on.svg";
 import member from "@/assets/img/profile_member.svg";
 import admin from "@/assets/img/profile_admin.svg";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Logo from "./_components/Logo";
 
 export default function Gnb({ isNoti, userRole }) {
   const pathname = usePathname();
@@ -16,15 +16,7 @@ export default function Gnb({ isNoti, userRole }) {
   return (
     <header className="flex h-14 items-center justify-between px-4 sm:px-6 md:h-15 lg:px-8">
       <div className="flex items-center gap-4">
-        <Link href="/">
-          <Image
-            src={logo}
-            alt="Docthur 로고"
-            width={80}
-            height={18}
-            className="md:h-[27px] md:w-[120px]"
-          />
-        </Link>
+        <Logo />
         {userRole === "admin" && (
           <>
             <Link
