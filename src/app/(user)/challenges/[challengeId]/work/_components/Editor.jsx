@@ -24,7 +24,7 @@ import IconOrderedList from "@/assets/editor/ic_list_ordered.svg";
 import IconBulletList from "@/assets/editor/ic_list_bullet.svg";
 import IconTextColor from "@/assets/editor/ic_textColor.svg";
 
-export default function Editor({ content }) {
+export default function Editor({ content, handleContent }) {
   const [showColorPicker, setShowColorPicker] = useState(false);
 
   const editor = useEditor({
@@ -59,7 +59,7 @@ export default function Editor({ content }) {
     },
     onUpdate: ({ editor }) => {
       // 여기에 필요한 경우 content 변경 핸들러를 추가할 수 있습니다.
-      console.log(editor.getHTML());
+      handleContent(editor.getHTML());
     },
   });
 

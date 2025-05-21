@@ -4,14 +4,39 @@ import BtnText from "@/components/btn/text/BtnText";
 import Logo from "@/layout/_components/Logo";
 
 // 제출하기 or 수정하기 선택 가능
-export default function EditorHeader({ isSubmit = false, isUpdate = false }) {
+export default function EditorHeader({
+  isSubmit = false,
+  isUpdate = false,
+  challengeTitle,
+  content,
+}) {
   // TODO : 작업물 CRUD 연동
   const onDiscard = () => {
     console.log("포기하기");
   };
 
+  // 현재 임시 저장이 중복되는 문제가 있음 어떻게 해결해야하나?
   const onDraft = () => {
-    console.log("임시저장");
+    const oldDraft = localStorage.getItem("draft");
+
+    const newDraftItem = {
+      //  TODO : 추후 챌린지 id 값을 저장시켜 중복을 방지하는 로직 작성하기
+      id: Date.now(), // 고유 ID 생성
+      title: challengeTitle,
+      content,
+      createdAt: new Date().toISOString(),
+    };
+
+    if (oldDraft) {
+      const parsedDraft = JSON.parse(oldDraft);
+      // 배열인지 확인하고 처리
+      const drafts = Array.isArray(parsedDraft) ? parsedDraft : [];
+      drafts.push(newDraftItem);
+      localStorage.setItem("draft", JSON.stringify(drafts));
+    } else {
+      // 새로운 배열로 시작
+      localStorage.setItem("draft", JSON.stringify([newDraftItem]));
+    }
   };
 
   const onSubmit = () => {
