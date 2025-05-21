@@ -15,7 +15,7 @@ export default function Container({
   children,
   className = "",
   maxWidth = "max-w-7xl",
-  padding = "px-4 sm:px-6 lg:px-8",
+  padding = "px-4",
   margin = "mx-auto",
 }) {
   return (

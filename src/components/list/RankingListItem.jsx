@@ -98,7 +98,7 @@ export default function RankingListItem({ item, toggleLike }) {
       </div>
 
       {/* 오른쪽: 좋아요, 작업물 보기 */}
-      <div className="flex items-center gap-4">
+      <div className="flex w-[210px] items-center justify-between gap-4">
         <button
           onClick={handleLikeClick}
           className={`flex items-center text-lg font-medium text-gray-500`}
