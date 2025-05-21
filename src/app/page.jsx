@@ -1,3 +1,4 @@
+
 import Container, {RootLandingPageContainer} from "@/components/container/PageContainer";
 import Gnb from "@/layout/_components/Gnb";
 import titleDoct from "@/assets/img/img_title_doct.svg"
@@ -29,7 +30,11 @@ const list = {
 export default function Home() {
   // 랜딩에선 따로 헤더 넣어주기
   return (
-    <Container maxWidth="w-full" padding="p-0 sm:p-0 lg:p-0" className="flex flex-col">
+    <Container
+      maxWidth="w-full"
+      padding="p-0 sm:p-0 lg:p-0"
+      className="flex flex-col"
+    >
       <Gnb userRole="guest" />
       <Container 
         maxWidth="w-full" 

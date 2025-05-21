@@ -6,48 +6,45 @@ import goToMyWork from "@/assets/icon/ic_arrow_right.svg";
 import continueChallenge from "@/assets/icon/ic_document.svg";
 
 const themes = {
-  tonal: "bg-[#FFE7E7] text-[#fe4744]  sm:h-10 md:h-12 gap-1",
-  solidblack: "bg-[var(--color-brand-black)] text-white sm:h-10",
-  solidwhite: "bg-gray-200 text-gray-500 sm:h-10",
-  outline: " border border-gray-800 bg-white text-gray-800 font-lg sm:h-10",
-  link: "bg-opacity-50 sm:h-10 bg-[#F6F8FA] text-gray-700",
+  tonal: "bg-[#FFE7E7] text-[#fe4744]",
+  solidblack: "bg-[var(--color-brand-black)] text-white",
+  solidwhite: "bg-gray-200 text-gray-500",
+  outline: " border border-gray-800 bg-gray-50 text-gray-800",
+  link: "bg-opacity-50 bg-[#F6F8FA] text-gray-700",
 };
 
-
 const iconMap = {
-  goToMyWork : {
+  goToMyWork: {
     src: goToMyWork,
-    alt: "내 작업물 보기"
+    alt: "내 작업물 보기",
   },
-  continueChallenge : {
+  continueChallenge: {
     src: continueChallenge,
-    alt: "도전 계속하기"
-  }
+    alt: "도전 계속하기",
+  },
 };
 
 // 사용법
-export default function BtnText({ children, theme , icon, onClick}) {
+// w,h,p 속성등 추가 스타일링은 className props 사용
+export default function BtnText({ theme, icon, onClick, className, children }) {
   return (
     <button
       onClick={onClick}
-      className={`flex h-8 w-full items-center justify-center rounded-[10px] text-sm font-semibold sm:rounded-xl sm:text-base ${themes[theme]}`}
+      className={`flex w-full items-center justify-center rounded-[10px] text-sm font-semibold sm:rounded-xl sm:text-base ${className} ${themes[theme]}`}
     >
-      {icon && theme === "tonal" ? (
-        <div className="hidden sm:inline">{children}</div>
-      ) : (
-        <div>{children}</div>
-      )}
-
       {
         // icon이 true면서 theme가 tonal일 경우 포기 아이콘 보여주기
-        icon && theme === "tonal" && (
-          <div>
+        icon && theme === "tonal" ? (
+          <div className="flex items-center justify-center gap-2">
+            <span className="hidden sm:inline">포기</span>
             <Image
               src={iconWithDraw}
               alt="포기하기"
-              className="h-3 w-4 sm:h-5 sm:w-6"
+              className="h-4 w-4 sm:h-6 sm:w-6"
             />
           </div>
+        ) : (
+          <div>{children}</div>
         )
       }
 
@@ -63,7 +60,6 @@ export default function BtnText({ children, theme , icon, onClick}) {
   );
 }
 
-
 export function BtnRoundedWithIcon({
   children,
   iconType = "continueChallenge",
@@ -74,9 +70,12 @@ export function BtnRoundedWithIcon({
     >
       <div>{children}</div>
       <div>
-        <Image src={iconMap[iconType].src} alt={iconMap[iconType].alt} className="h-4 w-4" />
+        <Image
+          src={iconMap[iconType].src}
+          alt={iconMap[iconType].alt}
+          className="h-4 w-4"
+        />
       </div>
     </button>
   );
 }
- 
