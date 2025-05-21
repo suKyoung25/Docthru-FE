@@ -8,7 +8,7 @@ import DeleteModal from "@/components/modal/DeleteModal";
 import FilterModal from "@/components/modal/FilterModal";
 import NotificationModal from "@/components/modal/NotificationModal";
 import SignupModal from "@/components/modal/SignupModal";
-import TemporaryStorage from "@/components/modal/TemporaryStorage";
+import TemporaryStorage from "@/components/modal/DraftModal";
 import Sort from "@/components/sort/Sort";
 import RankingListItem from "@/components/list/RankingListItem";
 import Reply from "@/components/reply/Reply";
@@ -125,7 +125,7 @@ const page = () => {
                 상태
               </div>
               <div>
-                <h2 className="text-lg font-semibold mb-4">옵션 선택</h2>
+                <h2 className="mb-4 text-lg font-semibold">옵션 선택</h2>
 
                 <BtnRadio
                   value="option1"
