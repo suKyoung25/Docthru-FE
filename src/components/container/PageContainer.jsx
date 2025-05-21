@@ -25,14 +25,3 @@ export default function Container({
   );
 }
 
-export function RootLandingPageContainer ({
-  children,
-  className = "border",
-  width = "w-93",
-}) {
-  return (
-    <div className={`${width} ${className}`}>
-      {children}
-    </div>
-  );
-}
