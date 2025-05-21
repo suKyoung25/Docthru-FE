@@ -3,7 +3,7 @@ import dropdownIcon from "@/assets/icon/ic_menu.svg";
 import clockIcon from "@/assets/icon/ic_clock.svg";
 import usersIcon from "@/assets/icon/ic_person.svg";
 import { typeChipMap, categoryChipMap } from "../chip/chipMaps";
-import ChipCardStatus from "@/components/chip/chipComplete/ChipCardStatus"; // 좌상단 chip
+import ChipCardStatus from "@/components/chip/chipComplete/ChipCardStatus"; // 좌상단 chip
 
 export default function ChallengeCard({
   status,
