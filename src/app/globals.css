@@ -36,11 +36,11 @@
 
   /* ✅ Tailwind Breakpoint 대응 Container Size */
 
-  --container-sm: 450px;
+  --container-sm: 375px;
   /* 모바일 */
-  --container-md: 768px;
+  --container-md: 744px;
   /* 태블릿 (iPad Mini) */
-  --container-xl: 1280px;
+  --container-xl: 1200px;
   /* 데스크탑 */
 }
 

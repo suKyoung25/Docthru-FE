@@ -8,12 +8,18 @@ import BtnText from "@/components/btn/text/BtnText";
 import outCircle from "@/assets/icon/ic_out_circle.svg";
 import Image from "next/image";
 import DraftModal from "@/components/modal/DraftModal";
+import originalPageModalBtn from "@/assets/icon/ic_list.svg";
+import OriginalPageModal from "../_components/OriginalPageModal";
 
 // TODO : 작업물 api 연동 후 챌린지 제목 적용
 export default function page() {
   const [isDraft, setIsDraft] = useState(false);
   const [draftModal, setDraftModal] = useState(false);
   const [content, setContent] = useState("");
+  const [originalPageUrl, setOriginalPageUrl] = useState(
+    "https://frontend-fundamentals.com/code-quality/code/",
+  );
+  const [isOriginalPageModal, setIsOriginalPageModal] = useState(false);
 
   // 개발용 임시 데이터
   // useEffect(() => {
@@ -68,11 +74,8 @@ export default function page() {
     setContent(item.content);
   };
 
-  const handleContent = (content) => {
-    setContent(content);
-  };
-
-  // 현재 임시 저장이 중복되는 문제가 있음 어떻게 해결해야하나?
+  // 임시저장 로직
+  // TODO: 현재 임시 저장이 중복되는 문제가 있음 어떻게 해결해야하나?
   const onDraft = (challengeTitle, content) => {
     const oldDraft = localStorage.getItem("draft");
 
@@ -96,24 +99,105 @@ export default function page() {
     }
   };
 
+  // 모달 on/off 로직
+  const onOpenOriginalPageModal = () => {
+    setIsOriginalPageModal(true);
+  };
+
+  const onCloseOriginalPageModal = () => {
+    setIsOriginalPageModal(false);
+  };
+
   return (
     <div className="relative">
-      <Container maxWidth="max-w-4xl">
-        <EditorHeader
-          isSubmit={true}
-          content={content}
-          challengeTitle="챌린지 제목"
-          onDraft={onDraft}
+      {/* 원문 모달 버튼 */}
+      {!isOriginalPageModal ? (
+        <button
+          className="fixed top-[117px] right-0 rounded-tl-full rounded-bl-full border border-gray-100 bg-white py-3.5 pr-2 pl-3.5 shadow-md sm:top-[123px] md:rounded-tl-3xl md:rounded-bl-3xl md:py-5 md:pr-3 md:pl-4"
+          onClick={onOpenOriginalPageModal}
+        >
+          <div className="flex items-center gap-2 md:flex-col">
+            <Image
+              src={originalPageModalBtn}
+              alt="원본 on/off 모달"
+              className="h-6 w-6"
+            />
+            <span className="text-[16px] font-semibold text-gray-500">
+              원문
+            </span>
+          </div>
+        </button>
+      ) : (
+        <button
+          className="fixed top-[117px] right-0 rounded-tl-full rounded-bl-full border border-gray-100 bg-white py-3.5 pr-2 pl-3.5 shadow-md sm:top-[123px] md:rounded-tl-3xl md:rounded-bl-3xl md:py-5 md:pr-3 md:pl-4"
+          onClick={onOpenOriginalPageModal}
+        >
+          <div className="flex items-center gap-2 md:flex-col">
+            <Image
+              src={originalPageModalBtn}
+              alt="원본 on/off 모달"
+              className="h-6 w-6"
+            />
+            <span className="text-[16px] font-semibold text-gray-500">
+              원문
+            </span>
+          </div>
+        </button>
+      )}
+
+      {/* 원문 모달 */}
+      {isOriginalPageModal ? (
+        <OriginalPageModal
+          pageUrl={originalPageUrl}
+          onClose={onCloseOriginalPageModal}
+          modalState={isOriginalPageModal}
         />
-        <EditorSection
-          challengeTitle="챌린지 제목"
-          content={content}
-          handleContent={handleContent}
-          onDraft={onDraft}
+      ) : (
+        <OriginalPageModal
+          pageUrl={originalPageUrl}
+          onClose={onCloseOriginalPageModal}
+          modalState={isOriginalPageModal}
         />
-      </Container>
+      )}
+
+      {/* 작업물 작성 컨테이너 */}
+      {isOriginalPageModal ? (
+        <Container
+          maxWidth="max-w-4xl"
+          className="mt-[350px] transition-all duration-300 sm:mt-0 sm:mr-[300px] xl:mr-[640px]"
+        >
+          <EditorHeader
+            isSubmit={true}
+            content={content}
+            challengeTitle="챌린지 제목"
+            onDraft={onDraft}
+          />
+          <EditorSection
+            challengeTitle="챌린지 제목"
+            content={content}
+            handleContent={setContent}
+            onDraft={onDraft}
+          />
+        </Container>
+      ) : (
+        <Container maxWidth="max-w-4xl">
+          <EditorHeader
+            isSubmit={true}
+            content={content}
+            challengeTitle="챌린지 제목"
+            onDraft={onDraft}
+          />
+          <EditorSection
+            challengeTitle="챌린지 제목"
+            content={content}
+            handleContent={setContent}
+            onDraft={onDraft}
+          />
+        </Container>
+      )}
+
       {isDraft && (
-        <div className="fixed bottom-6 left-1/2 w-full max-w-4xl -translate-x-1/2 px-4">
+        <div className="fixed bottom-6 left-1/2 z-10 w-full max-w-4xl -translate-x-1/2 px-4">
           <div className="flex w-full items-center justify-between gap-4 rounded-xl border border-gray-800 bg-gray-50 px-2 py-2">
             <div className="flex items-center gap-2">
               <button onClick={() => setIsDraft(false)}>
@@ -134,6 +218,7 @@ export default function page() {
           </div>
         </div>
       )}
+
       {draftModal && (
         <DraftModal
           onClose={onCloseDraftModal}
