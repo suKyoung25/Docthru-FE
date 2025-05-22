@@ -3,7 +3,7 @@
 import Container from "@/components/container/PageContainer";
 import EmailInput from "@/components/input/EmailInput";
 import PasswordInput from "@/components/input/PasswordInput";
-import LoginButton from "@/components/sign/LoginButton";
+import LoginButton from "@/components/login/LoginButton";
 import Logo from "@/layout/_components/Logo";
 import Link from "next/link";
 
