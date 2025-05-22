@@ -8,7 +8,7 @@ import Profile from "@/components/dropDown/Profile";
 import ListHead from '../_components/appliedChallenges/ListHead';
 import ListRow from '../_components/appliedChallenges/ListRow';
 
-// key : 필드명, label : 리스트의 타이틀명, flex : 너비 비율, className : 각 셀의 스타일링
+// key : 테이블 필드명, label : 필드의 게시판 타이틀명, flex : 너비 비율, className : 각 셀의 스타일링
 const listColumns = [
     { key: "id", label: "No.", flex: 1 , className: "pl-4 " },
     { key: "docType", label: "분야", flex: 1, className: ""  },
