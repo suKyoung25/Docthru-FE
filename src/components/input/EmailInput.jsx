@@ -11,7 +11,7 @@ export default function EmailInput({ value, onChange, error }) {
         id="email"
         value={value}
         onChange={onChange}
-        placeholder="이메일을 입력하세요"
+        placeholder="이메일을 입력해주세요"
         className={`h-12 w-full rounded-[12px] border bg-white px-3 py-2 text-sm outline-none ${
           error ? "border-error" : "border-gray-200"
         }`}

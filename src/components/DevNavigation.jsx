@@ -30,7 +30,7 @@ export default function DevNavigation() {
     { path: "/challenges/create", name: "챌린지 생성", group: "user" },
     { path: "/challenges/[challengeId]", name: "챌린지 상세", group: "user" },
     {
-      path: "/challenges/[challengeId]/create",
+      path: "/challenges/[challengeId]/work/create",
       name: "작업물 생성",
       group: "user",
     },
@@ -44,6 +44,7 @@ export default function DevNavigation() {
       name: "작업물 수정",
       group: "user",
     },
+    { path: "/challenges/mychallenges", name: "나의 챌린지", group: "user" },
 
     // 관리자 관련 라우트 (@admin)
     { path: "/admin/management", name: "챌린지 관리", group: "admin" },
