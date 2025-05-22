@@ -62,9 +62,6 @@ function page() {
     getChallengesData();
   }, [filters, keyword]);
 
-  //디버깅
-  console.log("challenges", challenges);
-
   const handleClickFilter = () => {
     setIsModal(true);
   };
@@ -77,10 +74,6 @@ function page() {
       status: status || "",
     });
 
-    //디버깅
-    console.log("status", status);
-
-    // 모달 닫기
     setIsModal(false);
   };
 
