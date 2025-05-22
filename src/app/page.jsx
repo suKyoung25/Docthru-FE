@@ -8,9 +8,9 @@ import Link from "next/link";
 import iconChallenge from "@/assets/icon/ic_landing_challenge.svg";
 import iconHeart from "@/assets/icon/ic_landing_heart.svg";
 import iconFeedback from "@/assets/icon/ic_landing_feedback.svg";
-import bgSm from "@/assets/img/bg_sm.png"
-import bgMd from "@/assets/img/bg_md.png"
-import bgLg from "@/assets/img/bg_lg.png"
+import bgSm from "@/assets/img/bg_sm.svg"
+import bgMd from "@/assets/img/bg_md.svg"
+import bgLg from "@/assets/img/bg_lg.svg"
 import imgChallenge from "@/assets/img/img_challengelist.svg"
 import imgWork from "@/assets/img/img_work.svg"
 import imgFeedback from "@/assets/img/img_feedback.svg"
@@ -22,7 +22,7 @@ import { useEffect, useState } from "react";
 
 
 const list = {
-  listDiv: "flex max-w-7xl w-[375px] md:w-[990px] justify-between flex-col md:flex-row gap-3 pt-9",
+  listDiv: "flex max-w-7xl w-[375px] md:w-[990px] justify-between flex-col md:flex-row gap-3 pt-10 sm:pt-16 md:pt-11",
   listDivTitle: "font-bold text-black text-xl sm:text-2xl pt-2 pb-3",
   listDivSubTitle: "font-normal text-[#676767] text-base",
   listImage: "flex justify-center"
@@ -78,8 +78,8 @@ export default function Home() {
         </div>
       </Container>
       <Container maxWidth="w-full" className="flex flex-col items-center justify-start " >
-          <div className={`${list.listDiv}`}>
-            <div >
+          <div className={`${list.listDiv} mt-5  md:mt-12`}>
+            <div>
               <Image src={iconChallenge} alt="챌린지 아이콘" />
               <div className={`${list.listDivTitle}`}>혼자서는 막막했던 번역,<br />챌린지로 함께 완성하기</div>
               <div className={`${list.listDivSubTitle}`}>중요한 건 꺾이지 않는 마음! 동료들과 함께<br />기술 문서를 번역해 보세요.</div>
