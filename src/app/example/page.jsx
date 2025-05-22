@@ -15,6 +15,7 @@ import Reply from "@/components/reply/Reply";
 import IconPasswordVisible from "@/components/btn/icon/BtnIcon";
 import BtnCheckbox from "@/components/btn/form/BtnCheckbox";
 import BtnRadio from "@/components/btn/form/BtnRadio";
+import Pagination from "@/components/pagination/Pagination";
 
 const themesTitle = "mb-1 font-[600]";
 const MODAL_COMPONENTS = {
@@ -29,6 +30,7 @@ const MODAL_COMPONENTS = {
 const page = () => {
   const [openModal, setOpenModal] = useState(null);
   const [selected, setSelected] = useState("option1");
+  const [page, setPage] = useState(1);
 
   const handleOpen = (modalName) => setOpenModal(modalName);
   const handleClose = () => setOpenModal(null);
@@ -146,6 +148,8 @@ const page = () => {
             </div>
           </div>
         </div>
+
+        {/* Sort 컴포넌트 설명 */}
         <div className="m-10 flex flex-col gap-4 bg-white p-4">
           <h2 className="text-3xl font-bold">Sort</h2>
           <div className={themesTitle}>
@@ -280,6 +284,16 @@ const page = () => {
         </div>
       </div>
       {ModalComponent && <ModalComponent onClose={handleClose} />}
+
+      {/* Pagination 컴포넌트 설명 */}
+      <div className="m-10 flex flex-col gap-8 bg-white p-4">
+        <h2 className="text-3xl font-bold">Pagination</h2>
+        <Pagination
+          totalCount={183}
+          currentPage={page}
+          onPageChange={(newPage) => setPage(newPage)}
+        />
+      </div>
     </Container>
   );
 };
