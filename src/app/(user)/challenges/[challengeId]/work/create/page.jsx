@@ -72,6 +72,30 @@ export default function page() {
     setContent(content);
   };
 
+  // 현재 임시 저장이 중복되는 문제가 있음 어떻게 해결해야하나?
+  const onDraft = (challengeTitle, content) => {
+    const oldDraft = localStorage.getItem("draft");
+
+    const newDraftItem = {
+      //  TODO : 추후 챌린지 id 값을 저장시켜 중복을 방지하는 로직 작성하기
+      id: Date.now(), // 고유 ID 생성
+      title: challengeTitle,
+      content,
+      createdAt: new Date().toISOString(),
+    };
+
+    if (oldDraft) {
+      const parsedDraft = JSON.parse(oldDraft);
+      // 배열인지 확인하고 처리
+      const drafts = Array.isArray(parsedDraft) ? parsedDraft : [];
+      drafts.push(newDraftItem);
+      localStorage.setItem("draft", JSON.stringify(drafts));
+    } else {
+      // 새로운 배열로 시작
+      localStorage.setItem("draft", JSON.stringify([newDraftItem]));
+    }
+  };
+
   return (
     <div className="relative">
       <Container maxWidth="max-w-4xl">
@@ -79,11 +103,13 @@ export default function page() {
           isSubmit={true}
           content={content}
           challengeTitle="챌린지 제목"
+          onDraft={onDraft}
         />
         <EditorSection
           challengeTitle="챌린지 제목"
           content={content}
           handleContent={handleContent}
+          onDraft={onDraft}
         />
       </Container>
       {isDraft && (

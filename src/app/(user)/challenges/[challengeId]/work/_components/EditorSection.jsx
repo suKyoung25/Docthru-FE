@@ -1,15 +1,21 @@
-import React from "react";
 import Editor from "./Editor";
 
 export default function EditorSection({
-  challengeTitle = "챌린지 제목",
+  challengeTitle,
   content,
   handleContent,
+  onDraft,
 }) {
   return (
     <div className="flex flex-col gap-4">
       <span className="text-2xl font-bold">{challengeTitle}</span>
-      <Editor content={content} handleContent={handleContent} />
+
+      <Editor
+        challengeTitle={challengeTitle}
+        content={content}
+        handleContent={handleContent}
+        onDraft={onDraft}
+      />
     </div>
   );
 }
