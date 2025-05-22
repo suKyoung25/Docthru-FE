@@ -13,6 +13,11 @@ export async function getChallenges({
     `${BASE_URL}?page=${page}&pageSize=${pageSize}&category=${category}&docType=${docType}&keyword=${keyword}`,
   );
 
+  //디버깅
+  console.log(
+    `${BASE_URL}?page=${page}&pageSize=${pageSize}&category=${category}&docType=${docType}&keyword=${keyword}`,
+  );
+
   if (!res.ok) throw new Error("챌린지 목록을 가져올 수 없습니다.");
 
   return res.json();
