@@ -20,7 +20,7 @@ export default function ConfirmPasswordInput({ value, onChange, error }) {
           id="confirmPassword"
           value={value}
           onChange={onChange}
-          placeholder="비밀번호를 다시 입력하세요"
+          placeholder="비밀번호를 한번 더 입력해 주세요"
           className={`h-12 w-full rounded-[12px] border bg-white px-3 py-2 pr-10 text-sm outline-none ${
             error ? "border-error" : "border-gray-200"
           }`}
