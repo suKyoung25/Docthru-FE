@@ -8,15 +8,16 @@ import Link from "next/link";
 import iconChallenge from "@/assets/icon/ic_landing_challenge.svg";
 import iconHeart from "@/assets/icon/ic_landing_heart.svg";
 import iconFeedback from "@/assets/icon/ic_landing_feedback.svg";
-import bgSm from "../assets/img/bg_sm.png"
+import bgSm from "@/assets/img/bg_sm.png"
 import bgMd from "@/assets/img/bg_md.png"
-import bgLg from "../assets/img/bg_lg.png"
+import bgLg from "@/assets/img/bg_lg.png"
 import imgChallenge from "@/assets/img/img_challengelist.svg"
 import imgWork from "@/assets/img/img_work.svg"
 import imgFeedback from "@/assets/img/img_feedback.svg"
 import imgChallengeSm from "@/assets/img/img_challengelist_sm.svg"
 import imgWorkSm from "@/assets/img/img_work_sm.svg"
 import imgFeedbackSm from "@/assets/img/img_feedback_sm.svg"
+import { useEffect, useState } from "react";
 
 
 
@@ -29,7 +30,26 @@ const list = {
 
 
 export default function Home() {
+  const [bgImage, setBgImage ] = useState(bgSm.src)
   // 랜딩에선 따로 헤더 넣어주기
+  useEffect(() => {
+    const width = window.innerWidth;
+    const updateBgImage = () => {
+      if(width >= 1280 ) {
+        setBgImage(bgLg.src);
+      } else if (width >= 768) {
+        setBgImage(bgMd.src);
+      } else {
+        setBgImage(bgSm.src);
+      }
+    };
+
+    updateBgImage();
+    window.addEventListener("resize", updateBgImage);
+    return() => window.removeEventListener("resize", updateBgImage);
+  }, [])
+
+
   return (
     <Container
       maxWidth="w-full"
@@ -42,7 +62,7 @@ export default function Home() {
         className="bg-brand-black flex flex-col items-center"
         style={
           {
-            backgroundImage:`url(${bgLg.src})`,
+            backgroundImage:`url(${bgImage})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }
