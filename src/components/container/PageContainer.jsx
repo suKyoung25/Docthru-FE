@@ -17,9 +17,12 @@ export default function Container({
   maxWidth = "max-w-[1200px]",
   padding = "px-4",
   margin = "mx-auto",
+  style = {},
 }) {
   return (
-    <div className={`${maxWidth} ${padding} ${margin} ${className}`}>
+    <div 
+      style={style}
+      className={`${maxWidth} ${padding} ${margin} ${className}`}>
       {children}
     </div>
   );

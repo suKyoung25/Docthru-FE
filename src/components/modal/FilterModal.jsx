@@ -4,16 +4,16 @@ import Image from "next/image";
 import out from "@/assets/icon/ic_out.svg";
 
 const FIELD_OPTIONS = [
-  { label: "Next. js", value: "nextjs" },
-  { label: "Modern JS", value: "modernjs" },
-  { label: "API", value: "api" },
-  { label: "Web", value: "web" },
-  { label: "Career", value: "career" },
+  { label: "Next. js", value: "Next.js" },
+  { label: "Modern JS", value: "Modern JS" },
+  { label: "API", value: "API" },
+  { label: "Web", value: "Web" },
+  { label: "Career", value: "Career" },
 ];
 
 const DOC_TYPE_OPTIONS = [
-  { label: "공식문서", value: "official" },
-  { label: "블로그", value: "blog" },
+  { label: "공식문서", value: "공식문서" },
+  { label: "블로그", value: "블로그" },
 ];
 
 const STATUS_OPTIONS = [
@@ -23,7 +23,7 @@ const STATUS_OPTIONS = [
 
 export default function FilterModal({
   initialFields = [],
-  initialDocType = "official",
+  initialDocType = "공식문서",
   initialStatus = "",
   onApply,
   onReset,
@@ -43,7 +43,7 @@ export default function FilterModal({
   // 리셋
   const handleReset = () => {
     setFields([]);
-    setDocType("official");
+    setDocType("공식문서");
     setStatus("");
     onReset?.();
   };

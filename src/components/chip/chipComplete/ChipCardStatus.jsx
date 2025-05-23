@@ -4,8 +4,6 @@ import personIcon from "@/assets/icon/ic_person_white.svg";
 import clockIcon from "@/assets/icon/ic_clock.svg";
 
 function ChipCardStatus({ status }) {
-  if (!status) return null;
-
   const statusStyleMap = {
     closed: {
       bg: "bg-gray-200",
