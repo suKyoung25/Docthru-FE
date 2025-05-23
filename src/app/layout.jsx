@@ -2,6 +2,7 @@ import "./globals.css";
 
 import localFont from "next/font/local";
 import DevNavigation from "@/components/DevNavigation";
+import Providers from "./provider";
 
 const pretendard = localFont({
   src: "../assets/font/PretendardVariable.woff2",
@@ -36,7 +37,9 @@ export default function RootLayout({ children }) {
       <body
         className={`${pretendard.variable} font-pretendard flex min-h-screen flex-col antialiased`}
       >
-        <main className="flex-grow pb-16">{children}</main>
+        <Providers>
+          <main className="flex-grow pb-16">{children}</main>
+        </Providers>
         <DevNavigation />
       </body>
     </html>
