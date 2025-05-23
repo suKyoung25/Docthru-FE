@@ -12,7 +12,7 @@ export default function Sort({ isAdminStatus, isFiltered, count, onClick }) {
       : filterIcon;
 
   const containerClass = [
-    "flex h-10 items-center justify-between gap-2 rounded-4xl border border-gray-300 px-3 py-2",
+    "flex w-full h-10 items-center justify-between gap-2 rounded-4xl border border-gray-300 px-3 py-2",
     isAdminStatus && "pr-2",
     isFiltered && "bg-gray-800",
   ]

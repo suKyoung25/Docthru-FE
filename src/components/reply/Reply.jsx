@@ -1,64 +1,60 @@
-"use client";
+'use client';
+import React, { useState, useRef, useEffect } from 'react';
+import menuIcon from '@/assets/icon/ic_menu.svg';
+import profileImg from '@/assets/img/profile_member.svg';
+import Image from 'next/image';
+import TextBox from './TextBox';
 
-import React, { useState, useRef, useEffect } from "react";
-import menuIcon from "@/assets/icon/ic_menu.svg";
-import profileImg from "@/assets/img/profile_member.svg";
-import Image from "next/image";
-import TextBox from "./TextBox";
-
-/**
- * Reply 컴포넌트
- *
- * @param {Object} props
- * @param {string} props.userName - 작성자 이름
- * @param {string} props.timestamp - 작성 시간 문자열
- * @param {string} props.content - 댓글 내용
- * @param {(edited: string) => void} props.onEdit - 수정 완료 시 호출되는 함수
- * @param {() => void} props.onDelete - 삭제하기 버튼 클릭 시 호출되는 함수
- */
 export default function Reply({
-  userName = "익명",
-  timestamp = "방금 전",
-  content = "이건 테스트 입니다 이건 테스트 입니다...",
+  userName = '익명',
+  timestamp = '방금 전',
+  content = '이건 테스트 입니다...',
+  isAuthor = false,
   onEdit = () => {},
-  onDelete = () => {},
+  onDelete = () => {}
 }) {
   const [isReplyMenu, setIsReplyMenu] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [editedContent, setEditedContent] = useState(content);
   const menuRef = useRef(null);
 
+  // 메뉴 버튼 클릭
   const handleMoreClick = () => {
     setIsReplyMenu((prev) => !prev);
   };
 
+  // 수정 버튼 클릭
   const handleEditClick = () => {
     setIsEditMode(true);
     setIsReplyMenu(false);
+    setEditedContent(content);
   };
 
+  // 수정 취소
   const handleCancelEdit = () => {
     setIsEditMode(false);
-    setEditedContent(content); // 원래 내용으로 복원
+    setEditedContent(content);
   };
 
+  // 수정 완료
   const handleSubmitEdit = () => {
-    onEdit(editedContent); // 부모에게 수정 내용 전달
+    onEdit(editedContent);
     setIsEditMode(false);
   };
 
+  // 메뉴 바깥 클릭 시 메뉴 닫기
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setIsReplyMenu(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   return (
-    <div className="relative w-full rounded-xl bg-white p-4">
+    <div className="relative mt-4 w-full rounded-xl bg-gray-50 p-4 lg:w-[826px]">
       <div className="mb-3 flex items-center justify-between">
         {/* 유저 이름과 시간 */}
         <div className="flex items-center gap-2">
@@ -71,8 +67,8 @@ export default function Reply({
           </div>
         </div>
 
-        {/* 메뉴 or 수정 버튼 */}
-        {!isEditMode ? (
+        {/* isAuthor가 true일 때만 메뉴/수정 버튼 표시 */}
+        {isAuthor && !isEditMode ? (
           <div className="relative" ref={menuRef}>
             <button
               onClick={handleMoreClick}
@@ -80,7 +76,6 @@ export default function Reply({
             >
               <Image src={menuIcon} alt="더보기" />
             </button>
-
             {isReplyMenu && (
               <div className="absolute top-7 right-0 z-10 w-[139px] rounded-md border border-gray-200 bg-white shadow-md">
                 <button
@@ -99,12 +94,9 @@ export default function Reply({
               </div>
             )}
           </div>
-        ) : (
+        ) : isAuthor && isEditMode ? (
           <div className="mt-2 flex justify-end gap-2 text-sm">
-            <button
-              onClick={handleCancelEdit}
-              className="px-5 py-2 font-bold text-gray-500"
-            >
+            <button onClick={handleCancelEdit} className="px-5 py-2 font-bold text-gray-500">
               취소
             </button>
             <button
@@ -114,20 +106,14 @@ export default function Reply({
               수정 완료
             </button>
           </div>
-        )}
+        ) : null}
       </div>
 
       {/* 내용 or 수정창 */}
       {isEditMode ? (
-        <TextBox
-          value={editedContent}
-          onChange={(e) => setEditedContent(e.target.value)}
-          onSubmit={handleSubmitEdit}
-        />
+        <TextBox value={editedContent} onChange={(e) => setEditedContent(e.target.value)} onSubmit={handleSubmitEdit} />
       ) : (
-        <p className="text-[16px] whitespace-pre-wrap text-gray-700">
-          {editedContent}
-        </p>
+        <p className="text-[16px] whitespace-pre-wrap text-gray-700">{content}</p>
       )}
     </div>
   );
