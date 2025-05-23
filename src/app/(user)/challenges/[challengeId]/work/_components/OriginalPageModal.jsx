@@ -2,8 +2,14 @@ import Image from "next/image";
 import React from "react";
 import outCircle from "@/assets/icon/ic_out_circle.svg";
 import BtnText from "@/components/btn/text/BtnText";
+import Link from "next/link";
 
-export default function OriginalPageModal({ pageUrl, onClose, modalState }) {
+export default function OriginalPageModal({
+  pageUrl,
+  onClose,
+  modalState,
+  originalPageUrl,
+}) {
   return (
     <div>
       {modalState ? (
@@ -14,7 +20,13 @@ export default function OriginalPageModal({ pageUrl, onClose, modalState }) {
             </button>
             {/* 이부분은 리팩터링 필요함 버튼의 w 가 안 덮어씌워짐 */}
             <div className="w-[110px]">
-              <BtnText theme="link" className="h-[32px]">
+              <BtnText
+                theme="link"
+                className="h-[32px]"
+                onClick={() => {
+                  window.open(originalPageUrl, "_blank");
+                }}
+              >
                 링크 열기
               </BtnText>
             </div>
@@ -36,7 +48,14 @@ export default function OriginalPageModal({ pageUrl, onClose, modalState }) {
             </button>
             {/* 이부분은 리팩터링 필요함 버튼의 w 가 안 덮어씌워짐 */}
             <div className="w-[110px]">
-              <BtnText theme="link" className="h-[32px]">
+              <BtnText
+                theme="link"
+                className="h-[32px]"
+                onClick={() => {
+                  window.open(originalPageUrl, "_blank");
+                  console.log("링크 열기");
+                }}
+              >
                 링크 열기
               </BtnText>
             </div>
