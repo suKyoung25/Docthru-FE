@@ -24,18 +24,20 @@ export default function Sort({ isAdminStatus, isFiltered, count, onClick }) {
   const imageClass = isAdminStatus ? "h-6 w-6" : "";
 
   return (
-    <button onClick={onClick} className={containerClass}>
-      <p className={`${textClass} max-sm:text-sm`}>
-        {isAdminStatus ? "승인 대기" : "필터"}
-        {count ? `(${count})` : ""}
-      </p>
-      <Image
-        src={iconSrc}
-        width={16}
-        height={16}
-        alt="아이콘"
-        className={imageClass}
-      />
-    </button>
+    <div className={containerClass}>
+      <div className={`${textClass} flex w-full flex-row max-sm:text-sm`}>
+        <div>{isAdminStatus ? "승인 대기" : "필터"}</div>
+        <div>{count ? `(${count})` : ""}</div>
+      </div>
+      <button onClick={onClick}>
+        <Image
+          src={iconSrc}
+          width={16}
+          height={16}
+          alt="아이콘"
+          className={imageClass}
+        />
+      </button>
+    </div>
   );
 }
