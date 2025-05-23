@@ -43,7 +43,7 @@ export default function FilterModal({
   // 리셋
   const handleReset = () => {
     setFields([]);
-    setDocType("공식문서");
+    setDocType("");
     setStatus("");
     onReset?.();
   };
