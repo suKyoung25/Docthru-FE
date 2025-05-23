@@ -11,7 +11,7 @@ import Pagination from "@/components/pagination/Pagination";
 
 function page() {
   const [filters, setFilters] = useState({
-    category: "",
+    categories: [],
     docType: "",
     status: "",
   });
@@ -21,6 +21,7 @@ function page() {
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(4);
+  const [filterCount, setFilterCount] = useState(0); //필터가 몇개 선택되었는지 count
 
   //챌린지 목록 불러오기
   const getChallengesData = async () => {
@@ -29,7 +30,9 @@ function page() {
         page,
         pageSize,
         keyword,
-        ...filters,
+        category: filters.categories[0] || "",
+        docType: filters.docType,
+        status: filters.status,
       };
 
       //category, docType, keyword 만 걸러진 challenges 데이터
@@ -73,9 +76,6 @@ function page() {
     getChallengesData();
   }, [filters, keyword]);
 
-  //디버깅
-  console.log("데이터 갯수", totalCount);
-
   const handleClickFilter = () => {
     setIsModal(true);
   };
@@ -83,10 +83,16 @@ function page() {
   const handleApplyFilters = ({ fields, docType, status }) => {
     //category를 fields 중복 허용?
     setFilters({
-      category: fields[0] || "",
-      docType: docType || "",
-      status: status || "",
+      categories: fields,
+      docType,
+      status,
     });
+
+    setFilterCount(
+      [fields.length > 0 ? 1 : 0, docType, status].filter(
+        (value) => value && value !== "",
+      ).length,
+    );
 
     setIsModal(false);
   };
@@ -120,11 +126,18 @@ function page() {
 
       <div className="mt-[16px] flex flex-row gap-[8px]">
         <div className="flex-[1]">
-          <Sort onClick={handleClickFilter} />
+          <Sort
+            onClick={handleClickFilter}
+            isFiltered={filterCount > 0}
+            count={filterCount}
+          />
           {isModal ? (
             <FilterModal
               onApply={handleApplyFilters}
               onClose={() => setIsModal(false)}
+              initialFields={filters.categories}
+              initialDocType={filters.docType}
+              initialStatus={filters.status}
             />
           ) : null}
         </div>

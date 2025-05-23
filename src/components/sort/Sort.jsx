@@ -25,10 +25,10 @@ export default function Sort({ isAdminStatus, isFiltered, count, onClick }) {
 
   return (
     <div className={containerClass}>
-      <p className={`${textClass} max-sm:text-sm`}>
-        {isAdminStatus ? "승인 대기" : "필터"}
-        {count ? `(${count})` : ""}
-      </p>
+      <div className={`${textClass} flex w-full flex-row max-sm:text-sm`}>
+        <div>{isAdminStatus ? "승인 대기" : "필터"}</div>
+        <div>{count ? `(${count})` : ""}</div>
+      </div>
       <button onClick={onClick}>
         <Image
           src={iconSrc}

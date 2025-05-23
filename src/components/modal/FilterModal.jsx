@@ -23,7 +23,7 @@ const STATUS_OPTIONS = [
 
 export default function FilterModal({
   initialFields = [],
-  initialDocType = "공식문서",
+  initialDocType = "",
   initialStatus = "",
   onApply,
   onReset,
