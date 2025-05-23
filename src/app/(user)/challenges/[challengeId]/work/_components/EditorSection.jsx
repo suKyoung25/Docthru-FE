@@ -5,6 +5,7 @@ export default function EditorSection({
   content,
   handleContent,
   onDraft,
+  isDrafting,
 }) {
   return (
     <div className="flex flex-col gap-4">
@@ -15,6 +16,7 @@ export default function EditorSection({
         content={content}
         handleContent={handleContent}
         onDraft={onDraft}
+        isDrafting={isDrafting}
       />
     </div>
   );

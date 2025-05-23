@@ -10,7 +10,7 @@ import BulletList from "@tiptap/extension-bullet-list";
 import OrderedList from "@tiptap/extension-ordered-list";
 import ListItem from "@tiptap/extension-list-item";
 import Placeholder from "@tiptap/extension-placeholder";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 
 // Import icons
@@ -30,11 +30,9 @@ export default function Editor({
   content,
   handleContent,
   onDraft,
+  isDrafting,
 }) {
-  const timeoutRef = useRef(null);
-
   const [showColorPicker, setShowColorPicker] = useState(false);
-  const [isDrafting, setIsDrafting] = useState(false);
 
   const editor = useEditor({
     extensions: [
@@ -95,30 +93,16 @@ export default function Editor({
       if (isSaveKey) {
         e.preventDefault();
 
-        setIsDrafting(true);
-
         const html = editor.getHTML();
         onDraft(challengeTitle, html);
-
-        // 이전 타이머가 있다면 제거
-        if (timeoutRef.current) {
-          clearTimeout(timeoutRef.current);
-          console.log("이전 타이머 제거");
-        }
-
-        // 심리적 안정감을 위한 저장중 표시 보여주기 로직
-        timeoutRef.current = setTimeout(() => {
-          setIsDrafting(false);
-        }, 800);
       }
     };
 
     document.addEventListener("keydown", handleSaveShortcut);
     return () => {
       document.removeEventListener("keydown", handleSaveShortcut);
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
-  }, [editor]);
+  }, [editor, challengeTitle]);
 
   const colors = [
     "#000000", // Black
