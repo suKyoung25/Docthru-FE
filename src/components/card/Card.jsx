@@ -81,7 +81,7 @@ export default function ChallengeCard({
             </span>
           </div>
         </div>
-      )}
+    </div>
     </div>
   );
 }
