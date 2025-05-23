@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useAuth } from "@/providers/AuthProvider";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import GoogleLoginButton from "@/components/btn/auth/GoogleLoginButton";
 
 export default function SignInPage() {
   const { login, user, isLoading } = useAuth()
@@ -45,19 +46,22 @@ export default function SignInPage() {
   }
 
   return (
-    <Container className="mt-21 flex w-85.5 flex-col items-center justify-center gap-10">
-      <Logo className="h-13.5 w-60" />
-      <div className="flex w-85.5 flex-col gap-6">
-        <EmailInput value={email} onChange={(e) => { setEmail(e.target.value) }} />
-        <PasswordInput value={password} onChange={(e) => { setPassword(e.target.value) }} />
+    <Container>
+      <div className="mt-15 mb-30 flex flex-col items-center md:mt-30">
+        <Logo className="mb-10 h-[54px] w-60 md:h-18 md:w-80" />
+        <form className="mb-[18px] space-y-6" onSubmit={handleLogin}>
+          <EmailInput value={email} onChange={(e) => { setEmail(e.target.value) }} />
+          <PasswordInput value={password} onChange={(e) => { setPassword(e.target.value) }} />
+          <SubmitButton type="로그인" />
+        </form>
+        <GoogleLoginButton />
+        <div className="text-[#262626]">
+          <span className="text-base">회원이 아니신가요?</span>
+          <Link href="/signUp">
+            <span className="text-base underline">회원가입하기</span>
+          </Link>
+        </div>
       </div>
-      <SubmitButton type="로그인" onSubmit={handleLogin} />
-      <div className="text-[#262626]">
-        <span className="text-base">회원이 아니신가요? </span>
-        <Link href="/" className="underline">
-          <span className="text-base underline">회원가입하기</span>
-        </Link>
-      </div>
-    </Container>
+    </Container >
   );
 }

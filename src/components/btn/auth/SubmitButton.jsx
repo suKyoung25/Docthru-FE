@@ -1,10 +1,9 @@
 import React from "react";
 
-export function SubmitButton({ type, onSubmit }) {
+export function SubmitButton({ type }) {
   return (
     <button
       type="submit"
-      onClick={onSubmit}
       className="h-12 w-[343px] rounded-xl bg-black font-semibold text-white md:w-[518px]"
     >
       {type}
@@ -13,3 +12,4 @@ export function SubmitButton({ type, onSubmit }) {
 }
 
 export default SubmitButton;
+
