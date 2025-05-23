@@ -32,7 +32,7 @@ export default function PasswordInput({ value, onChange, error }) {
           id="password"
           value={value}
           onChange={onChange}
-          placeholder="비밀번호를 입력하세요"
+          placeholder="비밀번호를 입력해주세요"
           className={`h-12 w-full rounded-[12px] border bg-white px-3 py-2 pr-10 text-sm outline-none ${
             error ? "border-error" : "border-gray-200"
           }`}

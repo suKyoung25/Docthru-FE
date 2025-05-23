@@ -10,7 +10,7 @@ import BulletList from "@tiptap/extension-bullet-list";
 import OrderedList from "@tiptap/extension-ordered-list";
 import ListItem from "@tiptap/extension-list-item";
 import Placeholder from "@tiptap/extension-placeholder";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 
 // Import icons
@@ -24,7 +24,7 @@ import IconOrderedList from "@/assets/editor/ic_list_ordered.svg";
 import IconBulletList from "@/assets/editor/ic_list_bullet.svg";
 import IconTextColor from "@/assets/editor/ic_textColor.svg";
 
-export default function Editor() {
+export default function Editor({ content, handleContent }) {
   const [showColorPicker, setShowColorPicker] = useState(false);
 
   const editor = useEditor({
@@ -51,13 +51,27 @@ export default function Editor() {
         emptyEditorClass: "is-editor-empty",
       }),
     ],
-    content: "",
+    content: content || "",
     editorProps: {
       attributes: {
         class: "prose prose-lg focus:outline-none w-full max-w-full",
       },
     },
+    onUpdate: ({ editor }) => {
+      // 여기에 필요한 경우 content 변경 핸들러를 추가할 수 있습니다.
+      handleContent(editor.getHTML());
+    },
   });
+
+  // content props가 변경될 때 에디터 내용 업데이트
+  useEffect(() => {
+    if (editor && content) {
+      // 현재 내용과 다를 때만 업데이트
+      if (editor.getHTML() !== content) {
+        editor.commands.setContent(content);
+      }
+    }
+  }, [content, editor]);
 
   if (!editor) {
     return null;

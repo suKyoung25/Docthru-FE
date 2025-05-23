@@ -6,15 +6,15 @@ import WebChip from "@/components/chip/chipType/WebChip";
 import BlogChip from "@/components/chip/chipCategory/BlogChip";
 import OfficialDocChip from "@/components/chip/chipCategory/OfficialDocChip";
 
-export const typeChipMap = {
-  api: <ApiChip />,
-  career: <CareerChip />,
-  modernjs: <ModernjsChip />,
-  nextjs: <NextjsChip />,
-  web: <WebChip />,
+export const categoryChipMap = {
+  API: <ApiChip />,
+  Career: <CareerChip />,
+  "Modern JS": <ModernjsChip />,
+  "Next.js": <NextjsChip />,
+  Web: <WebChip />,
 };
 
-export const categoryChipMap = {
-  blog: <BlogChip />,
-  officialdoc: <OfficialDocChip />,
+export const typeChipMap = {
+  블로그: <BlogChip />,
+  공식문서: <OfficialDocChip />,
 };

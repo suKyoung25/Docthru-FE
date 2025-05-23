@@ -14,7 +14,7 @@ export default function Gnb({ isNoti, userRole }) {
   const pathname = usePathname();
 
   return (
-    <header className="flex h-14 items-center justify-between px-4 sm:px-6 md:h-15 lg:px-8">
+    <header className="flex h-14 items-center justify-between bg-[#FFFFFF] px-4 sm:px-6 md:h-15 lg:px-8">
       <div className="flex items-center gap-4">
         <Logo />
         {userRole === "admin" && (
