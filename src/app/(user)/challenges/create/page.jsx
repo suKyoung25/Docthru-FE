@@ -3,6 +3,9 @@
 import BtnText from "@/components/btn/text/BtnText";
 import React, { useState } from "react";
 import Input from "./component/Input";
+import CategoryClosed from "@/components/dropdown/category/CategoryClosed";
+import CategoryItems from "@/components/dropdown/category/CategoryItems";
+import CategoryOpened from "@/components/dropdown/category/CategoryOpened";
 
 export default function page() {
   const [title, setTitle] = useState("");
@@ -29,6 +32,9 @@ export default function page() {
           onChange={(e) => setOriginUrl(e.target.value)}
           height={"h-[48px]"}
         />
+        <CategoryClosed />
+        <CategoryItems />
+        <CategoryOpened />
         <Input
           title={"최대 인원"}
           placeholder={"인원을 입력해주세요"}
