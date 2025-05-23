@@ -1,24 +1,124 @@
-import Container from "@/components/container/PageContainer";
-import CallengeContainerd from "./_components/challengeCard/CallengeContainer";
+"use client";
+
+import Sort from "@/components/sort/Sort";
+import ApplyChallenge from "./_components/ApplyChallenge";
 import SearchInput from "@/components/input/SearchInput";
-import Profile from "@/components/dropDown/Profile";
+import { useEffect, useState } from "react";
+import { getChallenges } from "@/lib/api/searchChallenges";
+import ChallengeCard from "@/components/card/Card";
+import FilterModal from "@/components/modal/FilterModal";
 
 function page() {
+  const [filters, setFilters] = useState({
+    category: "",
+    docType: "",
+    status: "",
+  });
+  const [challenges, setChallenges] = useState([]);
+  const [keyword, setKeyword] = useState("");
+  const [isModal, setIsModal] = useState(false);
+
+  //챌린지 목록 불러오기
+  const getChallengesData = async () => {
+    try {
+      const options = {
+        page: 1,
+        pageSize: 4,
+        keyword,
+        ...filters,
+      };
+
+      //category, docType, keyword 만 걸러진 challenges 데이터
+      const results = await getChallenges(options);
+
+      const currentDate = new Date();
+
+      //status(진행 중/마감) 도 걸러진 challengs 데이터
+      if (filters.status === "progress") {
+        const filteredResults = results.filter((result) => {
+          const deadlineDate = new Date(result.deadline);
+
+          return deadlineDate.getTime() > currentDate.getTime();
+        });
+
+        setChallenges(filteredResults);
+      } else if (filters.status === "closed") {
+        const filteredResults = results.filter((result) => {
+          const deadlineDate = new Date(result.deadline);
+
+          return deadlineDate.getTime() < currentDate.getTime();
+        });
+
+        setChallenges(filteredResults);
+      } else {
+        setChallenges(results);
+      }
+    } catch (error) {
+      console.error("챌린지 목록 불러오기 실패");
+    }
+  };
+
+  useEffect(() => {
+    getChallengesData();
+  }, [filters, keyword]);
+
+  const handleClickFilter = () => {
+    setIsModal(true);
+  };
+
+  const handleApplyFilters = ({ fields, docType, status }) => {
+    //category를 fields 중복 허용?
+    setFilters({
+      category: fields[0] || "",
+      docType: docType || "",
+      status: status || "",
+    });
+
+    setIsModal(false);
+  };
+
   return (
-    <>
-      <Container>
-        챌린지 컨테이너 (type="slim" or "" 가능)
-        <CallengeContainerd height={"h-[176px]"} type={""} />
-      </Container>
-      <Container>
-        챌린지 검색창 placeholder 텍스트 사이즈 변경 가능
-        <SearchInput text={"text-[14px]"} />
-      </Container>
-      <Container>
-        드롭다운 유저 프로필
-        <Profile />
-      </Container>
-    </>
+    <div className="mx-[16px] mt-[16px] mb-[65px]">
+      <div className="font-pretendard flex flex-row items-center justify-between text-[20px] font-semibold">
+        챌린지 목록 <ApplyChallenge />
+      </div>
+
+      <div className="mt-[16px] flex flex-row gap-[8px]">
+        <div className="flex-[1]">
+          <Sort onClick={handleClickFilter} />
+          {isModal ? (
+            <FilterModal
+              onApply={handleApplyFilters}
+              onClose={() => setIsModal(false)}
+            />
+          ) : null}
+        </div>
+        <div className="flex-[2.5]">
+          <SearchInput
+            text={"text-[14px]"}
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+          />
+        </div>
+      </div>
+      <div className="flex flex-col gap-[24px] py-[24px]">
+        {challenges ? (
+          challenges.map((challenge) => (
+            <ChallengeCard
+              key={challenge.id}
+              title={challenge.title}
+              type={challenge.docType}
+              category={challenge.category}
+              deadline={challenge.deadline}
+              participants={challenge.participants.length}
+              maxParticipant={challenge.maxParticipant}
+            />
+          ))
+        ) : (
+          <div>챌린지가 존재하지 않습니다.</div>
+        )}
+      </div>
+    </div>
   );
 }
 
