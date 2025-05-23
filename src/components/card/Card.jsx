@@ -80,7 +80,7 @@ export default function ChallengeCard({
               {participants}/{maxParticipant}
             </span>
           </div>
-        </>
+        </div>
       )}
     </div>
   );
