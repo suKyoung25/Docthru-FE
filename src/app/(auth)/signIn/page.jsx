@@ -27,15 +27,15 @@ export default function SignInPage() {
   }
 
   useEffect(() => {
-    console.log('User status changed:', user); // ⭐ 이 부분 추가
+    console.log('User status changed:', user);
     if (user) {
-      console.log('Redirecting to /'); // ⭐ 이 부분 추가
+      console.log('Redirecting to /');
       router.push('/');
     }
   }, [user, router]);
 
   // 로딩중 - 임시UI
-  if (isLoading) { // <- 여기서 isLoading이 정의되지 않아 에러가 발생하거나 컴포넌트 렌더링에 문제가 생길 수 있습니다.
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>

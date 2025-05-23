@@ -1,4 +1,3 @@
-// lib/actions/auth.js
 'use server';
 
 import { cookies } from 'next/headers';
