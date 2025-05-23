@@ -18,6 +18,10 @@ function page() {
   const [keyword, setKeyword] = useState("");
   const [isModal, setIsModal] = useState(false);
 
+  //디버깅
+  //vercel 오류 해결
+  //dev merge 오류
+
   //챌린지 목록 불러오기
   const getChallengesData = async () => {
     try {

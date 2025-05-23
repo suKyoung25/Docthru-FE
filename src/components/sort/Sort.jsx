@@ -12,7 +12,7 @@ export default function Sort({ isAdminStatus, isFiltered, count, onClick }) {
       : filterIcon;
 
   const containerClass = [
-    "flex h-10 items-center justify-between gap-2 rounded-4xl border border-gray-300 px-3 py-2",
+    "flex w-full h-10 items-center justify-between gap-2 rounded-4xl border border-gray-300 px-3 py-2",
     isAdminStatus && "pr-2",
     isFiltered && "bg-gray-800",
   ]
@@ -24,20 +24,18 @@ export default function Sort({ isAdminStatus, isFiltered, count, onClick }) {
   const imageClass = isAdminStatus ? "h-6 w-6" : "";
 
   return (
-    <div className={containerClass}>
+    <button onClick={onClick} className={containerClass}>
       <p className={`${textClass} max-sm:text-sm`}>
         {isAdminStatus ? "승인 대기" : "필터"}
         {count ? `(${count})` : ""}
       </p>
-      <button onClick={onClick}>
-        <Image
-          src={iconSrc}
-          width={16}
-          height={16}
-          alt="아이콘"
-          className={imageClass}
-        />
-      </button>
-    </div>
+      <Image
+        src={iconSrc}
+        width={16}
+        height={16}
+        alt="아이콘"
+        className={imageClass}
+      />
+    </button>
   );
 }

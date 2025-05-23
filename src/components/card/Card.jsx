@@ -9,7 +9,6 @@ import { typeChipMap, categoryChipMap } from "../chip/chipMaps";
 import ChipCardStatus from "@/components/chip/chipComplete/ChipCardStatus"; // 좌상단 chip
 import { useEffect, useState } from "react";
 
-
 export default function ChallengeCard({
   title,
   type,
@@ -57,13 +56,13 @@ export default function ChallengeCard({
         </button>
       </div>
 
-      {hasStatus && (
+      {status && (
         <div className="mt-2 text-xl font-semibold text-gray-800">{title}</div>
       )}
 
       <div className="mt-2 flex flex-wrap gap-2">
         {categoryChipMap[category] ?? null}
-{typeChipMap[type] ?? null}
+        {typeChipMap[type] ?? null}
       </div>
 
       <hr className="my-4 border-gray-200" />
@@ -81,7 +80,7 @@ export default function ChallengeCard({
             </span>
           </div>
         </div>
-    </div>
+      </div>
     </div>
   );
 }
