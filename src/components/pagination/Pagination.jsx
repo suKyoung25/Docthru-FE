@@ -4,12 +4,6 @@ import leftArrow from "@/assets/icon/ic_arrow_left.svg";
 import rightArrow from "@/assets/icon/ic_arrow_right.svg";
 
 /**
- * 한 페이지에 표시할 아이템(데이터) 개수
- * 예: 챌린지 목록 10개씩 보기
- */
-const itemsPerPage = 10;
-
-/**
  * 페이지네이션 바에 표시할 최대 페이지 수
  * 예: [1, 2, 3, 4, 5] 또는 [6, 7, 8, 9, 10]
  */
@@ -27,7 +21,13 @@ const pagesPerGroup = 5;
  * @param {(page: number) => void} onPageChange - 페이지 변경 핸들러
  * @returns
  */
-function Pagination({ totalCount, currentPage, onPageChange }) {
+function Pagination({ totalCount, currentPage, pageSize, onPageChange }) {
+  /**
+   * 한 페이지에 표시할 아이템(데이터) 개수
+   * 예: 챌린지 목록 10개씩 보기
+   */
+  const itemsPerPage = pageSize;
+
   const paginationData = useMemo(() => {
     const totalPages = Math.ceil(totalCount / itemsPerPage);
     const currentGroup = Math.ceil(currentPage / pagesPerGroup);
