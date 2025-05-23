@@ -58,7 +58,7 @@ export default function Reply({
   }, []);
 
   return (
-    <div className="relative w-full rounded-xl bg-white p-4">
+    <div className="relative mt-4 w-full rounded-xl bg-gray-50 p-4 lg:w-[826px]">
       <div className="mb-3 flex items-center justify-between">
         {/* 유저 이름과 시간 */}
         <div className="flex items-center gap-2">
