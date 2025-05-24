@@ -32,7 +32,7 @@ export default function BtnText({ theme, icon, onClick, className, children }) {
   return (
     <button
       onClick={onClick}
-      className={`flex w-full items-center justify-center rounded-[10px] text-sm font-semibold sm:rounded-xl sm:text-base ${className} ${themes[theme]}`}
+      className={`flex h-full w-full items-center justify-center rounded-[10px] text-sm font-semibold sm:rounded-xl sm:text-base ${className} ${themes[theme]}`}
     >
       {
         // icon이 true면서 theme가 tonal일 경우 포기 아이콘 보여주기

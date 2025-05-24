@@ -3,7 +3,8 @@ import Image from "next/image";
 import clock from "@/assets/icon/ic_clock.svg";
 import callengers from "@/assets/icon/ic_person.svg";
 
-export default function CallengeContainerd({ height, type }) {
+//type은 "slim", "" 사용 가능
+export default function ChallengeContainerd({ height, type }) {
   return (
     <>
       <div

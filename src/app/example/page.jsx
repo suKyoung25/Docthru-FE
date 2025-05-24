@@ -16,6 +16,11 @@ import IconPasswordVisible from "@/components/btn/icon/BtnIcon";
 import BtnCheckbox from "@/components/btn/form/BtnCheckbox";
 import BtnRadio from "@/components/btn/form/BtnRadio";
 import Pagination from "@/components/pagination/Pagination";
+import ChallengeContainerd from "../(user)/challenges/_components/challengeCard/ChallengeContainer";
+import SearchInput from "@/components/input/SearchInput";
+import Profile from "@/components/dropDown/Profile";
+import ApplyChallenge from "../(user)/challenges/_components/ApplyChallenge";
+import Input from "../(user)/challenges/create/component/Input";
 
 const themesTitle = "mb-1 font-[600]";
 const MODAL_COMPONENTS = {
@@ -292,6 +297,49 @@ const page = () => {
           totalCount={183}
           currentPage={page}
           onPageChange={(newPage) => setPage(newPage)}
+        />
+      </div>
+
+      {/* Challenge container 컴포넌트*/}
+      <div className="m-10 flex flex-col gap-8 bg-white p-4">
+        <h2 className="text-3xl font-bold">challenge container</h2>
+        <ChallengeContainerd height={"h-[176px]"} type={""} />
+        <ChallengeContainerd height={"h-[104px]"} type={"slim"} />
+      </div>
+
+      {/* SearchInput 컴포넌트
+      value와 onChange는 state를 생성하면서 설정하면 됨. 아래 예시
+      value={kwyword}
+      onChange={(e)=>setKeyword(e.target.value)}*/}
+      <div className="m-10 flex flex-col gap-8 bg-white p-4">
+        <h2 className="text-3xl font-bold">Search Input</h2>
+        <SearchInput text={"text-[14px]"} />
+      </div>
+
+      {/* Dropdown Profile 컴포넌트
+      DB랑 연동 시 유저의 등급으로 이미지 분기 처리 필요
+      라우터 경로 확인 필요*/}
+      <div className="m-10 flex flex-col gap-8 bg-[var(--color-gray-50)]">
+        <h2 className="text-3xl font-bold">Dropdown Profile</h2>
+        <Profile />
+      </div>
+
+      {/* 신청하기 컴포넌트*/}
+      <div className="m-10 flex flex-col gap-8 bg-white p-4">
+        <h2 className="text-3xl font-bold">신청하기(공통X)</h2>
+        <ApplyChallenge />
+      </div>
+
+      {/* Input 컴포넌트
+     value와 onChange는 state를 생성하면서 설정하면 됨. 아래 예시
+        value={originUrl}
+          onChange={(e) => setOriginUrl(e.target.value)}*/}
+      <div className="m-10 flex flex-col gap-8 bg-white p-4">
+        <h2 className="text-3xl font-bold">정보입력(공통X)</h2>
+        <Input
+          title={"제목"}
+          placeholder={"제목을 입력해주세요"}
+          height={"h-[48px]"}
         />
       </div>
     </Container>

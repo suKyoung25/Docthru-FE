@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import ChallengeCard from "@/components/card/Card";
-import CallengeContainerd from "@/app/(user)/challenges/_components/challengeCard/CallengeContainer";
+import ChallengeContainerd from "@/app/(user)/challenges/_components/challengeCard/ChallengeContainer";
 import Image from "next/image";
 import userIcon from "@/assets/img/profile_member.svg";
 import RankingListItem from "@/components/list/RankingListItem";
@@ -140,7 +140,7 @@ export default function ChallengeDetailPage() {
 
       {/* 도전하기 버튼 */}
       <section className="mt-8 w-full max-w-sm">
-        <CallengeContainerd height="h-auto" type="slim" />
+        <ChallengeContainerd height="h-auto" type="slim" />
       </section>
 
       {/* 참여현황 리스트 */}
