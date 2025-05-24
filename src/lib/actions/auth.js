@@ -5,25 +5,26 @@ import { cookies } from 'next/headers';
 const API_URL = process.env.API_URL;
 
 export async function getServerSideToken(type) {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const tokenCookie = cookieStore.get(type);
   return tokenCookie ? tokenCookie.value : null;
 }
 
 export async function setServerSideTokens(accessToken, refreshToken) {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
 
   const decodeToken = (token) => {
     try {
       return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
     } catch (e) {
+      console.error('Error decoding token:', e);
       return {};
     }
   };
 
   const calculateMaxAge = (tokenData) => {
     const nowInSeconds = Math.floor(Date.now() / 1000);
-    return tokenData.exp ? tokenData.exp - nowInSeconds : 60 * 60 * 24 * 30;
+    return tokenData.exp ? Math.max(0, tokenData.exp - nowInSeconds) : 60 * 60 * 24 * 30;
   };
 
   const accessTokenData = decodeToken(accessToken);
@@ -34,7 +35,7 @@ export async function setServerSideTokens(accessToken, refreshToken) {
 
   cookieStore.set('accessToken', accessToken, {
     path: '/',
-    maxAge: Math.max(0, accessTokenExpiresIn),
+    maxAge: accessTokenExpiresIn,
     sameSite: 'strict',
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production'
@@ -42,7 +43,7 @@ export async function setServerSideTokens(accessToken, refreshToken) {
 
   cookieStore.set('refreshToken', refreshToken, {
     path: '/',
-    maxAge: Math.max(0, refreshTokenExpiresIn),
+    maxAge: refreshTokenExpiresIn,
     sameSite: 'strict',
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production'
@@ -50,21 +51,25 @@ export async function setServerSideTokens(accessToken, refreshToken) {
 }
 
 export async function updateAccessToken(accessToken) {
-  const cookieStore = cookies();
-  const accessTokenData = JSON.parse(Buffer.from(accessToken.split('.')[1], 'base64').toString());
-  const accessTokenExpiresIn = accessTokenData.exp - Math.floor(Date.now() / 1000);
+  const cookieStore = await cookies();
+  try {
+    const accessTokenData = JSON.parse(Buffer.from(accessToken.split('.')[1], 'base64').toString());
+    const accessTokenExpiresIn = accessTokenData.exp - Math.floor(Date.now() / 1000);
 
-  cookieStore.set('accessToken', accessToken, {
-    path: '/',
-    maxAge: Math.max(0, accessTokenExpiresIn),
-    sameSite: 'strict',
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production'
-  });
+    cookieStore.set('accessToken', accessToken, {
+      path: '/',
+      maxAge: Math.max(0, accessTokenExpiresIn),
+      sameSite: 'strict',
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production'
+    });
+  } catch (error) {
+    console.error('Error updating access token:', error);
+  }
 }
 
 export async function clearServerSideTokens() {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   cookieStore.delete('accessToken');
   cookieStore.delete('refreshToken');
   return { success: true };
@@ -133,6 +138,7 @@ export async function getUserAction() {
     const accessToken = await getServerSideToken('accessToken');
 
     if (!accessToken) {
+      console.log('No access token found, returning null user.');
       return null;
     }
 
@@ -146,7 +152,7 @@ export async function getUserAction() {
     });
 
     if (!response.ok) {
-      console.error('Failed to fetch user data with accessToken (Server Action):', response.status);
+      console.error('Failed to fetch user data with accessToken (Server Action) - Status:', response.status);
       await clearServerSideTokens();
       return null;
     }
