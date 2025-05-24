@@ -55,8 +55,8 @@ export default function SignInPage() {
           <SubmitButton type="로그인" />
         </form>
         <GoogleLoginButton />
-        <div className="text-[#262626]">
-          <span className="text-base">회원이 아니신가요?</span>
+        <div className="text-[#262626] mt-6 space-x-2">
+          <span className="text-base">회원이 아니신가요? </span>
           <Link href="/signUp">
             <span className="text-base underline">회원가입하기</span>
           </Link>
