@@ -12,6 +12,8 @@ export default function page() {
   const [originUrl, setOriginUrl] = useState("");
   const [maxParticipant, setMaxParticipant] = useState("");
   const [content, setContent] = useState("");
+  const [isCategory, setIsCategory] = useState(false);
+  const [isDocType, setIsDocType] = useState(false);
 
   return (
     <div className="font-pretendard px-[16px] pt-[16px] pb-[87px] text-[18px] text-[var(--color-gray-900)]">
@@ -32,9 +34,16 @@ export default function page() {
           onChange={(e) => setOriginUrl(e.target.value)}
           height={"h-[48px]"}
         />
-        <CategoryClosed />
-        <CategoryItems />
-        <CategoryOpened />
+        <div className="flex h-full flex-col gap-[8px]">
+          <div className="flex flex-col gap-[24px] text-sm font-medium text-[var(--color-gray-900)]">
+            분야
+            <CategoryClosed setIsCategory={setIsCategory} />
+            {isCategory && <CategoryItems />}
+            문선 타입
+            <CategoryClosed setIsDocType={setIsDocType} />
+            {isDocType && <CategoryItems />}
+          </div>
+        </div>
         <Input
           title={"최대 인원"}
           placeholder={"인원을 입력해주세요"}
@@ -42,7 +51,6 @@ export default function page() {
           onChange={(e) => setMaxParticipant(e.target.value)}
           height={"h-[48px]"}
         />
-
         <Input
           title={"내용"}
           placeholder={"내용을 입력해주세요"}
