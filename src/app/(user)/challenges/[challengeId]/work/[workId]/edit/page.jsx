@@ -5,7 +5,7 @@ import EditorSection from "../../_components/EditorSection";
 
 export default function page() {
   return (
-    <Container>
+    <Container maxWidth="max-w-4xl">
       <EditorHeader isUpdate={true} />
       <EditorSection challengeTitle="챌린지 제목" />
     </Container>

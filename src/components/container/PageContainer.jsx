@@ -14,7 +14,7 @@ import React from "react";
 export default function Container({
   children,
   className = "",
-  maxWidth = "max-w-7xl",
+  maxWidth = "max-w-[1200px]",
   padding = "px-4",
   margin = "mx-auto",
   style = {},
@@ -27,4 +27,3 @@ export default function Container({
     </div>
   );
 }
-
