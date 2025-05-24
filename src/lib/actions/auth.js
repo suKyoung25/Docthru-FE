@@ -1,57 +1,60 @@
+// lib/actions/auth.js
 'use server';
 
 import { cookies } from 'next/headers';
 
-const API_URL = process.env.API_URL;
+const BACKEND_BASE_URL = process.env.API_URL || 'http://localhost:8080';
 
 export async function getServerSideToken(type) {
-  const cookieStore = await cookies();
+  const cookieStore = await cookies(); // await 추가
   const tokenCookie = cookieStore.get(type);
   return tokenCookie ? tokenCookie.value : null;
 }
 
 export async function setServerSideTokens(accessToken, refreshToken) {
-  const cookieStore = await cookies();
+  const cookieStore = await cookies(); // await 추가
 
   const decodeToken = (token) => {
     try {
-      return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+      const parts = token.split('.');
+      if (parts.length !== 3) {
+        throw new Error('Invalid token format');
+      }
+      return JSON.parse(Buffer.from(parts[1], 'base64').toString());
     } catch (e) {
-      console.error('Error decoding token:', e);
       return {};
     }
   };
 
   const calculateMaxAge = (tokenData) => {
     const nowInSeconds = Math.floor(Date.now() / 1000);
-    return tokenData.exp ? Math.max(0, tokenData.exp - nowInSeconds) : 60 * 60 * 24 * 30;
+    return tokenData.exp && tokenData.exp > nowInSeconds
+      ? Math.max(0, tokenData.exp - nowInSeconds)
+      : 60 * 60 * 24 * 30;
   };
 
   const accessTokenData = decodeToken(accessToken);
   const refreshTokenData = decodeToken(refreshToken);
 
-  const accessTokenExpiresIn = calculateMaxAge(accessTokenData);
-  const refreshTokenExpiresIn = calculateMaxAge(refreshTokenData);
-
   cookieStore.set('accessToken', accessToken, {
     path: '/',
-    maxAge: accessTokenExpiresIn,
-    sameSite: 'strict',
+    maxAge: calculateMaxAge(accessTokenData),
+    sameSite: 'Lax',
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production'
   });
 
   cookieStore.set('refreshToken', refreshToken, {
     path: '/',
-    maxAge: refreshTokenExpiresIn,
-    sameSite: 'strict',
+    maxAge: calculateMaxAge(refreshTokenData),
+    sameSite: 'Lax',
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production'
   });
 }
 
 export async function updateAccessToken(accessToken) {
-  const cookieStore = await cookies();
+  const cookieStore = await cookies(); // await 추가
   try {
     const accessTokenData = JSON.parse(Buffer.from(accessToken.split('.')[1], 'base64').toString());
     const accessTokenExpiresIn = accessTokenData.exp - Math.floor(Date.now() / 1000);
@@ -59,7 +62,7 @@ export async function updateAccessToken(accessToken) {
     cookieStore.set('accessToken', accessToken, {
       path: '/',
       maxAge: Math.max(0, accessTokenExpiresIn),
-      sameSite: 'strict',
+      sameSite: 'Lax',
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production'
     });
@@ -69,7 +72,7 @@ export async function updateAccessToken(accessToken) {
 }
 
 export async function clearServerSideTokens() {
-  const cookieStore = await cookies();
+  const cookieStore = await cookies(); // await 추가
   cookieStore.delete('accessToken');
   cookieStore.delete('refreshToken');
   return { success: true };
@@ -77,11 +80,12 @@ export async function clearServerSideTokens() {
 
 export async function loginAction(email, password) {
   try {
-    const response = await fetch(`${API_URL}/auth/sign-in`, {
+    const response = await fetch(`${BACKEND_BASE_URL}/auth/sign-in`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
-      cache: 'no-store'
+      cache: 'no-store',
+      credentials: 'include'
     });
 
     if (!response.ok) {
@@ -91,13 +95,7 @@ export async function loginAction(email, password) {
     }
 
     const userDataFromBody = await response.json();
-    console.log('Server Action login success data (body):', userDataFromBody);
-
-    return {
-      user: userDataFromBody,
-      accessToken: 'dummy_token_set_by_backend_cookie',
-      refreshToken: 'dummy_token_set_by_backend_cookie'
-    };
+    return { user: userDataFromBody };
   } catch (error) {
     console.error('Error in loginAction (Server Action):', error);
     throw error;
@@ -106,11 +104,12 @@ export async function loginAction(email, password) {
 
 export async function registerAction(nickname, email, password, passwordConfirmation) {
   try {
-    const response = await fetch(`${API_URL}/auth/sign-up`, {
+    const response = await fetch(`${BACKEND_BASE_URL}/auth/sign-up`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nickname, email, password, passwordConfirmation }),
-      cache: 'no-store'
+      cache: 'no-store',
+      credentials: 'include'
     });
 
     if (!response.ok) {
@@ -120,13 +119,7 @@ export async function registerAction(nickname, email, password, passwordConfirma
     }
 
     const userDataFromBody = await response.json();
-    console.log('Server Action register success data (body):', userDataFromBody);
-
-    return {
-      user: userDataFromBody,
-      accessToken: 'dummy_token_set_by_backend_cookie',
-      refreshToken: 'dummy_token_set_by_backend_cookie'
-    };
+    return { user: userDataFromBody };
   } catch (error) {
     console.error('Error in registerAction (Server Action):', error);
     throw error;
@@ -138,17 +131,17 @@ export async function getUserAction() {
     const accessToken = await getServerSideToken('accessToken');
 
     if (!accessToken) {
-      console.log('No access token found, returning null user.');
       return null;
     }
 
-    const response = await fetch(`${API_URL}/users/me`, {
+    const response = await fetch(`${BACKEND_BASE_URL}/users/me`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json'
       },
-      cache: 'no-store'
+      cache: 'no-store',
+      credentials: 'include'
     });
 
     if (!response.ok) {
@@ -158,7 +151,6 @@ export async function getUserAction() {
     }
 
     const userData = await response.json();
-    console.log('User data from getUserAction:', userData);
     return userData || null;
   } catch (error) {
     console.error('Error in getUserAction:', error);

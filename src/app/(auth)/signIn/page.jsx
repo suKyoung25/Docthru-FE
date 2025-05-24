@@ -18,7 +18,8 @@ export default function SignInPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState('')
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
     try {
       await login(email, password) // 로그인
     } catch (error) {
