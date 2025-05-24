@@ -1,92 +1,165 @@
-"use server";
+// lib/actions/auth.js
+'use server';
 
-import { cookies } from "next/headers";
-import { authService } from "../api/authService";
+import { cookies } from 'next/headers';
 
-// 서버 사이드 전용 함수
+const BACKEND_BASE_URL = process.env.API_URL || 'http://localhost:8080';
+
 export async function getServerSideToken(type) {
-  const cookieStore = await cookies();
+  const cookieStore = await cookies(); // await 추가
   const tokenCookie = cookieStore.get(type);
   return tokenCookie ? tokenCookie.value : null;
 }
 
 export async function setServerSideTokens(accessToken, refreshToken) {
-  const cookieStore = await cookies();
+  const cookieStore = await cookies(); // await 추가
 
-  // 토큰 디코딩 및 만료 시간 계산
-  const accessTokenData = JSON.parse(
-    Buffer.from(accessToken.split(".")[1], "base64url").toString(),
-  );
-  const refreshTokenData = JSON.parse(
-    Buffer.from(refreshToken.split(".")[1], "base64url").toString(),
-  );
+  const decodeToken = (token) => {
+    try {
+      const parts = token.split('.');
+      if (parts.length !== 3) {
+        throw new Error('Invalid token format');
+      }
+      return JSON.parse(Buffer.from(parts[1], 'base64').toString());
+    } catch (e) {
+      return {};
+    }
+  };
 
-  const accessTokenExpiresIn =
-    accessTokenData.exp - Math.floor(Date.now() / 1000);
-  const refreshTokenExpiresIn =
-    refreshTokenData.exp - Math.floor(Date.now() / 1000);
+  const calculateMaxAge = (tokenData) => {
+    const nowInSeconds = Math.floor(Date.now() / 1000);
+    return tokenData.exp && tokenData.exp > nowInSeconds
+      ? Math.max(0, tokenData.exp - nowInSeconds)
+      : 60 * 60 * 24 * 30;
+  };
 
-  // 쿠키 설정
-  cookieStore.set("accessToken", accessToken, {
-    path: "/",
-    maxAge: accessTokenExpiresIn,
-    sameSite: "strict",
+  const accessTokenData = decodeToken(accessToken);
+  const refreshTokenData = decodeToken(refreshToken);
+
+  cookieStore.set('accessToken', accessToken, {
+    path: '/',
+    maxAge: calculateMaxAge(accessTokenData),
+    sameSite: 'Lax',
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production'
   });
 
-  cookieStore.set("refreshToken", refreshToken, {
-    path: "/",
-    maxAge: refreshTokenExpiresIn,
-    sameSite: "strict",
+  cookieStore.set('refreshToken', refreshToken, {
+    path: '/',
+    maxAge: calculateMaxAge(refreshTokenData),
+    sameSite: 'Lax',
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production'
   });
 }
 
 export async function updateAccessToken(accessToken) {
-  const cookieStore = await cookies();
+  const cookieStore = await cookies(); // await 추가
+  try {
+    const accessTokenData = JSON.parse(Buffer.from(accessToken.split('.')[1], 'base64').toString());
+    const accessTokenExpiresIn = accessTokenData.exp - Math.floor(Date.now() / 1000);
 
-  // 토큰 디코딩 및 만료 시간 계산
-  const accessTokenData = JSON.parse(
-    Buffer.from(accessToken.split(".")[1], "base64url").toString(),
-  );
-
-  const accessTokenExpiresIn =
-    accessTokenData.exp - Math.floor(Date.now() / 1000);
-
-  // 액세스 토큰만 갱신
-  cookieStore.set("accessToken", accessToken, {
-    path: "/",
-    maxAge: accessTokenExpiresIn,
-    sameSite: "strict",
-  });
+    cookieStore.set('accessToken', accessToken, {
+      path: '/',
+      maxAge: Math.max(0, accessTokenExpiresIn),
+      sameSite: 'Lax',
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production'
+    });
+  } catch (error) {
+    console.error('Error updating access token:', error);
+  }
 }
 
 export async function clearServerSideTokens() {
-  const cookieStore = await cookies();
-
-  // 액세스 토큰 삭제
-  cookieStore.delete("accessToken");
-
-  // 리프레시 토큰 삭제
-  cookieStore.delete("refreshToken");
-
+  const cookieStore = await cookies(); // await 추가
+  cookieStore.delete('accessToken');
+  cookieStore.delete('refreshToken');
   return { success: true };
 }
 
 export async function loginAction(email, password) {
-  const userData = await authService.login(email, password);
-  return userData;
+  try {
+    const response = await fetch(`${BACKEND_BASE_URL}/auth/sign-in`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+      cache: 'no-store',
+      credentials: 'include'
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Server Action login error response:', errorData);
+      throw new Error(errorData.message || '로그인 실패: 서버 응답 오류');
+    }
+
+    const userDataFromBody = await response.json();
+    return { user: userDataFromBody };
+  } catch (error) {
+    console.error('Error in loginAction (Server Action):', error);
+    throw error;
+  }
 }
 
-export async function registerAction(
-  nickname,
-  email,
-  password,
-  passwordConfirmation,
-) {
-  const userData = await authService.register(
-    nickname,
-    email,
-    password,
-    passwordConfirmation,
-  );
-  return userData;
+export async function registerAction(nickname, email, password, passwordConfirmation) {
+  try {
+    const response = await fetch(`${BACKEND_BASE_URL}/auth/sign-up`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nickname, email, password, passwordConfirmation }),
+      cache: 'no-store',
+      credentials: 'include'
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Server Action register error response:', errorData);
+      throw new Error(errorData.message || '회원가입 실패: 서버 응답 오류');
+    }
+
+    const userDataFromBody = await response.json();
+    return { user: userDataFromBody };
+  } catch (error) {
+    console.error('Error in registerAction (Server Action):', error);
+    throw error;
+  }
+}
+
+export async function getUserAction() {
+  try {
+    const accessToken = await getServerSideToken('accessToken');
+
+    if (!accessToken) {
+      return null;
+    }
+
+    const response = await fetch(`${BACKEND_BASE_URL}/users/me`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      },
+      cache: 'no-store',
+      credentials: 'include'
+    });
+
+    if (!response.ok) {
+      console.error('Failed to fetch user data with accessToken (Server Action) - Status:', response.status);
+      await clearServerSideTokens();
+      return null;
+    }
+
+    const userData = await response.json();
+    return userData || null;
+  } catch (error) {
+    console.error('Error in getUserAction:', error);
+    await clearServerSideTokens();
+    return null;
+  }
+}
+
+export async function logoutAction() {
+  await clearServerSideTokens();
+  return { success: true };
 }
