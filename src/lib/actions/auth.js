@@ -1,18 +1,17 @@
-// lib/actions/auth.js
 'use server';
 
 import { cookies } from 'next/headers';
 
-const BACKEND_BASE_URL = process.env.API_URL || 'http://localhost:8080';
+const API_URL = process.env.API_URL;
 
 export async function getServerSideToken(type) {
-  const cookieStore = await cookies(); // await 추가
+  const cookieStore = await cookies();
   const tokenCookie = cookieStore.get(type);
   return tokenCookie ? tokenCookie.value : null;
 }
 
 export async function setServerSideTokens(accessToken, refreshToken) {
-  const cookieStore = await cookies(); // await 추가
+  const cookieStore = await cookies();
 
   const decodeToken = (token) => {
     try {
@@ -39,7 +38,7 @@ export async function setServerSideTokens(accessToken, refreshToken) {
   cookieStore.set('accessToken', accessToken, {
     path: '/',
     maxAge: calculateMaxAge(accessTokenData),
-    sameSite: 'Lax',
+    sameSite: 'None',
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production'
   });
@@ -47,14 +46,14 @@ export async function setServerSideTokens(accessToken, refreshToken) {
   cookieStore.set('refreshToken', refreshToken, {
     path: '/',
     maxAge: calculateMaxAge(refreshTokenData),
-    sameSite: 'Lax',
+    sameSite: 'None',
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production'
   });
 }
 
 export async function updateAccessToken(accessToken) {
-  const cookieStore = await cookies(); // await 추가
+  const cookieStore = await cookies();
   try {
     const accessTokenData = JSON.parse(Buffer.from(accessToken.split('.')[1], 'base64').toString());
     const accessTokenExpiresIn = accessTokenData.exp - Math.floor(Date.now() / 1000);
@@ -62,7 +61,7 @@ export async function updateAccessToken(accessToken) {
     cookieStore.set('accessToken', accessToken, {
       path: '/',
       maxAge: Math.max(0, accessTokenExpiresIn),
-      sameSite: 'Lax',
+      sameSite: 'None',
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production'
     });
@@ -72,7 +71,7 @@ export async function updateAccessToken(accessToken) {
 }
 
 export async function clearServerSideTokens() {
-  const cookieStore = await cookies(); // await 추가
+  const cookieStore = await cookies();
   cookieStore.delete('accessToken');
   cookieStore.delete('refreshToken');
   return { success: true };
@@ -80,7 +79,7 @@ export async function clearServerSideTokens() {
 
 export async function loginAction(email, password) {
   try {
-    const response = await fetch(`${BACKEND_BASE_URL}/auth/sign-in`, {
+    const response = await fetch(`${API_URL}/auth/sign-in`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
@@ -104,7 +103,7 @@ export async function loginAction(email, password) {
 
 export async function registerAction(nickname, email, password, passwordConfirmation) {
   try {
-    const response = await fetch(`${BACKEND_BASE_URL}/auth/sign-up`, {
+    const response = await fetch(`${API_URL}/auth/sign-up`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nickname, email, password, passwordConfirmation }),
@@ -134,7 +133,7 @@ export async function getUserAction() {
       return null;
     }
 
-    const response = await fetch(`${BACKEND_BASE_URL}/users/me`, {
+    const response = await fetch(`${API_URL}/users/me`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${accessToken}`,
