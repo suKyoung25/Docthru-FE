@@ -38,14 +38,14 @@ export async function setServerSideTokens(accessToken, refreshToken) {
   cookieStore.set('accessToken', accessToken, {
     path: '/',
     maxAge: calculateMaxAge(accessTokenData),
-    sameSite: 'None',
+    sameSite: 'Lax',
     httpOnly: true
   });
 
   cookieStore.set('refreshToken', refreshToken, {
     path: '/',
     maxAge: calculateMaxAge(refreshTokenData),
-    sameSite: 'None',
+    sameSite: 'Lax',
     httpOnly: true
   });
 }
@@ -59,7 +59,7 @@ export async function updateAccessToken(accessToken) {
     cookieStore.set('accessToken', accessToken, {
       path: '/',
       maxAge: Math.max(0, accessTokenExpiresIn),
-      sameSite: 'None',
+      sameSite: 'Lax',
       httpOnly: true
     });
   } catch (error) {
