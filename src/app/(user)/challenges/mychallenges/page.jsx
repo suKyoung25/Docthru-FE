@@ -2,10 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import Container from "@/components/container/PageContainer";
-import ChallengeContainerd from "../_components/challengeCard/ChallengeContainer";
 import SearchInput from "@/components/input/SearchInput";
 import Profile from "@/components/dropDown/Profile";
-import ListHead from '../_components/myChallenges/appliedChallenges/ListHead';
 import { appliedChallenges } from '@/lib/api/myChallenges';
 import ApplyChallenge from '../_components/ApplyChallenge';
 import { useRouter } from 'next/navigation';
@@ -14,12 +12,8 @@ import FilterModal from '@/components/modal/FilterModal';
 import Sort from '@/components/sort/Sort';
 import { useAuth } from "@/providers/AuthProvider";
 import { getUserAction } from "@/lib/actions/auth";
-import MapResultData from "../_components/myChallenges/appliedChallenges/MapResultData";
 import { columnSetting } from "@/constant/constant";
-import Pagination from "@/components/pagination/Pagination";
-
-
-
+import AppliedChallenges from "../_components/myChallenges/appliedChallenges/appliedChallenges";
 
 export default function page() {
   const router = useRouter();
@@ -38,6 +32,7 @@ export default function page() {
   async function appliedChallengesData() {
     try {
       const data = await appliedChallenges();
+      console.log(data);
       setResult(data);
     } catch (error) {
       console.error("목록 불러오기 실패");
@@ -45,16 +40,13 @@ export default function page() {
   }
   if (isLoading) return <div>로딩 중...</div>;
   if (!user) return <div>로그인이 필요합니다.</div>;
-  console.log(user);
+  
   //신청한 챌린지 목록 불러오기
 
   useEffect(()=>{
-    
    if (user) appliedChallengesData();
   },[])
 
-
-  
   return (
     <Container>
       <div className="flex justify-between h-10 mt-4">
@@ -68,20 +60,15 @@ export default function page() {
         <div className="flex-7 sm:flex-8"> <SearchInput /></div>
         <div className="flex-3 sm:flex-2"><Sort /></div>
       </div>
-      <ListHead columnSetting={columnSetting} />
-      <MapResultData 
-        columnSetting={columnSetting} // 매칭 데이터, 너비, 스타일링 셋팅
-        resultData={result} // api response
-        onClick={() => router.push(`/challenges/${data.id}`)} // 상세페이지로 이동
-      />
-      <div className="mt-5">
-      {/* <Pagination
-        totalCount={data.length} // ← 50
-        currentPage={page}
+      <AppliedChallenges 
+        columnSetting={columnSetting} 
+        result={result} 
+        onClick={(id) => router.push(`/challenges/${id}`)}
+        totalCount={totalCount}
+        page={page}
         pageSize={pageSize}
-        onPageChange={setPage}
-      /> */}
-      </div>
+        onPageChange={(newPage) => setPage(newPage)}
+      />
     </Container>
   );
 }
