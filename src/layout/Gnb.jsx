@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import notiOff from '@/assets/icon/ic_noti_off.svg';
 import notiOn from '@/assets/icon/ic_noti_on.svg';
 import member from '@/assets/img/profile_member.svg';
@@ -9,7 +9,7 @@ import admin from '@/assets/img/profile_admin.svg';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Logo from './_components/Logo';
-import Profile from '@/components/dropDown/Profile';
+import Profile from '@/components/dropdown/Profile';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 
 export default function Gnb({ isNoti, userRole }) {
