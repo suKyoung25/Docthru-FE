@@ -26,8 +26,6 @@ export default function page() {
   const { user, isLoading } = useAuth();
   
   if(isLoading) return (<div>로딩 중..</div>);
- 
-  console.log('User status changed!!:', user);
 
   async function appliedChallengesData() {
     try {
