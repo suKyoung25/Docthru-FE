@@ -13,7 +13,7 @@ import Sort from '@/components/sort/Sort';
 import { useAuth } from "@/providers/AuthProvider";
 import { getUserAction } from "@/lib/actions/auth";
 import { columnSetting } from "@/constant/constant";
-import AppliedChallenges from "../_components/myChallenges/appliedChallenges/appliedChallenges";
+import AppliedChallenges from "../_components/myChallenges/appliedChallenges/AppliedChallenges";
 
 export default function page() {
   const router = useRouter();
