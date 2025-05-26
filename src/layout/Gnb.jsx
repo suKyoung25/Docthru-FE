@@ -9,7 +9,7 @@ import admin from '@/assets/img/profile_admin.svg';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Logo from './_components/Logo';
-import Profile from '@/components/dropdown/Profile';
+import Profile from '@/components/dropDown/Profile';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 
 export default function Gnb({ isNoti, userRole }) {
