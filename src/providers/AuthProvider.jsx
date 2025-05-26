@@ -85,7 +85,7 @@ export default function AuthProvider({ children }) {
   };
 
   useEffect(() => {
-    const excludeRoutes = ["/signIn", "/signUp"];
+    const excludeRoutes = ["/", "/signIn", "/signUp"];
 
     if (!excludeRoutes.includes(pathname)) {
       getUser();

@@ -7,88 +7,99 @@ import PasswordConfirmationInput from "@/components/input/PasswordConfirmationIn
 import NicknameInput from "@/components/input/NicknameInput";
 import SubmitButton from "@/components/btn/auth/SubmitButton";
 import GoogleLoginButton from "@/components/btn/auth/GoogleLoginButton";
+import AuthModal from "@/components/modal/AuthModal";
 import Logo from "@/layout/_components/Logo";
 import Link from "next/link";
 import { useState } from "react";
 import { useAuth } from "@/providers/AuthProvider";
-import SignupModal from "@/components/modal/SignupModal";
-import { validateEmail, validatePassword, validatePasswordConfirmation } from "@/lib/utils/authUtils";
 import { useRouter } from "next/navigation";
+import { validateEmail, validatePassword, validatePasswordConfirmation } from "@/lib/utils/authUtils";
 
 export default function SignUpPage() {
-  const [hasInputValue, setHasInputValue] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [errorMsg, setErrorMsg] = useState(null);
-  const [isSignupSuccess, setIsSignupSuccess] = useState(false);
   const [values, setValues] = useState({
     email: "",
     nickname: "",
     password: "",
     passwordConfirmation: ""
   });
-  const [emailError, setEmailError] = useState(false);
-  const [nicknameError, setNicknameError] = useState(false);
-  const [passwordError, setPasswordError] = useState("");
-  const [passwordConfirmationError, setPasswordConfirmationError] = useState(false);
 
-  const { register, isLoading } = useAuth();
+  const [errors, setErrors] = useState({
+    email: false,
+    nickname: false,
+    password: "",
+    passwordConfirmation: false
+  });
+
+  const [modalState, setModalState] = useState({
+    open: false,
+    success: false,
+    message: ""
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  const { register } = useAuth();
   const router = useRouter();
 
-  // 유효성 검사 함수
-  const checkValidation = () => {
+  const validateForm = () => {
     const emailErr = validateEmail(values.email);
     const nicknameErr = values.nickname.trim() === "";
     const passwordErr = validatePassword(values.password);
     const passwordConfirmErr = validatePasswordConfirmation(values.password, values.passwordConfirmation);
 
-    setEmailError(emailErr);
-    setNicknameError(nicknameErr);
-    setPasswordError(passwordErr);
-    setPasswordConfirmationError(passwordConfirmErr);
+    setErrors({
+      email: emailErr,
+      nickname: nicknameErr,
+      password: passwordErr,
+      passwordConfirmation: passwordConfirmErr
+    });
 
     return !emailErr && !nicknameErr && !passwordErr && !passwordConfirmErr;
   };
 
-  // 입력 필드 값 변경 시 실행되는 핸들러
   const handleChange = (e) => {
     const { id, value } = e.target;
-
-    const newValues = { ...values, [id]: value };
-    setValues(newValues);
-    setHasInputValue(true);
+    setValues((prev) => ({ ...prev, [id]: value }));
   };
 
-  // 회원가입 폼 제출 핸들러
   const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
     const { email, nickname, password, passwordConfirmation } = values;
 
-    e.preventDefault();
-
-    const isValid = checkValidation();
-    if (!isValid) return;
-
+    setLoading(true);
     try {
       const result = await register(email, nickname, password, passwordConfirmation);
       if (result?.error) {
-        setIsSignupSuccess(false);
-        setIsModalOpen(true);
-        setErrorMsg(result.message);
+        setModalState({
+          open: true,
+          success: false,
+          message: result.message
+        });
         return;
       }
-      setIsSignupSuccess(true);
-    } catch (error) {
-      console.error("회원가입 실패", error);
-      setErrorMsg(error.message);
+      setModalState({
+        open: true,
+        success: true,
+        message: "가입이 완료되었습니다!"
+      });
+    } catch (err) {
+      setModalState({
+        open: true,
+        success: false,
+        message: err.message || "회원가입 중 오류 발생"
+      });
     } finally {
-      setIsModalOpen(true);
+      setLoading(false);
     }
   };
 
-  const handleModal = () => {
-    if (isSignupSuccess) {
+  const handleModalClose = () => {
+    if (modalState.success) {
       router.push("/signIn");
     } else {
-      setIsModalOpen(false);
+      setModalState((prev) => ({ ...prev, open: false }));
     }
   };
 
@@ -97,15 +108,19 @@ export default function SignUpPage() {
       <div className="mt-15 mb-30 flex flex-col items-center md:mt-30">
         <Logo className="mb-10 h-[54px] w-60 md:h-18 md:w-80" />
         <form className="mb-[18px] space-y-6" onSubmit={handleSubmit}>
-          <EmailInput value={values.email} onChange={handleChange} error={emailError} />
-          <NicknameInput value={values.nickname} onChange={handleChange} error={nicknameError} />
-          <PasswordInput value={values.password} onChange={handleChange} error={passwordError} />
+          <EmailInput value={values.email} onChange={handleChange} error={errors.email} />
+          <NicknameInput value={values.nickname} onChange={handleChange} error={errors.nickname} />
+          <PasswordInput value={values.password} onChange={handleChange} error={errors.password} />
           <PasswordConfirmationInput
             value={values.passwordConfirmation}
             onChange={handleChange}
-            error={passwordConfirmationError}
+            error={errors.passwordConfirmation}
           />
-          <SubmitButton type={isLoading ? "가입 중" : "회원가입"} loading={isLoading} hasInputValue={hasInputValue} />
+          <SubmitButton
+            type={loading ? "가입 중" : "회원가입"}
+            loading={loading}
+            hasInputValue={Object.values(values).some(Boolean)}
+          />
         </form>
         <GoogleLoginButton />
         <div className="mt-6 space-x-2">
@@ -115,7 +130,8 @@ export default function SignUpPage() {
           </Link>
         </div>
       </div>
-      {isModalOpen && <SignupModal errorMsg={errorMsg} onClose={handleModal} />}
+
+      {modalState.open && <AuthModal message={modalState.message} onClose={handleModalClose} />}
     </Container>
   );
 }
