@@ -53,32 +53,14 @@ export async function loginAction(email, password) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ email, password }),
-      cache: 'no-store' // 로그인 요청은 캐싱하지 않음
+      cache: 'no-store'
     });
 
-    // --- 강력한 디버깅 로그 ---
-    console.log('--- DEBUG START: loginAction ---');
-    console.log('1. Raw response from loginAction fetch:', response);
-    console.log('2. Is response an instance of global Response?', response instanceof Response);
-    console.log('3. Type of response:', typeof response);
-    console.log('4. Does response have .headers property?', 'headers' in response);
-    if (response && 'headers' in response) {
-      console.log('5. Type of response.headers:', typeof response.headers);
-      console.log(
-        '6. Does response.headers have .getAll method?',
-        'getAll' in response.headers && typeof response.headers.getAll === 'function'
-      );
-      if (response.headers && typeof response.headers.getAll === 'function') {
-        console.log("7. Attempting to call response.headers.getAll('Set-Cookie')...");
-        const setCookieHeaders = response.headers.getAll('Set-Cookie');
-        console.log('Set-Cookie Headers from login response:', setCookieHeaders);
-      } else {
-        console.error('8. CRITICAL: response.headers.getAll is NOT a function before actual call!');
-      }
-    } else {
-      console.error("9. CRITICAL: 'headers' property missing or response is not an object!");
-    }
-    console.log('--- DEBUG END: loginAction ---');
+    // --- 디버깅 로그 부분은 이제 필요 없으므로 제거하거나 주석 처리 ---
+    // console.log('--- DEBUG START: loginAction ---');
+    // console.log('1. Raw response from loginAction fetch:', response);
+    // ...
+    // console.log('--- DEBUG END: loginAction ---');
     // --- 디버깅 로그 끝 ---
 
     if (!response.ok) {
@@ -88,6 +70,56 @@ export async function loginAction(email, password) {
     }
 
     const userData = await response.json();
+
+    // 백엔드 응답에서 Set-Cookie 헤더를 가져옵니다.
+    // response.headers.get()은 해당 이름의 첫 번째 헤더 값을 문자열로 반환합니다.
+    const setCookieHeader = response.headers.get('Set-Cookie');
+
+    if (setCookieHeader) {
+      console.log('Backend Set-Cookie header received in loginAction:', setCookieHeader);
+
+      // Next.js의 cookies()를 사용하여 서버 쿠키를 설정합니다.
+      // Next.js는 Set-Cookie 헤더의 각 항목을 자동으로 파싱하여 처리하므로,
+      // 개별 쿠키 이름을 찾아 수동으로 set 해줍니다.
+      // (이때 백엔드에서 보낸 Max-Age, HttpOnly 등의 속성을 그대로 사용합니다.)
+
+      // 백엔드에서 'Set-Cookie' 헤더가 하나의 문자열로 합쳐져 오는 경우,
+      // 이를 파싱하여 개별 쿠키를 설정해야 합니다.
+      const cookieParts = setCookieHeader.split(', ').flatMap((part) => part.split(',')); // 콤마로 분리
+      const cookieStore = cookies(); // 서버 액션에서 cookies() 인스턴스 가져오기
+
+      cookieParts.forEach((cookieString) => {
+        const [nameValuePair, ...attributes] = cookieString.split(';').map((s) => s.trim());
+        const [name, value] = nameValuePair.split('=');
+
+        // 필요한 속성만 추출하여 설정 (Max-Age, Path, HttpOnly, SameSite, Secure)
+        const cookieOptions = {};
+        attributes.forEach((attr) => {
+          const lowerAttr = attr.toLowerCase();
+          if (lowerAttr.startsWith('max-age')) {
+            cookieOptions.maxAge = parseInt(attr.split('=')[1], 10);
+          } else if (lowerAttr.startsWith('path')) {
+            cookieOptions.path = attr.split('=')[1];
+          } else if (lowerAttr.startsWith('expires')) {
+            cookieOptions.expires = new Date(attr.split('=')[1]);
+          } else if (lowerAttr === 'httponly') {
+            cookieOptions.httpOnly = true;
+          } else if (lowerAttr.startsWith('samesite')) {
+            cookieOptions.sameSite = attr.split('=')[1]; // 'Lax' 또는 'Strict'
+          } else if (lowerAttr === 'secure') {
+            cookieOptions.secure = true;
+          }
+        });
+
+        if (name && value) {
+          cookieStore.set(name, value, cookieOptions);
+          console.log(`[loginAction] Set server cookie: ${name}`);
+        }
+      });
+    } else {
+      console.warn('No Set-Cookie header received from backend for login.');
+    }
+
     // 백엔드에서 받은 사용자 정보를 클라이언트 컴포넌트로 전달
     return { success: true, user: userData };
   } catch (error) {

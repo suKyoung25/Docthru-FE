@@ -56,7 +56,7 @@ export const tokenFetch = async (url, options = {}) => {
   let response = await fetch(`${baseURL}${url}`, mergedOptions);
 
   // 401 에러 발생 시 토큰 갱신 시도 (리프레시 토큰 요청은 제외)
-  if (response.status === 401 && url !== '/auth/refresh') {
+  if (response.status === 401 && url !== '/auth/refresh-token') {
     console.warn('Access token expired or invalid, attempting to refresh token...');
     try {
       const refreshToken = await getServerSideToken('refreshToken'); // 서버 사이드에서 리프레시 토큰 가져오기
@@ -68,7 +68,7 @@ export const tokenFetch = async (url, options = {}) => {
       }
 
       // 토큰 갱신 요청
-      const refreshResponse = await fetch(`${baseURL}/auth/refresh`, {
+      const refreshResponse = await fetch(`${baseURL}/auth/refresh-token`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

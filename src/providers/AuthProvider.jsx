@@ -63,7 +63,6 @@ export default function AuthProvider({ children, initialUser, initialLoading }) 
   const register = async (nickname, email, password, passwordConfirmation) => {
     setIsLoading(true);
     try {
-      // 서버 액션 호출
       const responseData = await registerAction(
         nickname,
         email,
@@ -75,10 +74,11 @@ export default function AuthProvider({ children, initialUser, initialLoading }) 
         throw new Error(responseData.message || "회원가입에 실패했습니다.");
       }
 
-      // 회원가입 성공 후, 서버 액션에서 받은 사용자 정보로 상태 업데이트
-      // loginAction과 registerAction은 백엔드에서 받은 user 객체를 반환하도록 수정했습니다.
       setUser(responseData.user);
-      router.push('/blogs'); // 회원가입 성공 후 리다이렉트
+      // 회원가입 성공 후에도 서버 컴포넌트가 새로운 쿠키를 읽도록 트리거
+      router.refresh(); // 매우 중요!
+      router.push('/blogs'); // 리다이렉션
+
       return responseData;
     } catch (error) {
       console.error("회원가입 실패:", error.message);
@@ -92,7 +92,6 @@ export default function AuthProvider({ children, initialUser, initialLoading }) 
   const login = async (email, password) => {
     setIsLoading(true);
     try {
-      // 서버 액션 호출
       const responseData = await loginAction(email, password);
       console.log("loginAction 결과 (서버 응답 확인):", responseData);
 
@@ -100,10 +99,12 @@ export default function AuthProvider({ children, initialUser, initialLoading }) 
         throw new Error(responseData.message || "로그인에 실패했습니다.");
       }
 
-      // 로그인 성공 후, 서버 액션에서 받은 사용자 정보로 상태 업데이트
-      // loginAction과 registerAction은 백엔드에서 받은 user 객체를 반환하도록 수정했습니다.
       setUser(responseData.user);
-      router.push('/blogs'); // 로그인 성공 후 리다이렉트
+      // 로그인 성공 후, router.refresh()를 호출하여 서버 컴포넌트(layout.js)가
+      // 새로운 쿠키를 포함한 요청으로 다시 렌더링되도록 트리거합니다.
+      router.refresh(); // 매우 중요!
+      router.push('/blogs'); // 리다이렉션
+
       return responseData;
     } catch (error) {
       console.error("로그인 실패:", error.message);
