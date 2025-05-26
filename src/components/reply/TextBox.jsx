@@ -43,7 +43,7 @@ export default function TextBox({
     <TextareaAutosize
       minRows={3}
       maxRows={6}
-      className="w-full resize-none bg-white text-gray-700 placeholder-gray-400 focus:outline-none"
+      className="w-full rounded-xl border border-gray-200 p-4"
       placeholder={placeholder}
       value={value}
       onChange={onChange}

@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* ===========================
    🌈 Theme Variables
@@ -26,21 +26,20 @@
 
   /* ✅ Typography */
   --font-pretendard:
-    "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
-    system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo",
-    "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol", sans-serif;
+    'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue',
+    'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', sans-serif;
 
   --font-quantico-regular: Quantico, sans-serif;
   --font-quantico-bold: Quantico, sans-serif;
 
   /* ✅ Tailwind Breakpoint 대응 Container Size */
 
-  --container-sm: 450px;
+  --container-sm: 375px;
   /* 모바일 */
-  --container-md: 768px;
+  --container-md: 744px;
   /* 태블릿 (iPad Mini) */
-  --container-xl: 1280px;
+  --container-xl: 1200px;
   /* 데스크탑 */
 }
 
@@ -65,6 +64,11 @@
     color: var(--color-gray-900);
   }
 
+  input:focus,
+  textarea:focus {
+    outline: 1px solid var(--color-gray-900);
+  }
+
   button {
     cursor: pointer;
   }
@@ -85,6 +89,7 @@
     list-style-type: disc;
     padding-left: 1.25rem;
   }
+
   .ProseMirror ol {
     list-style-type: decimal;
     padding-left: 1.25rem;

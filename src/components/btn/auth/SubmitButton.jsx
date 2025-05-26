@@ -12,3 +12,4 @@ export function SubmitButton({ type }) {
 }
 
 export default SubmitButton;
+

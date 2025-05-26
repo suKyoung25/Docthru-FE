@@ -37,7 +37,7 @@ export default function page() {
       description,
       accessToken,
       category: selectedCategory,
-      docType: selectedDocType,
+      docType: selectedDocType
     };
 
     //디버깅
@@ -150,9 +150,7 @@ export default function page() {
             }}
           />
           {maxParticipantErrorMessage ? (
-            <div className="pl-[15px] text-red-500">
-              {maxParticipantErrorMessage}
-            </div>
+            <div className="pl-[15px] text-red-500">{maxParticipantErrorMessage}</div>
           ) : null}
         </div>
         <Input
@@ -165,14 +163,14 @@ export default function page() {
       </div>
 
       <div className="h-[48px] w-full">
-        {/* <BtnText
+        <BtnText
           theme="solidblack"
           onClick={handlePost}
           // icon={} className={} children={}
         >
           신청하기
-        </BtnText> */}
-        <button onClick={handlePost}>신청하기</button>
+        </BtnText>
+        {/* <button onClick={handlePost}>신청하기</button> */}
       </div>
     </div>
   );
