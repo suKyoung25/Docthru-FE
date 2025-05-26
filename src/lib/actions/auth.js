@@ -31,18 +31,18 @@ export async function updateAccessToken(newAccessToken) {
   }
 }
 
-export async function clearServerSideTokens() {
-  try {
-    const cookieStore = cookies();
-    cookieStore.delete('accessToken');
-    cookieStore.delete('refreshToken');
-    console.log('[clearServerSideTokens] All tokens cleared successfully.');
-    return { success: true };
-  } catch (error) {
-    console.error('[clearServerSideTokens] Error clearing tokens:', error);
-    return { error: true, message: error.message };
-  }
-}
+// export async function clearServerSideTokens() {
+//   try {
+//     const cookieStore = cookies();
+//     cookieStore.delete('accessToken');
+//     cookieStore.delete('refreshToken');
+//     console.log('[clearServerSideTokens] All tokens cleared successfully.');
+//     return { success: true };
+//   } catch (error) {
+//     console.error('[clearServerSideTokens] Error clearing tokens:', error);
+//     return { error: true, message: error.message };
+//   }
+// }
 
 export async function loginAction(email, password) {
   const baseURL = process.env.NEXT_PUBLIC_API_URL;
@@ -151,5 +151,18 @@ export async function registerAction(nickname, email, password, passwordConfirma
   } catch (error) {
     console.error('회원가입 액션 오류:', error.message);
     return { error: true, message: error.message || '회원가입 중 알 수 없는 오류 발생' };
+  }
+}
+
+export async function logoutAction() {
+  try {
+    const cookieStore = cookies();
+    cookieStore.delete('accessToken');
+    cookieStore.delete('refreshToken');
+    console.log('[logoutAction] All tokens cleared successfully via logoutAction.');
+    return { success: true };
+  } catch (error) {
+    console.error('[logoutAction] Error clearing tokens in logoutAction:', error);
+    return { error: true, message: error.message };
   }
 }

@@ -59,15 +59,15 @@ export const tokenFetch = async (url, options = {}) => {
   if (response.status === 401 && url !== '/auth/refresh-token') {
     console.warn('Access token expired or invalid, attempting to refresh token...');
     try {
-      const refreshToken = await getServerSideToken('refreshToken'); // 서버 사이드에서 리프레시 토큰 가져오기
+      const refreshToken = await getServerSideToken('refreshToken');
+      console.log('Fetched refreshToken from cookies:', refreshToken); // 디버깅용 로그
 
       if (!refreshToken) {
-        console.error('Refresh token not found. Logging out.');
-        await clearServerSideTokens(); // 리프레시 토큰 없으면 로그아웃 (서버 액션)
+        console.error('Refresh token not found. Throwing error to trigger logout.');
+        // clearServerSideTokens() 호출 제거
         throw new Error('리프레시 토큰이 없습니다. 다시 로그인 해주세요.');
       }
 
-      // 토큰 갱신 요청
       const refreshResponse = await fetch(`${baseURL}/auth/refresh-token`, {
         method: 'POST',
         headers: {
@@ -82,29 +82,24 @@ export const tokenFetch = async (url, options = {}) => {
         const newAccessToken = refreshData.accessToken;
 
         if (newAccessToken) {
-          // 새로 발급받은 액세스 토큰을 서버 쿠키에 업데이트 (서버 액션 호출)
-          await updateAccessToken(newAccessToken);
-
-          // 새로 발급받은 액세스 토큰으로 헤더 업데이트
+          await updateAccessToken(newAccessToken); // Access token 설정은 서버 액션이므로 OK
           mergedOptions.headers.Authorization = `Bearer ${newAccessToken}`;
-
-          // 원래 요청 재시도
-          console.log('Token refreshed successfully. Retrying original request...');
-          response = await fetch(`${baseURL}${url}`, mergedOptions);
+          response = await fetch(`<span class="math-inline">\{baseURL\}</span>{url}`, mergedOptions);
         } else {
-          console.error('새 액세스 토큰을 받지 못했습니다. 로그아웃합니다.');
-          await clearServerSideTokens();
+          console.error('새 액세스 토큰을 받지 못했습니다. Throwing error to trigger logout.');
+          // clearServerSideTokens() 호출 제거
           throw new Error('새 액세스 토큰 발급 실패. 다시 로그인해주세요.');
         }
       } else {
         const errorData = await refreshResponse.json();
         console.error('토큰 갱신 실패:', errorData.message || refreshResponse.statusText);
-        await clearServerSideTokens(); // 모든 토큰 삭제 (강제 로그아웃)
+        // clearServerSideTokens() 호출 제거
         throw new Error('인증 세션이 만료되었습니다. 다시 로그인해주세요.');
       }
     } catch (error) {
       console.error('토큰 리프레시 및 재시도 중 오류 발생:', error.message);
-      await clearServerSideTokens();
+      // clearServerSideTokens() 호출 제거
+      // 중요: 여기서 에러를 다시 던져서 userService.getMe에서 처리하도록 합니다.
       throw new Error(`인증 오류: ${error.message}. 다시 로그인 해주세요.`);
     }
   }

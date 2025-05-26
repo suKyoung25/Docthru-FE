@@ -118,13 +118,13 @@ export default function AuthProvider({ children, initialUser, initialLoading }) 
   const logout = async () => {
     setIsLoading(true);
     try {
-      await clearServerSideTokens(); // 서버 액션을 통해 쿠키 삭제 (authService.logout이 이 함수를 호출하므로 직접 호출해도 됨)
-      setUser(null); // 클라이언트 상태 초기화
-      router.push('/login'); // 로그아웃 후 로그인 페이지로 리다이렉트
+      await logoutAction(); // <-- 변경된 부분
+      setUser(null);
+      router.push('/login');
     } catch (error) {
       console.error("로그아웃 실패:", error);
       setUser(null);
-      router.push('/login'); // 에러 발생 시에도 로그인 페이지로 리다이렉트
+      router.push('/login');
     } finally {
       setIsLoading(false);
     }

@@ -1,21 +1,22 @@
 // src/lib/service/userService.js
 import { tokenFetch } from '@/lib/fetchClient';
+import { logoutAction } from '@/lib/actions/auth'; // logoutAction 임포트
 
 export const userService = {
-  // 사용자 정보 요청
-  getMe: async () => {
+  async getMe() {
     try {
       const response = await tokenFetch('/users/me');
       if (!response.ok) {
-        // 401 에러 등 인증 실패 시 tokenFetch에서 이미 로그아웃 처리 및 에러 throw
-        // 여기서는 그 외의 HTTP 에러 처리
         const errorData = await response.json();
-        throw new Error(errorData.message || '사용자 정보 로드 실패');
+        throw new Error(errorData.message || 'Failed to fetch user data');
       }
-      return await response.json();
+      const data = await response.json();
+      return data;
     } catch (error) {
-      console.error('userService.getMe 실패:', error);
-      throw error; // AuthProvider에서 이 에러를 받아서 처리합니다.
+      console.error('userService.getMe 실패:', error.message);
+      // 여기서 logoutAction을 호출합니다. (이 함수는 서버 액션이므로 쿠키 수정 가능)
+      await logoutAction();
+      throw error; // 에러를 다시 던져서 RootLayout에서 처리하도록 합니다.
     }
   }
 };
