@@ -45,7 +45,7 @@ export function middleware(request) {
   return NextResponse.next();
 }
 
-// ✅ 정적 파일이나 API 경로 제외하고 미들웨어 실행할 페이지 정의
+// 미들웨어가 적용될 경로 패턴 지정
 export const config = {
   matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)']
 };

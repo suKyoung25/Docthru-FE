@@ -180,7 +180,7 @@ const page = () => {
                 isLiked: false,
                 workId: 1
               }}
-              toggleLike={() => {}}
+              toggleLike={() => { }}
             />
             <RankingListItem
               item={{
@@ -191,7 +191,7 @@ const page = () => {
                 isLiked: true,
                 workId: 2
               }}
-              toggleLike={() => {}}
+              toggleLike={() => { }}
             />
           </div>
         </div>
@@ -214,15 +214,15 @@ const page = () => {
               userName="홍길동"
               timestamp="방금 전"
               content="이것은 예시 댓글입니다."
-              onEdit={() => {}}
-              onDelete={() => {}}
+              onEdit={() => { }}
+              onDelete={() => { }}
             />
             <Reply
               userName="김코딩"
               timestamp="1시간 전"
               content="여러 줄 작성이 가능한\n댓글 예시입니다."
-              onEdit={() => {}}
-              onDelete={() => {}}
+              onEdit={() => { }}
+              onDelete={() => { }}
             />
           </div>
         </div>
