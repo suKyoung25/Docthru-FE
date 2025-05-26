@@ -3,9 +3,9 @@
 import BtnText from "@/components/btn/text/BtnText";
 import React, { useState } from "react";
 import Input from "./component/Input";
-import CategoryClosed from "@/components/dropdown/category/CategoryClosed";
-import CategoryItems from "@/components/dropdown/category/CategoryItems";
-import CategoryOpened from "@/components/dropdown/category/CategoryOpened";
+import CategoryClosed from "@/components/dropDown/category/CategoryClosed";
+import CategoryItems from "@/components/dropDown/category/CategoryItems";
+import CategoryOpened from "@/components/dropDown/category/CategoryOpened";
 
 export default function page() {
   const [title, setTitle] = useState("");
