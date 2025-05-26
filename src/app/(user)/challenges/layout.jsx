@@ -7,8 +7,7 @@ import React from 'react';
 
 // GNB를 제외할 경로들을 배열로 관리
 const excludeGnbPaths = [
-  '/challenges/[challengeId]/work/[workId]/create',
-  '/challenges/[challengeId]/work/[workId]/edit',
+  '/challenges/[challengeId]/work/[workId]/form'
   // 추후 GNB를 제외할 경로들을 여기에 추가
 ];
 

@@ -30,18 +30,13 @@ export default function DevNavigation() {
     { path: '/challenges/create', name: '챌린지 생성', group: 'user' },
     { path: '/challenges/[challengeId]', name: '챌린지 상세', group: 'user' },
     {
-      path: '/challenges/[challengeId]/work/[workId]/create',
-      name: '작업물 생성',
+      path: '/challenges/[challengeId]/work/[workId]/form',
+      name: '작업물 폼',
       group: 'user'
     },
     {
       path: '/challenges/[challengeId]/work/[workId]',
       name: '작업물 상세',
-      group: 'user'
-    },
-    {
-      path: '/challenges/[challengeId]/work/[workId]/edit',
-      name: '작업물 수정',
       group: 'user'
     },
     { path: '/challenges/mychallenges', name: '나의 챌린지', group: 'user' },

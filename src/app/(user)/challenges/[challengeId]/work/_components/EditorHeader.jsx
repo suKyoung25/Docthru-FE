@@ -1,29 +1,8 @@
-"use client";
-
-import BtnText from "@/components/btn/text/BtnText";
-import Logo from "@/layout/_components/Logo";
+import BtnText from '@/components/btn/text/BtnText';
+import Logo from '@/layout/_components/Logo';
 
 // 제출하기 or 수정하기 선택 가능
-export default function EditorHeader({
-  isSubmit = false,
-  isUpdate = false,
-  content,
-  challengeTitle,
-  onDraft,
-}) {
-  // TODO : 작업물 CRUD 연동
-  const onDiscard = () => {
-    console.log("포기하기");
-  };
-
-  const onSubmit = () => {
-    console.log("제출하기");
-  };
-
-  const onUpdate = () => {
-    console.log("수정하기");
-  };
-
+export default function EditorHeader({ challengeTitle, content, onDraft, isSubmitted, onSubmit, onDiscardModal }) {
   return (
     <header className="flex items-center justify-between py-4">
       <Logo />
@@ -33,34 +12,22 @@ export default function EditorHeader({
           theme="tonal"
           icon
           className="min-w-[36px] px-3 py-2 sm:min-w-[90px] sm:px-0"
-          onClick={onDiscard}
+          onClick={onDiscardModal}
         />
 
-        <BtnText
-          theme="outline"
-          className="min-w-[90px] px-4 py-2"
-          onClick={() => onDraft(challengeTitle, content)}
-        >
+        <BtnText theme="outline" className="min-w-[90px] px-4 py-2" onClick={() => onDraft(challengeTitle, content)}>
           임시저장
         </BtnText>
 
-        {isUpdate && (
-          <BtnText
-            theme="solidblack"
-            className="min-w-[90px] px-4 py-2"
-            onClick={onUpdate}
-          >
-            수정하기
+        {isSubmitted && (
+          <BtnText theme="solidblack" className="min-w-[90px] px-4 py-2" onClick={onSubmit}>
+            제출하기
           </BtnText>
         )}
 
-        {isSubmit && (
-          <BtnText
-            theme="solidblack"
-            className="min-w-[90px] px-4 py-2"
-            onClick={onSubmit}
-          >
-            제출하기
+        {!isSubmitted && (
+          <BtnText theme="solidblack" className="min-w-[90px] px-4 py-2" onClick={onSubmit}>
+            수정하기
           </BtnText>
         )}
       </div>
