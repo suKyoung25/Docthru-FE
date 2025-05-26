@@ -28,9 +28,9 @@ export default function page() {
 
   useEffect(() => {
     const fetchChallenge = async () => {
-      console.log('challengeId', challengeId);
-      const challenge = await workService.getWorkDetail(challengeId, workId);
-      console.log(challenge);
+      // 테스트용
+      const challenge = await workService.getWorkDetail();
+      console.log('challenge', challenge);
     };
     fetchChallenge();
   }, []);
