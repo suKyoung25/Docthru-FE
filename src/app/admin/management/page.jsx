@@ -1,7 +1,7 @@
 'use client';
 
 import AppliedChallenges from '@/app/(user)/challenges/_components/myChallenges/appliedChallenges/AppliedChallenges';
-import DropdownListLeftSmall from '@/components/dropdown/list/DropdownListLeftSmall';
+import DropdownListLeftSmall from '@/components/dropDown/list/DropdownListLeftSmall';
 import SearchInput from '@/components/input/SearchInput';
 import Sort from '@/components/sort/Sort';
 import { columnSetting, ITEM_COUNT } from '@/constant/constant';
