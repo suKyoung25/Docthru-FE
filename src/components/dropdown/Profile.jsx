@@ -1,0 +1,52 @@
+'use client';
+
+import React from 'react';
+import Image from 'next/image';
+import userImage from '@/assets/img/profile_member.svg';
+import adminImage from '@/assets/img/profile_admin.svg';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/providers/AuthProvider';
+
+function Profile() {
+  const router = useRouter();
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'ADMIN';
+
+  const handleClickMychallenge = () => {
+    router.push('/my/challenges');
+  };
+
+  const handleClickLogout = () => {
+    router.push('/signIn');
+  };
+
+  return (
+    <div className="flex flex-col items-start rounded-[8px] bg-[#FFFFFF] px-[16px] pt-[16px] pb-[8px] border border-gray-100">
+      <div className="flex w-fit flex-row justify-baseline gap-[8px]">
+        <Image src={isAdmin ? adminImage : userImage} alt="프로필 이미지" width={32} height={32} />
+        <div className="flex flex-col gap-[2px]">
+          {/* DB에서 불러온 유저 이름으로 변경 필수 */}
+          <div className="text-[14px] font-medium text-[var(--color-gray-800)]">{user?.nickname}</div>
+          {/* DB에서 불러온 유저 등급으로 변경 필수 */}
+          <div className="text-[12px] font-medium text-[var(--color-gray-500)]">{user?.role}</div>
+          {user?.email && <div className="text-[12px] font-medium text-[var(--color-gray-500)]">이메일: {user.email}</div>}
+          {user?.grade && <div className="text-[12px] font-medium text-[var(--color-gray-500)]">등급: {user.grade}</div>}
+        </div>
+      </div>
+      <span className="flex w-full border-b-2 border-gray-100 my-2"></span>
+      {!isAdmin && (
+        <button
+          className="h-8 text-sm md:text-base font-medium text-[var(--color-gray-800)]"
+          onClick={handleClickMychallenge}
+        >
+          나의 챌린지
+        </button>
+      )}
+      <button className="h-8 text-sm md:text-base font-medium text-[var(--color-gray-400)]" onClick={handleClickLogout}>
+        로그아웃
+      </button>
+    </div>
+  );
+}
+
+export default Profile;

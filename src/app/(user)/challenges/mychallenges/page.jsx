@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Container from "@/components/container/PageContainer";
 import SearchInput from "@/components/input/SearchInput";
-import Profile from "@/components/dropDown/Profile";
+import Profile from "@/components/dropdown/Profile";
 import { appliedChallenges } from '@/lib/api/myChallenges';
 import ApplyChallenge from '../_components/ApplyChallenge';
 import { useRouter } from 'next/navigation';
@@ -24,8 +24,8 @@ export default function page() {
   const endIndex = startIndex + pageSize;
   const [result, setResult] = useState([]);
   const { user, isLoading } = useAuth();
-  
-  if(isLoading) return (<div>로딩 중..</div>);
+
+  if (isLoading) return (<div>로딩 중..</div>);
 
   async function appliedChallengesData() {
     try {
@@ -38,18 +38,18 @@ export default function page() {
   }
   if (isLoading) return <div>로딩 중...</div>;
   if (!user) return <div>로그인이 필요합니다.</div>;
-  
+
   //신청한 챌린지 목록 불러오기
 
-  useEffect(()=>{
-   if (user) appliedChallengesData();
-  },[])
+  useEffect(() => {
+    if (user) appliedChallengesData();
+  }, [])
 
   return (
     <Container>
       <div className="flex justify-between h-10 mt-4">
         <h2 className="flex-1 text-xl font-semibold">
-          나의 챌린지 
+          나의 챌린지
         </h2>
         <ApplyChallenge />
       </div>
@@ -58,9 +58,9 @@ export default function page() {
         <div className="flex-7 sm:flex-8"> <SearchInput /></div>
         <div className="flex-3 sm:flex-2"><Sort /></div>
       </div>
-      <AppliedChallenges 
-        columnSetting={columnSetting} 
-        result={result} 
+      <AppliedChallenges
+        columnSetting={columnSetting}
+        result={result}
         onClick={(id) => router.push(`/challenges/${id}`)}
         totalCount={totalCount}
         page={page}

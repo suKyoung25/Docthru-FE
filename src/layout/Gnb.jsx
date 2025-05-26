@@ -9,7 +9,7 @@ import admin from '@/assets/img/profile_admin.svg';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Logo from './_components/Logo';
-import Profile from '@/components/dropDown/Profile';
+import Profile from '@/components/dropdown/Profile';
 
 export default function Gnb({ isNoti, userRole }) {
   const pathname = usePathname();
