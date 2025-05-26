@@ -3,20 +3,21 @@
 import BtnText from "@/components/btn/text/BtnText";
 import React, { useState } from "react";
 import Input from "./component/Input";
-import CategoryClosed from "@/components/dropdown/category/CategoryClosed";
-import CategoryItems from "@/components/dropdown/category/CategoryItems";
+import CategoryClosed from "@/components/dropDown/category/CategoryClosed";
+import CategoryItems from "@/components/dropDown/category/CategoryItems";
 import { postChallenges } from "@/lib/api/challenges-first/createChallenge";
 import { useRouter } from "next/navigation";
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function page() {
   const [title, setTitle] = useState("");
   const [originUrl, setOriginUrl] = useState("");
-  const [maxParticipant, setMaxParticipant] = useState("");
+  const [maxParticipant, setMaxParticipant] = useState(null);
   const [content, setContent] = useState("");
   const [isCategory, setIsCategory] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("카테고리");
   const [isDocType, setIsDocType] = useState(false);
-  // const [isOpen, setIsOpen] = useState(false);
+  const [selectedDocType, setSelectedDocType] = useState("카테고리");
   const router = useRouter();
 
   //디버깅 (추후 삭제 필요)
@@ -25,6 +26,7 @@ export default function page() {
 
   //챌린지 신청하기
   const handlePost = async () => {
+    if (maxParticipantErrorMessage) return alert("신청 형식을 확인해주세요");
     //쿠키에서 토큰 가져오는 함수 추가 필요
     const token = accessToken;
 
@@ -48,6 +50,16 @@ export default function page() {
     }
   };
 
+  //최대 참여자 인원 수 제한
+  let maxParticipantErrorMessage;
+  if (maxParticipant > 99) {
+    maxParticipantErrorMessage = "참여자는 최대 99명입니다.";
+  } else if (maxParticipant === "") {
+    maxParticipantErrorMessage = "숫자로만 입력해주세요";
+  } else {
+    maxParticipantErrorMessage = null;
+  }
+
   return (
     <div className="font-pretendard px-[16px] pt-[16px] pb-[87px] text-[18px] text-[var(--color-gray-900)]">
       <div className="font-bold">신규 챌린지 신청</div>
@@ -67,48 +79,70 @@ export default function page() {
         />
         <div className="flex h-full flex-col gap-[8px]">
           <div className="flex flex-col gap-[24px] text-sm font-medium text-[var(--color-gray-900)]">
-            분야
-            <CategoryClosed
-              isOpen={isCategory}
-              onClick={() => {
-                setIsCategory((prev) => !prev);
-              }}
-              label={selectedCategory}
-            />
-            {isCategory ? (
-              <CategoryItems
-                toggleType={"fields"}
-                onSelect={(selected) => {
-                  setSelectedCategory(selected);
-                  setIsCategory(false);
+            <div>
+              분야
+              <CategoryClosed
+                isOpen={isCategory}
+                onClick={() => {
+                  setIsCategory((prev) => !prev);
                 }}
+                label={selectedCategory}
               />
-            ) : null}
-            문선 타입
-            <CategoryClosed
-              isOpen={isDocType}
-              onClick={() => {
-                setIsDocType((prev) => !prev);
-              }}
-              label={selectedCategory}
-            />
-            {isDocType ? (
-              <CategoryItems
-                toggleType={"docs"}
-                onSelect={(selected) => {
-                  setSelectedCategory(selected);
-                  setIsCategory(false);
+              {isCategory ? (
+                <CategoryItems
+                  toggleType={"fields"}
+                  onSelect={(selected) => {
+                    setSelectedCategory(selected);
+                    setIsCategory(false);
+                  }}
+                />
+              ) : null}
+            </div>
+            <div>
+              문서 타입
+              <CategoryClosed
+                isOpen={isDocType}
+                onClick={() => {
+                  setIsDocType((prev) => !prev);
                 }}
+                label={selectedDocType}
               />
-            ) : null}
+              {isDocType ? (
+                <CategoryItems
+                  toggleType={"docs"}
+                  onSelect={(selected) => {
+                    setSelectedDocType(selected);
+                    setIsDocType(false);
+                  }}
+                />
+              ) : null}
+            </div>
           </div>
         </div>
-        <Input
-          title={"최대 인원"}
-          placeholder={"인원을 입력해주세요"}
-          value={maxParticipant}
-          onChange={(e) => setMaxParticipant(e.target.value)}
-        />
+        <Input type={"date"} />
+        <div>
+          <Input
+            title={"최대 인원"}
+            placeholder={"인원을 입력해주세요"}
+            value={maxParticipant ?? ""}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value === "") {
+                setMaxParticipant("");
+              } else {
+                const num = Number(value);
+                if (!isNaN(num)) {
+                  setMaxParticipant(num);
+                }
+              }
+            }}
+          />
+          {maxParticipantErrorMessage ? (
+            <div className="pl-[15px] text-red-500">
+              {maxParticipantErrorMessage}
+            </div>
+          ) : null}
+        </div>
         <Input
           title={"내용"}
           placeholder={"내용을 입력해주세요"}
