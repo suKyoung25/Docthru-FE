@@ -1,16 +1,19 @@
-import { getTokenFromCookie } from "@/lib/utils/auth";
+'use server'; // Server Action 파일에 import 되므로 'use server' 필요
+
+import { getServerSideToken, clearServerSideTokens, updateAccessToken } from '@/lib/actions/auth'; // 서버 액션 임포트
 
 /**
  * 기본 fetch 클라이언트 - 인증이 필요 없는 일반 요청용
+ * 이 함수는 항상 HTTP `Response` 객체 자체를 반환합니다.
+ * 응답의 성공 여부 (.ok) 확인 및 본문 파싱은 이 함수를 호출하는 측(예: authService)에서 수행합니다.
  */
 export const defaultFetch = async (url, options = {}) => {
-  const baseURL = process.env.NEXT_PUBLIC_API_URL;
+  const baseURL = process.env.NEXT_PUBLIC_API_URL; // .env.local 또는 .env 파일에 정의
   const defaultOptions = {
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json'
     },
-    // Next.js 기본 캐싱 활성화
-    cache: "force-cache",
+    cache: 'no-store' // 기본적으로 캐싱하지 않음 (요청마다 새로운 데이터 보장)
   };
 
   const mergedOptions = {
@@ -18,82 +21,81 @@ export const defaultFetch = async (url, options = {}) => {
     ...options,
     headers: {
       ...defaultOptions.headers,
-      ...options.headers,
-    },
+      ...options.headers
+    }
   };
 
   const response = await fetch(`${baseURL}${url}`, mergedOptions);
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message);
-  }
-
-  return response.json();
+  return response;
 };
 
-/**
- * 토큰 인증 fetch 클라이언트
- */
 export const tokenFetch = async (url, options = {}) => {
   const baseURL = process.env.NEXT_PUBLIC_API_URL;
-  const token = await getTokenFromCookie();
-  const defaultOptions = {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    // 서버 컴포넌트에서도 매번 재검증
-    cache: "no-store",
+  let accessToken = await getServerSideToken('accessToken'); // 서버 사이드에서 액세스 토큰 가져오기
+
+  const defaultHeaders = {
+    'Content-Type': 'application/json',
+    ...(accessToken && { Authorization: `Bearer ${accessToken}` }) // 액세스 토큰이 있으면 추가
   };
 
-  const mergedOptions = {
-    ...defaultOptions,
-    ...options,
+  let mergedOptions = {
     headers: {
-      ...defaultOptions.headers,
-      ...options.headers,
+      ...defaultHeaders,
+      ...options.headers
     },
+    cache: 'no-store',
+    ...options
   };
 
-  // 원래 요청 실행
   let response = await fetch(`${baseURL}${url}`, mergedOptions);
 
-  // 401 에러 발생 시 토큰 갱신 시도
-  if (response.status === 401 && url !== "/auth/refresh") {
+  if (response.status === 401 && url !== '/auth/refresh-token') {
+    console.warn('Access token expired or invalid, attempting to refresh token...');
     try {
-      // 토큰 갱신 요청
-      const refreshToken = getTokenFromCookie();
-      const refreshResponse = await fetch(`${baseURL}/auth/refresh`, {
-        method: "POST",
+      const refreshToken = await getServerSideToken('refreshToken');
+      console.log('Fetched refreshToken from cookies:', refreshToken); // 디버깅용 로그
+
+      if (!refreshToken) {
+        console.error('Refresh token not found. Throwing error to trigger logout.');
+        // clearServerSideTokens() 호출 제거
+        throw new Error('리프레시 토큰이 없습니다. 다시 로그인 해주세요.');
+      }
+
+      const refreshResponse = await fetch(`${baseURL}/auth/refresh-token`, {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ refreshToken }),
-        cache: "no-store",
+        cache: 'no-store'
       });
 
       if (refreshResponse.ok) {
-        // 토큰 갱신 성공 시 원래 요청 재시도
-        response = await fetch(`${baseURL}${url}`, mergedOptions);
+        const refreshData = await refreshResponse.json();
+        const newAccessToken = refreshData.accessToken;
+
+        if (newAccessToken) {
+          await updateAccessToken(newAccessToken); // Access token 설정은 서버 액션이므로 OK
+          mergedOptions.headers.Authorization = `Bearer ${newAccessToken}`;
+          response = await fetch(`<span class="math-inline">\{baseURL\}</span>{url}`, mergedOptions);
+        } else {
+          console.error('새 액세스 토큰을 받지 못했습니다. Throwing error to trigger logout.');
+          // clearServerSideTokens() 호출 제거
+          throw new Error('새 액세스 토큰 발급 실패. 다시 로그인해주세요.');
+        }
+      } else {
+        const errorData = await refreshResponse.json();
+        console.error('토큰 갱신 실패:', errorData.message || refreshResponse.statusText);
+        // clearServerSideTokens() 호출 제거
+        throw new Error('인증 세션이 만료되었습니다. 다시 로그인해주세요.');
       }
     } catch (error) {
-      const errorData = await refreshResponse.json();
-      throw new Error(JSON.stringify(errorData));
+      console.error('토큰 리프레시 및 재시도 중 오류 발생:', error.message);
+      // clearServerSideTokens() 호출 제거
+      // 중요: 여기서 에러를 다시 던져서 userService.getMe에서 처리하도록 합니다.
+      throw new Error(`인증 오류: ${error.message}. 다시 로그인 해주세요.`);
     }
   }
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message);
-  }
-
-  // 응답 본문이 있는지 확인
-  const contentType = response.headers.get("content-type");
-  if (contentType && contentType.includes("application/json")) {
-    return response.json();
-  }
-
-  // 본문이 없거나 JSON이 아닌 경우 응답 객체 자체 반환
-  return { status: response.status, ok: response.ok };
+  return response;
 };

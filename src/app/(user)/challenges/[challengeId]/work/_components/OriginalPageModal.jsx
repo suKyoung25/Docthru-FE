@@ -1,15 +1,10 @@
-import Image from "next/image";
-import React from "react";
-import outCircle from "@/assets/icon/ic_out_circle.svg";
-import BtnText from "@/components/btn/text/BtnText";
-import Link from "next/link";
+import Image from 'next/image';
+import React from 'react';
+import outCircle from '@/assets/icon/ic_out_circle.svg';
+import BtnText from '@/components/btn/text/BtnText';
+import Link from 'next/link';
 
-export default function OriginalPageModal({
-  pageUrl,
-  onClose,
-  modalState,
-  originalPageUrl,
-}) {
+export default function OriginalPageModal({ pageUrl, onClose, modalState, originalPageUrl }) {
   return (
     <div>
       {modalState ? (
@@ -24,7 +19,7 @@ export default function OriginalPageModal({
                 theme="link"
                 className="h-[32px]"
                 onClick={() => {
-                  window.open(originalPageUrl, "_blank");
+                  window.open(originalPageUrl, '_blank');
                 }}
               >
                 링크 열기
@@ -52,8 +47,8 @@ export default function OriginalPageModal({
                 theme="link"
                 className="h-[32px]"
                 onClick={() => {
-                  window.open(originalPageUrl, "_blank");
-                  console.log("링크 열기");
+                  window.open(originalPageUrl, '_blank');
+                  console.log('링크 열기');
                 }}
               >
                 링크 열기

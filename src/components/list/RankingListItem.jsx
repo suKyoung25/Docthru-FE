@@ -40,11 +40,22 @@ import arrowRightIcon from '@/assets/icon/ic_arrow_right.svg';
  *   likes: number,
  *   isLiked: boolean,
  *   workId?: number,
+ *   challengeId?: number,
  * }} props.item - 유저 정보를 담은 객체
  * @param {() => void} props.toggleLike - 좋아요 버튼 클릭 시 호출되는 콜백 함수
  */
 export default function RankingListItem({ item, toggleLike }) {
-  const { rank = 1, userName = '홍길동', userRole = '프로그래머', likes = 0, isLiked = false, workId = 0 } = item;
+
+  const {
+    rank = 1,
+    userName = '홍길동',
+    userRole = '프로그래머',
+    likes = 0,
+    isLiked = false,
+    workId = 0,
+    challengeId = 0
+  } = item;
+
 
   const [isLikedState, setIsLikedState] = useState(isLiked);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -84,10 +95,12 @@ export default function RankingListItem({ item, toggleLike }) {
             height={20}
             className={`mr-1 transition-transform duration-200 ${isAnimating ? 'scale-125' : 'scale-100'}`}
           />
+
           {likes >= 10000 ? '9999...' : likes.toLocaleString()}
+
         </button>
         <Link
-          href={`/challenge/work/${workId}`}
+          href={`/challenges/${challengeId}/work/${workId}`}
           className="flex items-center gap-1 text-base font-normal text-gray-800 no-underline transition-colors"
         >
           작업물 보기
