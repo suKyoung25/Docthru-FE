@@ -3,7 +3,7 @@
 import { loginAction, registerAction } from "@/lib/actions/auth";
 import { userService } from "@/lib/service/userService";
 import { createContext, useContext, useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { authService } from "@/lib/service/authService";
 
 const AuthContext = createContext({
@@ -11,7 +11,8 @@ const AuthContext = createContext({
   logout: () => {},
   register: () => {},
   updateUser: () => {},
-  user: null
+  user: null,
+  isLoading: true
 });
 
 export const useAuth = () => {
@@ -24,8 +25,9 @@ export const useAuth = () => {
 
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+  const pathname = usePathname();
 
   const getUser = async () => {
     try {
@@ -38,20 +40,19 @@ export default function AuthProvider({ children }) {
     }
   };
 
-  const register = async (nickname, email, password, passwordConfirmation) => {
+  const register = async (email, nickname, password, passwordConfirmation) => {
     setIsLoading(true);
     try {
-      const userData = await registerAction(nickname, email, password, passwordConfirmation);
-
+      const userData = await registerAction(email, nickname, password, passwordConfirmation);
       if (userData?.error) {
-        throw new Error(userData.message || "회원가입에 실패했습니다.");
+        console.log(userData);
+        return userData;
       }
-      setUser(userData.user);
+      console.log("회원가입 성공:", userData);
       return userData;
     } catch (error) {
       console.error("회원가입 실패:", error.message);
       setUser(null);
-      throw error;
     } finally {
       setIsLoading(false);
     }
@@ -67,7 +68,7 @@ export default function AuthProvider({ children }) {
         throw new Error(userData.message || "로그인에 실패했습니다.");
       }
       getUser();
-      router.push("/signIn");
+      router.push("/challenges");
     } catch (error) {
       console.error("로그인 실패:", error.message);
       setUser(null);
@@ -84,16 +85,14 @@ export default function AuthProvider({ children }) {
   };
 
   useEffect(() => {
-    getUser();
-  }, []);
+    const excludeRoutes = ["/signIn", "/signUp"];
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-      </div>
-    );
-  }
+    if (!excludeRoutes.includes(pathname)) {
+      getUser();
+    } else {
+      setIsLoading(false);
+    }
+  }, []);
 
   return <AuthContext.Provider value={{ user, login, logout, register, isLoading }}>{children}</AuthContext.Provider>;
 }

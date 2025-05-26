@@ -1,11 +1,11 @@
 import React from "react";
 
-const SignupModal = ({ onClose }) => {
+const SignupModal = ({ errorMsg, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="relative mx-4 flex h-[220px] w-[327px] flex-col items-center justify-center rounded-lg border-2 border-gray-800 bg-white md:h-[250px] md:w-[540px]">
-        <span className="mb-5 text-base font-medium text-gray-800 md:mb-2 md:text-lg">
-          가입이 완료되었습니다!
+      <div className="relative mx-4 flex h-[220px] w-[327px] flex-col items-center rounded-xl border-2 border-gray-800 bg-white md:h-[250px] md:w-[540px]">
+        <span className="mt-[81px] md:mt-[108px] text-base font-medium text-gray-800 md:mb-2 md:text-lg">
+          {errorMsg ?? "가입이 완료되었습니다!"}
         </span>
         <button
           onClick={onClose}
