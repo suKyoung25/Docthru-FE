@@ -7,7 +7,7 @@ import adminImage from '@/assets/img/profile_admin.svg';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/providers/AuthProvider';
 
-function Profile() {
+function Profile({ userRole }) {
   const router = useRouter();
   const isAdmin = userRole === 'admin';
   const { user, logout } = useAuth();
