@@ -1,4 +1,4 @@
-// lib/fetchClient.js
+// src/lib/fetchClient.js
 'use server'; // Server Action 파일에 import 되므로 'use server' 필요
 
 import { getServerSideToken, clearServerSideTokens, updateAccessToken } from '@/lib/actions/auth'; // 서버 액션 임포트
@@ -9,12 +9,12 @@ import { getServerSideToken, clearServerSideTokens, updateAccessToken } from '@/
  * 응답의 성공 여부 (.ok) 확인 및 본문 파싱은 이 함수를 호출하는 측(예: authService)에서 수행합니다.
  */
 export const defaultFetch = async (url, options = {}) => {
-  const baseURL = process.env.NEXT_PUBLIC_API_URL;
+  const baseURL = process.env.NEXT_PUBLIC_API_URL; // .env.local 또는 .env 파일에 정의
   const defaultOptions = {
     headers: {
       'Content-Type': 'application/json'
     },
-    cache: 'no-store' // 로그인/회원가입 요청은 캐싱하지 않음
+    cache: 'no-store' // 기본적으로 캐싱하지 않음 (요청마다 새로운 데이터 보장)
   };
 
   const mergedOptions = {
@@ -27,9 +27,6 @@ export const defaultFetch = async (url, options = {}) => {
   };
 
   const response = await fetch(`${baseURL}${url}`, mergedOptions);
-
-  // defaultFetch는 Response 객체 자체를 반환합니다.
-  // 에러 발생 여부 (.ok) 확인 및 JSON 파싱은 authService에서 담당합니다.
   return response;
 };
 
@@ -40,28 +37,25 @@ export const defaultFetch = async (url, options = {}) => {
  */
 export const tokenFetch = async (url, options = {}) => {
   const baseURL = process.env.NEXT_PUBLIC_API_URL;
-  let accessToken = await getServerSideToken('accessToken');
+  let accessToken = await getServerSideToken('accessToken'); // 서버 사이드에서 액세스 토큰 가져오기
 
-  const defaultOptions = {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}` // 초기 액세스 토큰 사용
-    },
-    cache: 'no-store' // 서버 컴포넌트에서도 매번 재검증
+  const defaultHeaders = {
+    'Content-Type': 'application/json',
+    ...(accessToken && { Authorization: `Bearer ${accessToken}` }) // 액세스 토큰이 있으면 추가
   };
 
   let mergedOptions = {
-    ...defaultOptions,
-    ...options,
     headers: {
-      ...defaultOptions.headers,
+      ...defaultHeaders,
       ...options.headers
-    }
+    },
+    cache: 'no-store', // 서버 컴포넌트에서도 매번 재검증
+    ...options // 나머지 옵션은 덮어쓸 수 있도록
   };
 
   let response = await fetch(`${baseURL}${url}`, mergedOptions);
 
-  // 401 에러 발생 시 토큰 갱신 시도
+  // 401 에러 발생 시 토큰 갱신 시도 (리프레시 토큰 요청은 제외)
   if (response.status === 401 && url !== '/auth/refresh') {
     console.warn('Access token expired or invalid, attempting to refresh token...');
     try {
@@ -84,7 +78,6 @@ export const tokenFetch = async (url, options = {}) => {
       });
 
       if (refreshResponse.ok) {
-        // 리프레시 응답은 여기서 JSON 파싱 (새 액세스 토큰을 본문에 포함)
         const refreshData = await refreshResponse.json();
         const newAccessToken = refreshData.accessToken;
 
@@ -116,7 +109,5 @@ export const tokenFetch = async (url, options = {}) => {
     }
   }
 
-  // tokenFetch도 Response 객체 자체를 반환합니다.
-  // 응답의 성공 여부 (.ok) 확인 및 JSON 파싱은 이 함수를 호출하는 곳에서 담당합니다.
   return response;
 };

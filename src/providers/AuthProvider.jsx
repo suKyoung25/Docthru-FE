@@ -1,17 +1,25 @@
 "use client";
 
-import { loginAction, registerAction, getServerSideToken } from "@/lib/actions/auth"; // getServerSideToken은 필요에 따라 남겨둡니다.
+// getServerSideToken은 클라이언트 컴포넌트에서 직접 사용하지 않으므로 제거하거나 주석 처리합니다.
+// loginAction, registerAction은 클라이언트에서 호출할 서버 액션입니다.
+import { loginAction, registerAction, clearServerSideTokens } from "@/lib/actions/auth";
+// authService와 userService는 이제 서버 액션 대신 직접 백엔드 API를 호출하거나,
+// 서버 액션이 담당할 수 없는 클라이언트 측 로직에만 사용되어야 합니다.
+// 현재 authService의 logout 함수가 clearServerSideTokens를 호출하고 있으므로
+// authService 임포트는 유지하고, userService는 getUser에서 사용.
 import { authService } from "@/lib/service/authService";
-import { userService } from "@/lib/service/userService"; // userService는 getUser 함수에서 사용
+import { userService } from "@/lib/service/userService";
 
-import { createContext, useContext, useEffect, useState, useCallback } from "react";
+import { createContext, useContext, useState, useCallback, useEffect } from "react";
+import { useRouter } from "next/navigation"; // 로그아웃 후 리다이렉션을 위해 useRouter 임포트
 
 const AuthContext = createContext({
+  user: null,
+  isLoading: true, // 기본 로딩 상태를 true로 설정
   login: () => { },
   logout: () => { },
-  user: null,
-  updateUser: () => { },
   register: () => { },
+  updateUser: () => { },
 });
 
 export const useAuth = () => {
@@ -25,21 +33,27 @@ export const useAuth = () => {
 // initialUser와 initialLoading을 props로 받도록 변경
 export default function AuthProvider({ children, initialUser, initialLoading }) {
   const [user, setUser] = useState(initialUser);
-  const [isLoading, setIsLoading] = useState(initialLoading); // 초기 로딩 상태도 props로 받음
+  // initialLoading은 layout에서 false로 넘어오므로, isLoading 초기값은 false가 됩니다.
+  const [isLoading, setIsLoading] = useState(initialLoading);
+  const router = useRouter();
 
   // 사용자 정보를 가져오는 함수 (재활용성을 위해 useCallback 사용)
   // 이 함수는 초기 로딩 시점보다는, 로그인/회원가입 후 또는 새로고침 없이 유저 정보가 업데이트되어야 할 때 주로 사용됩니다.
   const getUser = useCallback(async () => {
     try {
-      const userData = await userService.getMe();
+      const userData = await userService.getMe(); // tokenFetch를 통해 인증된 요청 수행
       setUser(userData);
       return userData;
     } catch (error) {
       console.error("사용자 정보를 가져오는데 실패했습니다:", error);
       setUser(null);
+      // 토큰 만료 등으로 실패한 경우, 로그아웃 처리 및 로그인 페이지로 리다이렉트
+      // await clearServerSideTokens(); // 이미 userService.getMe 내부에서 처리될 수 있음
+      router.push('/login');
       throw error;
     }
-  }, []);
+  }, [router]);
+
 
   // 사용자 정보 업데이트 함수
   const updateUser = useCallback((newUserData) => {
@@ -47,7 +61,9 @@ export default function AuthProvider({ children, initialUser, initialLoading }) 
   }, []);
 
   const register = async (nickname, email, password, passwordConfirmation) => {
+    setIsLoading(true);
     try {
+      // 서버 액션 호출
       const responseData = await registerAction(
         nickname,
         email,
@@ -59,23 +75,24 @@ export default function AuthProvider({ children, initialUser, initialLoading }) 
         throw new Error(responseData.message || "회원가입에 실패했습니다.");
       }
 
-      // 회원가입 성공 후, 백엔드에서 받은 사용자 정보로 상태 업데이트
-      setUser({
-        id: responseData.id,
-        email: responseData.email,
-        nickname: responseData.nickname,
-      });
-      // 성공적으로 사용자 상태를 업데이트했으므로, 여기서 추가적으로 getUser를 호출할 필요는 없습니다.
+      // 회원가입 성공 후, 서버 액션에서 받은 사용자 정보로 상태 업데이트
+      // loginAction과 registerAction은 백엔드에서 받은 user 객체를 반환하도록 수정했습니다.
+      setUser(responseData.user);
+      router.push('/blogs'); // 회원가입 성공 후 리다이렉트
       return responseData;
     } catch (error) {
       console.error("회원가입 실패:", error.message);
       setUser(null);
       throw error;
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const login = async (email, password) => {
+    setIsLoading(true);
     try {
+      // 서버 액션 호출
       const responseData = await loginAction(email, password);
       console.log("loginAction 결과 (서버 응답 확인):", responseData);
 
@@ -83,48 +100,46 @@ export default function AuthProvider({ children, initialUser, initialLoading }) 
         throw new Error(responseData.message || "로그인에 실패했습니다.");
       }
 
-      // 로그인 성공 후, 백엔드에서 받은 사용자 정보로 상태 업데이트
-      setUser({
-        id: responseData.id,
-        email: responseData.email,
-        nickname: responseData.nickname,
-      });
-      // 성공적으로 사용자 상태를 업데이트했으므로, 여기서 추가적으로 getUser를 호출할 필요는 없습니다.
+      // 로그인 성공 후, 서버 액션에서 받은 사용자 정보로 상태 업데이트
+      // loginAction과 registerAction은 백엔드에서 받은 user 객체를 반환하도록 수정했습니다.
+      setUser(responseData.user);
+      router.push('/blogs'); // 로그인 성공 후 리다이렉트
       return responseData;
     } catch (error) {
       console.error("로그인 실패:", error.message);
       setUser(null);
       throw error;
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const logout = async () => {
+    setIsLoading(true);
     try {
-      await authService.logout(); // 서버 액션을 통해 쿠키 삭제
+      await clearServerSideTokens(); // 서버 액션을 통해 쿠키 삭제 (authService.logout이 이 함수를 호출하므로 직접 호출해도 됨)
       setUser(null); // 클라이언트 상태 초기화
-      // 로그아웃 후 리다이렉션이 필요한 경우 여기서 처리 (예: useRouter().push('/login'))
+      router.push('/login'); // 로그아웃 후 로그인 페이지로 리다이렉트
     } catch (error) {
       console.error("로그아웃 실패:", error);
       setUser(null);
+      router.push('/login'); // 에러 발생 시에도 로그인 페이지로 리다이렉트
+    } finally {
+      setIsLoading(false);
     }
   };
 
   // initialUser와 initialLoading을 props로 받기 때문에 useEffect에서 초기 사용자 로딩 로직 제거
-  // 하지만, 혹시 모를 상황 (예: 클라이언트에서 직접 페이지 진입 시)을 대비하여
-  // 이미 인증된 상태라면 (initialUser가 있다면) isLoading을 false로 설정합니다.
   useEffect(() => {
-    // initialUser가 이미 설정되어 있고, 아직 로딩 중이라면 로딩 완료로 처리
+    // layout.js에서 initialUser와 initialLoading을 받아오므로,
+    // 이 useEffect는 주로 user 상태가 변경될 때 추가적인 작업을 수행하는 용도로 사용됩니다.
+    // 예를 들어, user 객체가 null이 되면 특정 상태를 초기화하는 등의 로직.
     if (initialUser && isLoading) {
-      setIsLoading(false);
+      setIsLoading(false); // 초기 로딩 상태는 layout에서 결정되므로 한 번만 처리
     }
-    // initialUser가 없는데, 페이지 새로고침 시 토큰이 존재할 수 있는 경우를 대비하여
-    // 한번 더 getUser를 시도할 수도 있습니다.
-    // 하지만 layout.js에서 이미 getUser를 했으므로, 이 부분은 제거하는 것이 더 효율적입니다.
-    // 만약 login/signup 페이지를 제외한 다른 페이지에서 AuthProvider가 사용되고
-    // 사용자가 직접 URL 입력 등으로 들어온 경우, 여기서 다시 인증 상태를 확인해야 할 수 있습니다.
-    // 현재 제안은 layout.js에서 초기 인증을 전담하도록 설계되었습니다.
   }, [initialUser, isLoading]);
 
+  // 로딩 상태에 따라 스피너 렌더링
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
