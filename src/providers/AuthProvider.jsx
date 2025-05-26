@@ -1,12 +1,8 @@
 "use client";
 
-// getServerSideToken은 클라이언트 컴포넌트에서 직접 사용하지 않으므로 제거하거나 주석 처리합니다.
-// loginAction, registerAction은 클라이언트에서 호출할 서버 액션입니다.
+
 import { loginAction, registerAction, clearServerSideTokens } from "@/lib/actions/auth";
-// authService와 userService는 이제 서버 액션 대신 직접 백엔드 API를 호출하거나,
-// 서버 액션이 담당할 수 없는 클라이언트 측 로직에만 사용되어야 합니다.
-// 현재 authService의 logout 함수가 clearServerSideTokens를 호출하고 있으므로
-// authService 임포트는 유지하고, userService는 getUser에서 사용.
+
 import { authService } from "@/lib/service/authService";
 import { userService } from "@/lib/service/userService";
 
@@ -30,25 +26,22 @@ export const useAuth = () => {
   return context;
 };
 
-// initialUser와 initialLoading을 props로 받도록 변경
+
 export default function AuthProvider({ children, initialUser, initialLoading }) {
   const [user, setUser] = useState(initialUser);
-  // initialLoading은 layout에서 false로 넘어오므로, isLoading 초기값은 false가 됩니다.
+
   const [isLoading, setIsLoading] = useState(initialLoading);
   const router = useRouter();
 
-  // 사용자 정보를 가져오는 함수 (재활용성을 위해 useCallback 사용)
-  // 이 함수는 초기 로딩 시점보다는, 로그인/회원가입 후 또는 새로고침 없이 유저 정보가 업데이트되어야 할 때 주로 사용됩니다.
   const getUser = useCallback(async () => {
     try {
-      const userData = await userService.getMe(); // tokenFetch를 통해 인증된 요청 수행
+      const userData = await userService.getMe();
       setUser(userData);
       return userData;
     } catch (error) {
       console.error("사용자 정보를 가져오는데 실패했습니다:", error);
       setUser(null);
-      // 토큰 만료 등으로 실패한 경우, 로그아웃 처리 및 로그인 페이지로 리다이렉트
-      // await clearServerSideTokens(); // 이미 userService.getMe 내부에서 처리될 수 있음
+
       router.push('/login');
       throw error;
     }
