@@ -1,20 +1,14 @@
-"use client"
+'use client';
 
-import React, { useState } from 'react'
-import ListRow from './ListRow'
+import React, { useState } from 'react';
+import ListRow from './ListRow';
 
-export default function MapResultData({ resultData, columnSetting, onClick}) {
-
+export default function MapResultData({ resultData, columnSetting, onClick }) {
   return (
-    <div >
-        {resultData.map((dataList, key) => (
-          <ListRow 
-            key={key} 
-            data={dataList} 
-            columnSetting={columnSetting}
-            onClick={() => onClick(dataList.id)}
-          />
-          ))}
+    <div>
+      {resultData?.map((dataList, key) => (
+        <ListRow key={key} data={dataList} columnSetting={columnSetting} onClick={() => onClick(dataList.id)} />
+      ))}
     </div>
-  )
+  );
 }
