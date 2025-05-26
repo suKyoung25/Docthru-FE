@@ -45,6 +45,7 @@ import arrowRightIcon from '@/assets/icon/ic_arrow_right.svg';
  * @param {() => void} props.toggleLike - 좋아요 버튼 클릭 시 호출되는 콜백 함수
  */
 export default function RankingListItem({ item, toggleLike }) {
+
   const {
     rank = 1,
     userName = '홍길동',
@@ -54,6 +55,7 @@ export default function RankingListItem({ item, toggleLike }) {
     workId = 0,
     challengeId = 0
   } = item;
+
 
   const [isLikedState, setIsLikedState] = useState(isLiked);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -93,7 +95,9 @@ export default function RankingListItem({ item, toggleLike }) {
             height={20}
             className={`mr-1 transition-transform duration-200 ${isAnimating ? 'scale-125' : 'scale-100'}`}
           />
-          {likes >= 10000 ? '9999+' : likes.toLocaleString()}
+
+          {likes >= 10000 ? '9999...' : likes.toLocaleString()}
+
         </button>
         <Link
           href={`/challenges/${challengeId}/work/${workId}`}

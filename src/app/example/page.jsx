@@ -18,7 +18,7 @@ import BtnRadio from '@/components/btn/form/BtnRadio';
 import Pagination from '@/components/pagination/Pagination';
 import ChallengeContainerd from '../(user)/challenges/_components/challengeCard/ChallengeContainer';
 import SearchInput from '@/components/input/SearchInput';
-import Profile from '@/components/dropdown/Profile';
+import Profile from '@/components/dropDown/Profile';
 import ApplyChallenge from '../(user)/challenges/_components/ApplyChallenge';
 import Input from '../(user)/challenges/create/component/Input';
 
