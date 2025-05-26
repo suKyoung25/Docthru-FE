@@ -1,4 +1,3 @@
-// src/lib/fetchClient.js
 'use server'; // Server Action 파일에 import 되므로 'use server' 필요
 
 import { getServerSideToken, clearServerSideTokens, updateAccessToken } from '@/lib/actions/auth'; // 서버 액션 임포트
@@ -30,11 +29,6 @@ export const defaultFetch = async (url, options = {}) => {
   return response;
 };
 
-/**
- * 토큰 인증 fetch 클라이언트
- * 이 함수도 항상 HTTP `Response` 객체 자체를 반환합니다.
- * 401 에러 시 토큰 갱신 및 재시도 로직을 포함합니다.
- */
 export const tokenFetch = async (url, options = {}) => {
   const baseURL = process.env.NEXT_PUBLIC_API_URL;
   let accessToken = await getServerSideToken('accessToken'); // 서버 사이드에서 액세스 토큰 가져오기
@@ -49,13 +43,12 @@ export const tokenFetch = async (url, options = {}) => {
       ...defaultHeaders,
       ...options.headers
     },
-    cache: 'no-store', // 서버 컴포넌트에서도 매번 재검증
-    ...options // 나머지 옵션은 덮어쓸 수 있도록
+    cache: 'no-store',
+    ...options
   };
 
   let response = await fetch(`${baseURL}${url}`, mergedOptions);
 
-  // 401 에러 발생 시 토큰 갱신 시도 (리프레시 토큰 요청은 제외)
   if (response.status === 401 && url !== '/auth/refresh-token') {
     console.warn('Access token expired or invalid, attempting to refresh token...');
     try {
