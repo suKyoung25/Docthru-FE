@@ -23,7 +23,7 @@
 
 - **HTTP 클라이언트**:
 
-  - axios v1.9.0
+  - fetch
 
 - **UI 컴포넌트**:
   - react-icons v5.5.0 (아이콘)
