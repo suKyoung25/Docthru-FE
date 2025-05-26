@@ -7,10 +7,10 @@ import adminImage from '@/assets/img/profile_admin.svg';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/providers/AuthProvider';
 
-function Profile({ userRole }) {
+function Profile() {
   const router = useRouter();
-  const isAdmin = userRole === 'admin';
   const { user } = useAuth();
+  const isAdmin = user?.role === 'ADMIN';
 
   const handleClickMychallenge = () => {
     router.push('/my/challenges');
@@ -29,6 +29,8 @@ function Profile({ userRole }) {
           <div className="text-[14px] font-medium text-[var(--color-gray-800)]">{user?.nickname}</div>
           {/* DB에서 불러온 유저 등급으로 변경 필수 */}
           <div className="text-[12px] font-medium text-[var(--color-gray-500)]">{user?.role}</div>
+          {user?.email && <div className="text-[12px] font-medium text-[var(--color-gray-500)]">이메일: {user.email}</div>}
+          {user?.grade && <div className="text-[12px] font-medium text-[var(--color-gray-500)]">등급: {user.grade}</div>}
         </div>
       </div>
       <span className="flex w-full border-b-2 border-gray-100 my-2"></span>
