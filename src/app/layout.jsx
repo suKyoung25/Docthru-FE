@@ -5,7 +5,7 @@ import DevNavigation from "@/components/DevNavigation";
 import Providers from "./provider"; // 기존 Providers 임포트
 
 // --- Auth 관련 임포트 추가 ---
-import AuthProvider from '@/providers/AuthProvider'; // AuthProvider 경로를 정확히 확인하세요 (여기서는 '@/providers/AuthProvider')
+import AuthProvider from '@/providers/AuthProvider'; // AuthProvider 경로를 정확히 확인하세요
 import { getServerSideToken } from '@/lib/actions/auth';
 import { userService } from '@/lib/service/userService';
 // ----------------------------

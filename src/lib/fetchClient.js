@@ -1,7 +1,12 @@
+// lib/fetchClient.js
+'use server'; // Server Action 파일에 import 되므로 'use server' 필요
+
 import { getServerSideToken, clearServerSideTokens, updateAccessToken } from '@/lib/actions/auth'; // 서버 액션 임포트
 
 /**
  * 기본 fetch 클라이언트 - 인증이 필요 없는 일반 요청용
+ * 이 함수는 항상 HTTP `Response` 객체 자체를 반환합니다.
+ * 응답의 성공 여부 (.ok) 확인 및 본문 파싱은 이 함수를 호출하는 측(예: authService)에서 수행합니다.
  */
 export const defaultFetch = async (url, options = {}) => {
   const baseURL = process.env.NEXT_PUBLIC_API_URL;
@@ -9,7 +14,7 @@ export const defaultFetch = async (url, options = {}) => {
     headers: {
       'Content-Type': 'application/json'
     },
-    cache: 'force-cache' // 기본 캐싱 활성화
+    cache: 'no-store' // 로그인/회원가입 요청은 캐싱하지 않음
   };
 
   const mergedOptions = {
@@ -23,29 +28,18 @@ export const defaultFetch = async (url, options = {}) => {
 
   const response = await fetch(`${baseURL}${url}`, mergedOptions);
 
-  if (!response.ok) {
-    let errorData = {};
-    try {
-      errorData = await response.json();
-    } catch (e) {
-      errorData.message = `HTTP error! Status: ${response.status} - ${response.statusText}`;
-    }
-    throw new Error(errorData.message || `API 호출 실패: ${url} (상태 코드: ${response.status})`);
-  }
-
-  const contentType = response.headers.get('content-type');
-  if (contentType && contentType.includes('application/json')) {
-    return response.json();
-  }
-  return { status: response.status, ok: response.ok, message: 'No content' };
+  // defaultFetch는 Response 객체 자체를 반환합니다.
+  // 에러 발생 여부 (.ok) 확인 및 JSON 파싱은 authService에서 담당합니다.
+  return response;
 };
 
 /**
  * 토큰 인증 fetch 클라이언트
+ * 이 함수도 항상 HTTP `Response` 객체 자체를 반환합니다.
+ * 401 에러 시 토큰 갱신 및 재시도 로직을 포함합니다.
  */
 export const tokenFetch = async (url, options = {}) => {
   const baseURL = process.env.NEXT_PUBLIC_API_URL;
-  // getServerSideToken을 사용하여 서버 사이드에서 쿠키에 접근
   let accessToken = await getServerSideToken('accessToken');
 
   const defaultOptions = {
@@ -90,11 +84,9 @@ export const tokenFetch = async (url, options = {}) => {
       });
 
       if (refreshResponse.ok) {
+        // 리프레시 응답은 여기서 JSON 파싱 (새 액세스 토큰을 본문에 포함)
         const refreshData = await refreshResponse.json();
         const newAccessToken = refreshData.accessToken;
-        // 새 리프레시 토큰은 백엔드에서 Set-Cookie로 보내므로 여기서 직접 받을 필요는 없습니다.
-        // 하지만 만약 백엔드가 새 리프레시 토큰도 응답 본문에 준다면 처리할 수 있습니다.
-        // 여기서는 새 액세스 토큰만 본문으로 받는다고 가정하고 updateAccessToken 호출합니다.
 
         if (newAccessToken) {
           // 새로 발급받은 액세스 토큰을 서버 쿠키에 업데이트 (서버 액션 호출)
@@ -124,19 +116,7 @@ export const tokenFetch = async (url, options = {}) => {
     }
   }
 
-  if (!response.ok) {
-    let errorData = {};
-    try {
-      errorData = await response.json();
-    } catch (e) {
-      errorData.message = `HTTP error! Status: ${response.status} - ${response.statusText}`;
-    }
-    throw new Error(errorData.message || `API 호출 실패: ${response.status}`);
-  }
-
-  const contentType = response.headers.get('content-type');
-  if (contentType && contentType.includes('application/json')) {
-    return response.json();
-  }
-  return { status: response.status, ok: response.ok, message: 'No content' };
+  // tokenFetch도 Response 객체 자체를 반환합니다.
+  // 응답의 성공 여부 (.ok) 확인 및 JSON 파싱은 이 함수를 호출하는 곳에서 담당합니다.
+  return response;
 };
