@@ -77,12 +77,18 @@ export default function page() {
       {draftState.isModalOpen && <DraftModal onClose={toggleDraftModal} isLoggedIn={true} onLoadItem={loadDraft} />}
 
       {modalState.isDeleteConfirmOpen && (
-        <ConfirmActionModal text="정말 포기하시겠습니까?" onConfirm={handleDeleteWork} isLoggedIn={true} />
+        <ConfirmActionModal
+          text="정말 포기하시겠습니까?"
+          onClose={() => updateModalState("isDeleteConfirmOpen", false)}
+          onConfirm={handleDeleteWork}
+          isLoggedIn={true}
+        />
       )}
 
       {modalState.isSubmitConfirmOpen && (
         <ConfirmActionModal
           text={`${isSubmitted ? "제출" : "수정"}하시겠습니까?`}
+          onClose={() => updateModalState("isSubmitConfirmOpen", false)}
           onConfirm={handleUpdateWork}
           isLoggedIn={true}
         />
