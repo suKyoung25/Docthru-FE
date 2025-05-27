@@ -4,7 +4,7 @@ import { useState } from "react";
 import BtnText, { BtnRoundedWithIcon } from "@/components/btn/text/BtnText";
 import Container from "@/components/container/PageContainer";
 import DeclineModal from "@/components/modal/DeclineModal";
-import DeleteModal from "@/components/modal/DeleteModal";
+import DeleteModal from "@/components/modal/ConfirmActionModal";
 import FilterModal from "@/components/modal/FilterModal";
 import NotificationModal from "@/components/modal/NotificationModal";
 import SignupModal from "@/components/modal/AuthModal";
