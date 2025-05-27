@@ -17,7 +17,7 @@ export default function ChallengeCard({
   participants,
   maxParticipant,
   variant = "default",
-  onDeleteClick,
+  onDeclineClick,
 }) {
   const [status, setStatus] = useState("");
 
@@ -59,7 +59,7 @@ export default function ChallengeCard({
 
         <div className="flex items-center gap-2">
           {/* 삭제버튼 */}
-          <button onClick={onDeleteClick} className="px-3 py-1 text-sm text-red-600 border border-red-600 rounded-md hover:bg-red-50">
+          <button onClick={onDeclineClick} className="px-3 py-1 text-sm text-red-600 border border-red-600 rounded-md hover:bg-red-50">
             삭제
           </button>
           {/* 3점메뉴(드롭다운) 버튼 */}
