@@ -3,58 +3,104 @@
 import Container from "@/components/container/PageContainer";
 import EmailInput from "@/components/input/EmailInput";
 import PasswordInput from "@/components/input/PasswordInput";
-import ConfirmPasswordInput from "@/components/input/ConfirmPasswordInput";
+import PasswordConfirmationInput from "@/components/input/PasswordConfirmationInput";
 import NicknameInput from "@/components/input/NicknameInput";
 import SubmitButton from "@/components/btn/auth/SubmitButton";
 import GoogleLoginButton from "@/components/btn/auth/GoogleLoginButton";
+import AuthModal from "@/components/modal/AuthModal";
 import Logo from "@/layout/_components/Logo";
 import Link from "next/link";
 import { useState } from "react";
-import { BASE_URL } from "@/constant/constant";
+import { useAuth } from "@/providers/AuthProvider";
+import { useRouter } from "next/navigation";
+import { validateEmail, validatePassword, validatePasswordConfirmation } from "@/lib/utils/authUtils";
 
 export default function SignUpPage() {
-  const [isSignupSuccess, setIsSignupSuccess] = useState(false);
-  const [isInputValid, setIsInputValid] = useState(false);
   const [values, setValues] = useState({
     email: "",
     nickname: "",
     password: "",
-    confirmPassword: "",
+    passwordConfirmation: ""
   });
 
-  // 입력 필드 값 변경 시 실행되는 핸들러
+  const [errors, setErrors] = useState({
+    email: false,
+    nickname: false,
+    password: "",
+    passwordConfirmation: false
+  });
+
+  const [modalState, setModalState] = useState({
+    open: false,
+    success: false,
+    message: ""
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  const { register } = useAuth();
+  const router = useRouter();
+
+  const validateForm = () => {
+    const emailErr = validateEmail(values.email);
+    const nicknameErr = values.nickname.trim() === "";
+    const passwordErr = validatePassword(values.password);
+    const passwordConfirmErr = validatePasswordConfirmation(values.password, values.passwordConfirmation);
+
+    setErrors({
+      email: emailErr,
+      nickname: nicknameErr,
+      password: passwordErr,
+      passwordConfirmation: passwordConfirmErr
+    });
+
+    return !emailErr && !nicknameErr && !passwordErr && !passwordConfirmErr;
+  };
+
   const handleChange = (e) => {
     const { id, value } = e.target;
-
-    const newValues = { ...values, [id]: value };
-    setValues(newValues);
-
-    const isValid =
-      newValues.email.trim() !== "" &&
-      newValues.nickname.trim() !== "" &&
-      newValues.password.trim() !== "" &&
-      newValues.passwordConfirmation.trim() !== "";
-    setIsInputValid(isValid);
-    console.log(isValid);
+    setValues((prev) => ({ ...prev, [id]: value }));
   };
 
-  const signUp = async () => {
-    const { email, nickname, password, confirmPassword } = values;
-
-    return await fetch(`${BASE_URL}/auth/sign-up`, {
-      method: "POST",
-      headers: { "Content-type": "application/json" },
-      body: JSON.stringify({ email, nickname, password, confirmPassword }),
-      credentials: "include",
-    });
-  };
-
-  // 회원가입 폼 제출 핸들러
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
 
-    const result = await signUp();
-    console.log(result);
+    const { email, nickname, password, passwordConfirmation } = values;
+
+    setLoading(true);
+    try {
+      const result = await register(email, nickname, password, passwordConfirmation);
+      if (result?.error) {
+        setModalState({
+          open: true,
+          success: false,
+          message: result.message
+        });
+        return;
+      }
+      setModalState({
+        open: true,
+        success: true,
+        message: "가입이 완료되었습니다!"
+      });
+    } catch (err) {
+      setModalState({
+        open: true,
+        success: false,
+        message: err.message || "회원가입 중 오류 발생"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleModalClose = () => {
+    if (modalState.success) {
+      router.push("/signIn");
+    } else {
+      setModalState((prev) => ({ ...prev, open: false }));
+    }
   };
 
   return (
@@ -62,27 +108,19 @@ export default function SignUpPage() {
       <div className="mt-15 mb-30 flex flex-col items-center md:mt-30">
         <Logo className="mb-10 h-[54px] w-60 md:h-18 md:w-80" />
         <form className="mb-[18px] space-y-6" onSubmit={handleSubmit}>
-          <EmailInput
-            value={values.email}
+          <EmailInput value={values.email} onChange={handleChange} error={errors.email} />
+          <NicknameInput value={values.nickname} onChange={handleChange} error={errors.nickname} />
+          <PasswordInput value={values.password} onChange={handleChange} error={errors.password} />
+          <PasswordConfirmationInput
+            value={values.passwordConfirmation}
             onChange={handleChange}
-            error={isInputValid}
+            error={errors.passwordConfirmation}
           />
-          <NicknameInput
-            value={values.nickname}
-            onChange={handleChange}
-            error={isInputValid}
+          <SubmitButton
+            type={loading ? "가입 중" : "회원가입"}
+            loading={loading}
+            hasInputValue={Object.values(values).some(Boolean)}
           />
-          <PasswordInput
-            value={values.password}
-            onChange={handleChange}
-            error={isInputValid}
-          />
-          <ConfirmPasswordInput
-            value={values.confirmPassword}
-            onChange={handleChange}
-            error={isInputValid}
-          />
-          <SubmitButton type="회원가입" />
         </form>
         <GoogleLoginButton />
         <div className="mt-6 space-x-2">
@@ -92,6 +130,8 @@ export default function SignUpPage() {
           </Link>
         </div>
       </div>
+
+      {modalState.open && <AuthModal message={modalState.message} onClose={handleModalClose} />}
     </Container>
   );
 }

@@ -1,223 +1,127 @@
-'use server';
+"use server";
 
-import { cookies } from 'next/headers';
-import { NextResponse } from 'next/server';
-
-const API_URL = process.env.API_URL;
+import { BASE_URL } from "@/constant/constant";
+import { cookies } from "next/headers";
 
 export async function loginAction(email, password) {
   try {
-    const response = await fetch(`${API_URL}/auth/sign-in`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-      cache: 'no-store',
-      credentials: 'include'
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Server Action login error response:', errorData);
-      throw new Error(errorData.message || '로그인 실패: 서버 응답 오류');
-    }
-
-    const setCookieHeaders = response.headers.getSetCookie();
-    console.log('[loginAction] Received Set-Cookie headers from backend:', setCookieHeaders);
-
-    const cookieStore = cookies();
-
-    setCookieHeaders.forEach((cookieString) => {
-      const parts = cookieString.split(';');
-      const [nameValue] = parts[0].split('=');
-      const name = nameValue;
-      const value = parts[0].substring(name.length + 1);
-
-      const cookieOptions = {};
-      parts.slice(1).forEach((part) => {
-        const trimmedPart = part.trim();
-        if (trimmedPart.toLowerCase() === 'httponly') {
-          cookieOptions.httpOnly = true;
-        } else if (trimmedPart.toLowerCase() === 'secure') {
-          cookieOptions.secure = true;
-        } else if (trimmedPart.toLowerCase().startsWith('samesite')) {
-          cookieOptions.sameSite = trimmedPart.split('=')[1];
-        } else if (trimmedPart.toLowerCase().startsWith('path')) {
-          cookieOptions.path = trimmedPart.split('=')[1];
-        } else if (trimmedPart.toLowerCase().startsWith('max-age')) {
-          cookieOptions.maxAge = parseInt(trimmedPart.split('=')[1], 10);
-        }
-      });
-
-      cookieStore.set(name, value, cookieOptions);
-      console.log(`[loginAction] Setting Next.js cookie: ${name} with options`, cookieOptions);
-    });
-
-    const userDataFromBody = await response.json();
-    return { user: userDataFromBody };
-  } catch (error) {
-    console.error('Error in loginAction (Server Action):', error);
-    throw error;
-  }
-}
-
-export async function registerAction(nickname, email, password, passwordConfirmation) {
-  try {
-    const response = await fetch(`${API_URL}/auth/sign-up`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nickname, email, password, passwordConfirmation }),
-      cache: 'no-store',
-      credentials: 'include'
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Server Action register error response:', errorData);
-      throw new Error(errorData.message || '회원가입 실패: 서버 응답 오류');
-    }
-
-    const setCookieHeaders = response.headers.getSetCookie();
-    console.log('[registerAction] Received Set-Cookie headers from backend:', setCookieHeaders);
-
-    const cookieStore = cookies();
-
-    setCookieHeaders.forEach((cookieString) => {
-      const parts = cookieString.split(';');
-      const [nameValue] = parts[0].split('=');
-      const name = nameValue;
-      const value = parts[0].substring(name.length + 1);
-
-      const cookieOptions = {};
-      parts.slice(1).forEach((part) => {
-        const trimmedPart = part.trim();
-        if (trimmedPart.toLowerCase() === 'httponly') {
-          cookieOptions.httpOnly = true;
-        } else if (trimmedPart.toLowerCase() === 'secure') {
-          cookieOptions.secure = true;
-        } else if (trimmedPart.toLowerCase().startsWith('samesite')) {
-          cookieOptions.sameSite = trimmedPart.split('=')[1];
-        } else if (trimmedPart.toLowerCase().startsWith('path')) {
-          cookieOptions.path = trimmedPart.split('=')[1];
-        } else if (trimmedPart.toLowerCase().startsWith('max-age')) {
-          cookieOptions.maxAge = parseInt(trimmedPart.split('=')[1], 10);
-        }
-      });
-      cookieStore.set(name, value, cookieOptions);
-      console.log(`[registerAction] Setting Next.js cookie: ${name} with options`, cookieOptions);
-    });
-
-    const userDataFromBody = await response.json();
-    return { user: userDataFromBody };
-  } catch (error) {
-    console.error('Error in registerAction (Server Action):', error);
-    throw error;
-  }
-}
-
-export async function getServerSideToken(type) {
-  const cookieStore = await cookies();
-  const tokenCookie = cookieStore.get(type);
-  return tokenCookie ? tokenCookie.value : null;
-}
-
-export async function setServerSideTokens(accessToken, refreshToken) {
-  const cookieStore = await cookies();
-
-  const decodeToken = (token) => {
-    try {
-      const parts = token.split('.');
-      if (parts.length !== 3) {
-        throw new Error('Invalid token format');
-      }
-      return JSON.parse(Buffer.from(parts[1], 'base64').toString());
-    } catch (e) {
-      return {};
-    }
-  };
-
-  const calculateMaxAge = (tokenData) => {
-    const nowInSeconds = Math.floor(Date.now() / 1000);
-    return tokenData.exp && tokenData.exp > nowInSeconds
-      ? Math.max(0, tokenData.exp - nowInSeconds)
-      : 60 * 60 * 24 * 30;
-  };
-
-  const accessTokenData = decodeToken(accessToken);
-  const refreshTokenData = decodeToken(refreshToken);
-
-  cookieStore.set('accessToken', accessToken, {
-    path: '/',
-    maxAge: calculateMaxAge(accessTokenData),
-    sameSite: 'Lax',
-    httpOnly: true
-  });
-
-  cookieStore.set('refreshToken', refreshToken, {
-    path: '/',
-    maxAge: calculateMaxAge(refreshTokenData),
-    sameSite: 'Lax',
-    httpOnly: true
-  });
-}
-
-export async function updateAccessToken(accessToken) {
-  const cookieStore = await cookies();
-  try {
-    const accessTokenData = JSON.parse(Buffer.from(accessToken.split('.')[1], 'base64').toString());
-    const accessTokenExpiresIn = accessTokenData.exp - Math.floor(Date.now() / 1000);
-
-    cookieStore.set('accessToken', accessToken, {
-      path: '/',
-      maxAge: Math.max(0, accessTokenExpiresIn),
-      sameSite: 'Lax',
-      httpOnly: true
-    });
-  } catch (error) {
-    console.error('Error updating access token:', error);
-  }
-}
-
-export async function clearServerSideTokens() {
-  const cookieStore = await cookies();
-  cookieStore.delete('accessToken');
-  cookieStore.delete('refreshToken');
-  return { success: true };
-}
-
-export async function getUserAction() {
-  try {
-    const accessToken = await getServerSideToken('accessToken');
-
-    if (!accessToken) {
-      return null;
-    }
-
-    const response = await fetch(`${API_URL}/users/me`, {
-      method: 'GET',
+    const res = await fetch(`${BASE_URL}/auth/sign-in`, {
+      method: "POST",
       headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json"
       },
-      cache: 'no-store',
-      credentials: 'include'
+      body: JSON.stringify({ email, password }),
+      cache: "no-store"
     });
 
-    if (!response.ok) {
-      console.error('Failed to fetch user data with accessToken (Server Action) - Status:', response.status);
-      await clearServerSideTokens();
-      return null;
+    if (!res.ok) {
+      const data = await res.json();
+      console.error("로그인 실패 응답:", data);
+      return { error: true, message: data.message || "로그인 실패" };
     }
 
-    const userData = await response.json();
-    return userData || null;
+    const userData = await res.json();
+
+    const setCookieHeader = res.headers.get("Set-Cookie");
+
+    if (setCookieHeader) {
+      console.log("Backend Set-Cookie header received in loginAction:", setCookieHeader);
+
+      const cookieParts = setCookieHeader.split(", ").flatMap((part) => part.split(","));
+      const cookieStore = cookies();
+
+      cookieParts.forEach((cookieString) => {
+        const [nameValuePair, ...attributes] = cookieString.split(";").map((s) => s.trim());
+        const [name, value] = nameValuePair.split("=");
+
+        const cookieOptions = {};
+        attributes.forEach((attr) => {
+          const lowerAttr = attr.toLowerCase();
+          if (lowerAttr.startsWith("max-age")) {
+            cookieOptions.maxAge = parseInt(attr.split("=")[1], 10);
+          } else if (lowerAttr.startsWith("path")) {
+            cookieOptions.path = attr.split("=")[1];
+          } else if (lowerAttr.startsWith("expires")) {
+            cookieOptions.expires = new Date(attr.split("=")[1]);
+          } else if (lowerAttr === "httponly") {
+            cookieOptions.httpOnly = true;
+          } else if (lowerAttr.startsWith("samesite")) {
+            cookieOptions.sameSite = attr.split("=")[1];
+          } else if (lowerAttr === "secure") {
+            cookieOptions.secure = true;
+          }
+        });
+
+        if (name && value) {
+          cookieStore.set(name, value, cookieOptions);
+          console.log(`[loginAction] Set server cookie: ${name}`);
+        }
+      });
+    } else {
+      console.warn("No Set-Cookie header received from backend for login.");
+    }
+
+    return { success: true, user: userData };
   } catch (error) {
-    console.error('Error in getUserAction:', error);
-    await clearServerSideTokens();
-    return null;
+    console.error("로그인 액션 오류:", error.message);
+    return { error: true, message: error.message || "로그인 중 알 수 없는 오류 발생" };
+  }
+}
+
+export async function registerAction(email, nickname, password, passwordConfirmation) {
+  try {
+    const res = await fetch(`${BASE_URL}/auth/sign-up`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ email, nickname, password, passwordConfirmation }),
+      cache: "no-store"
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      return { error: true, message: data.message || "회원가입 실패" };
+    }
+    return { success: true, user: data };
+  } catch (error) {
+    return { error: true, message: error.message || "회원가입 오류" };
   }
 }
 
 export async function logoutAction() {
-  await clearServerSideTokens();
-  return { success: true };
+  try {
+    const cookieStore = cookies();
+    cookieStore.delete("accessToken");
+    cookieStore.delete("refreshToken");
+    return { success: true };
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+}
+
+// 401 에러 발생 시 토큰 자동 갱신(TODO: 수정필요)
+export async function getUserWithAutoRefresh() {
+  const tryFetch = async () =>
+    await fetch(`${BASE_URL}/users/me`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      cache: "no-store"
+    });
+
+  const res = await tryFetch();
+  if (res.ok) return await res.json();
+  if (res.status === 401) {
+    const refreshRes = await fetch(`${BASE_URL}/auth/refresh`, {
+      method: "POST",
+      credentials: "include",
+      cache: "no-store"
+    });
+    if (!refreshRes.ok) throw new Error("리프레시 토큰 만료됨");
+    const retry = await tryFetch();
+    if (!retry.ok) throw new Error("토큰 갱신 후 재요청 실패");
+    return await retry.json();
+  }
+  throw new Error("유저 정보 조회 실패");
 }

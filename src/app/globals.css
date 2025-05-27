@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 /* ===========================
    🌈 Theme Variables
@@ -26,9 +26,9 @@
 
   /* ✅ Typography */
   --font-pretendard:
-    'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue',
-    'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji',
-    'Segoe UI Symbol', sans-serif;
+    "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue",
+    "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", sans-serif;
 
   --font-quantico-regular: Quantico, sans-serif;
   --font-quantico-bold: Quantico, sans-serif;
@@ -71,6 +71,10 @@
 
   button {
     cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
   }
 
   .font-quantico-regular {

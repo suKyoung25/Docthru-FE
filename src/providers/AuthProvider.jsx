@@ -1,15 +1,18 @@
 "use client";
 
-import { loginAction, registerAction, getUserAction, logoutAction } from "@/lib/actions/auth";
-import { createContext, useContext, useEffect, useState } from "react";
+import { loginAction, registerAction } from "@/lib/actions/auth";
+import { userService } from "@/lib/service/userService";
+import { createContext, useContext, useState, useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { authService } from "@/lib/service/authService";
 
 const AuthContext = createContext({
-  login: () => { },
-  logout: () => { },
+  login: () => {},
+  logout: () => {},
+  register: () => {},
+  updateUser: () => {},
   user: null,
-  updateUser: () => { },
-  register: () => { },
-  isLoading: true,
+  isLoading: true
 });
 
 export const useAuth = () => {
@@ -23,77 +26,73 @@ export const useAuth = () => {
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
+  const pathname = usePathname();
 
   const getUser = async () => {
     try {
-      const userData = await getUserAction();
-      console.log('AuthProvider - getUser received:', userData);
-      setUser(userData || null);
+      const user = await userService.getMe();
+      setUser(user);
     } catch (error) {
       console.error("사용자 정보를 가져오는데 실패했습니다:", error);
       setUser(null);
+      throw error;
     }
   };
 
-  const register = async (nickname, email, password, passwordConfirmation) => {
+  const register = async (email, nickname, password, passwordConfirmation) => {
+    setIsLoading(true);
     try {
-      const result = await registerAction(
-        nickname,
-        email,
-        password,
-        passwordConfirmation,
-      );
-      console.log('AuthProvider - register result:', result);
-      setUser(result?.user || null);
-      return result?.user || null;
+      const userData = await registerAction(email, nickname, password, passwordConfirmation);
+      if (userData?.error) {
+        console.log(userData);
+        return userData;
+      }
+      console.log("회원가입 성공:", userData);
+      return userData;
     } catch (error) {
-      console.error("회원가입 실패:", error);
-      throw error;
+      console.error("회원가입 실패:", error.message);
+      setUser(null);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const login = async (email, password) => {
+    setIsLoading(true);
     try {
-      const result = await loginAction(email, password);
-      console.log('AuthProvider - login result:', result);
+      const userData = await loginAction(email, password);
+      console.log("loginAction 결과 (서버 응답 확인):", userData);
 
-      setUser(result?.user || null);
-      return result?.user || null;
+      if (userData?.error) {
+        throw new Error(userData.message || "로그인에 실패했습니다.");
+      }
+      getUser();
+      router.push("/challenges");
     } catch (error) {
-      console.error("로그인 실패:", error);
+      console.error("로그인 실패:", error.message);
       setUser(null);
       throw error;
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const logout = async () => {
-    try {
-      await logoutAction();
-      setUser(null);
-    } catch (error) {
-      console.error("로그아웃 실패:", error);
-    }
+    await authService.logout();
+    setUser(null);
+    router.push("/signIn");
   };
 
   useEffect(() => {
-    async function fetchInitialUser() {
-      await getUser();
+    const excludeRoutes = ["/", "/signIn", "/signUp"];
+
+    if (!excludeRoutes.includes(pathname)) {
+      getUser();
+    } else {
       setIsLoading(false);
     }
-    fetchInitialUser();
   }, []);
 
-  if (isLoading) {
-    return (
-      <div className="flex h-64 items-center justify-center">
-        <div className="h-12 w-12 animate-spin rounded-full border-t-2 border-b-2 border-blue-500"></div>
-      </div>
-    );
-  }
-
-  return (
-    <AuthContext.Provider value={{ user, login, logout, register, isLoading }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ user, login, logout, register, isLoading }}>{children}</AuthContext.Provider>;
 }

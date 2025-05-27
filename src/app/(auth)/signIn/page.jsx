@@ -1,40 +1,30 @@
-'use client';
+"use client";
 
-import Container from '@/components/container/PageContainer';
-import EmailInput from '@/components/input/EmailInput';
-import PasswordInput from '@/components/input/PasswordInput';
-import SubmitButton from '@/components/btn/auth/SubmitButton';
-import Logo from '@/layout/_components/Logo';
-import Link from 'next/link';
-import { useAuth } from '@/providers/AuthProvider';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import GoogleLoginButton from '@/components/btn/auth/GoogleLoginButton';
+import Container from "@/components/container/PageContainer";
+import EmailInput from "@/components/input/EmailInput";
+import PasswordInput from "@/components/input/PasswordInput";
+import SubmitButton from "@/components/btn/auth/SubmitButton";
+import Logo from "@/layout/_components/Logo";
+import Link from "next/link";
+import { useAuth } from "@/providers/AuthProvider";
+import { useState } from "react";
+import GoogleLoginButton from "@/components/btn/auth/GoogleLoginButton";
 
 export default function SignInPage() {
-  const { login, user, isLoading } = useAuth();
-  const router = useRouter();
+  const { login, isLoading } = useAuth();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       await login(email, password); // 로그인
     } catch (error) {
-      console.error('로그인 실패', error);
-      alert('로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.');
+      console.error("로그인 실패", error);
+      alert("로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.");
     }
   };
-
-  useEffect(() => {
-    console.log('User status changed:', user);
-    if (user) {
-      console.log('Redirecting to /');
-      router.push('/challenges');
-    }
-  }, [user, router]);
 
   // 로딩중 - 임시UI
   if (isLoading) {
