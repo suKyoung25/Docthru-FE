@@ -5,15 +5,29 @@ import SearchInput from "@/components/input/SearchInput";
 import ChallengeCard from "@/components/card/Card";
 import FilterModal from "@/components/modal/FilterModal";
 import Pagination from "@/components/pagination/Pagination";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useChallenges from "@/hooks/useChallengeList";
 import ApplyChallenge from "@/app/(user)/challenges/_components/ApplyChallenge";
 import DeclineModal from "@/components/modal/DeclineModal";
+import { toast } from 'react-hot-toast';
+import { useAuth } from "@/providers/AuthProvider";
+import { deleteChallengeAction } from "@/lib/actions/challenge";
 
 function Page() {
   const [isModal, setIsModal] = useState(false);
   const [isDeclineModalOpen, setIsDeclineModalOpen] = useState(false);
   const [challengeToDeclineId, setChallengeToDeclineId] = useState(null);
+
+  const { user } = useAuth();
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    if (user && user.role === 'ADMIN') {
+      setIsAdmin(true);
+    } else {
+      setIsAdmin(false);
+    }
+  }, [user]);
 
   const {
     challenges,
@@ -28,6 +42,8 @@ function Page() {
     setPage,
     setKeyword,
     applyFilters,
+    setChallenges,
+    setTotalCount,
   } = useChallenges();
 
   const handleClickFilter = () => {
@@ -39,18 +55,34 @@ function Page() {
     setIsModal(false);
   };
 
-  // 삭제 모달을 여는 함수
   const handleDeclineClick = (challengeId) => {
     setChallengeToDeclineId(challengeId);
     setIsDeclineModalOpen(true);
   };
 
-  // 삭제 확인 함수
-  const handleConfirmDecline = () => {
-    // 여기에 챌린지 삭제 로직을 구현
-    console.log("챌린지 ID:", challengeToDeclineId, "삭제 중입니다.");
-    setIsDeclineModalOpen(false);
-    setChallengeToDeclineId(null);
+  const handleConfirmDecline = async (adminMessage) => {
+    if (!challengeToDeclineId) {
+      console.error("삭제할 챌린지 ID가 설정되지 않았습니다.");
+      return;
+    }
+
+    try {
+      // deleteChallengeAction 호출
+      await deleteChallengeAction(challengeToDeclineId, adminMessage);
+      toast.success("챌린지가 성공적으로 삭제되었습니다.");
+
+      setChallenges((prevChallenges) =>
+        prevChallenges.filter((challenge) => challenge.id !== challengeToDeclineId)
+      );
+      setTotalCount((prevCount) => prevCount - 1);
+
+    } catch (err) {
+      toast.error(`챌린지 삭제에 실패했습니다: ${err.message}`);
+      console.error("챌린지 삭제 에러:", err);
+    } finally {
+      setIsDeclineModalOpen(false);
+      setChallengeToDeclineId(null);
+    }
   };
 
   return (
@@ -100,6 +132,7 @@ function Page() {
               participants={challenge.participants.length}
               maxParticipant={challenge.maxParticipant}
               onDeclineClick={() => handleDeclineClick(challenge.id)}
+              isAdmin={isAdmin}
             />
           ))
         ) : (
@@ -118,7 +151,7 @@ function Page() {
         <DeclineModal
           onClose={() => setIsDeclineModalOpen(false)}
           onConfirm={handleConfirmDecline}
-          isLoggedIn={true} // 삭제 버튼을 보기 사용자가 로그인했다고 가정
+          isLoggedIn={true}
         />
       )}
     </div>

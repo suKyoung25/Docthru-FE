@@ -14,15 +14,14 @@ export async function postChallenges(postData) {
   const res = await fetch(BASE_URL, {
     method: "post",
     headers: {
-      "Content-type": "application/json",
+      "Content-type": "application/json"
     },
     credentials: "include",
-    body: JSON.stringify(postData),
+    body: JSON.stringify(postData)
   });
 
   if (!res.ok) throw new Error("챌린지를 생성할 수 없습니다.");
 
-  //디버깅
   console.log("res", res);
 
   return res.json();
