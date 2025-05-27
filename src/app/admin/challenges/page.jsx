@@ -7,7 +7,7 @@ import ChallengeCard from "@/components/card/Card";
 import FilterModal from "@/components/modal/FilterModal";
 import Pagination from "@/components/pagination/Pagination";
 import { useState } from "react";
-import useChallenges from "@/hooks/useChanges";
+import useChallenges from "@/hooks/useChallengeList";
 import ApplyChallenge from "@/app/(user)/challenges/_components/ApplyChallenge";
 
 function Page() {
