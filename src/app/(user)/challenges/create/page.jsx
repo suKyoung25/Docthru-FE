@@ -156,7 +156,9 @@ export default function page() {
       </div>
 
       <div className="h-[48px] w-full">
+
         <BtnText theme="solidblack" onClick={handlePost}>
+
           신청하기
         </BtnText>
       </div>

@@ -19,14 +19,14 @@ export default function SignInPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      await login(email, password); // 로그인
+      await login(email, password);
     } catch (error) {
       console.error("로그인 실패", error);
       alert("로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.");
     }
   };
 
-  // 로딩중 - 임시UI
+  // 임시 로딩 UI
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -53,7 +53,7 @@ export default function SignInPage() {
               setPassword(e.target.value);
             }}
           />
-          <SubmitButton type="로그인" />
+          <SubmitButton type="로그인" hasInputValue="true" />
         </form>
         <GoogleLoginButton />
         <div className="text-[#262626] mt-6 space-x-2">
