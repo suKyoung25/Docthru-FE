@@ -3,12 +3,13 @@ const BASE_URL = process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC
 
 // 공통 fetch 설정
 const fetchConfig = {
-  credentials: "include", // 항상 쿠키 포함
+  credentials: "include",
   headers: {
-    "Content-Type": "application/json" // 이 부분이 필요합니다
-  }
+    "Content-Type": "application/json",
+    Origin: process.env.NEXT_PUBLIC_CLIENT_URL // 프론트엔드 도메인
+  },
+  mode: "cors"
 };
-
 const workService = {
   // 챌린지 작업물 목록 조회 (페이지네이션)
   getWorkList: async (challengeId, page = 1, size = 5) => {
@@ -51,8 +52,8 @@ const workService = {
   // 작업물 삭제(포기)
   deleteWork: async (workId) => {
     const response = await fetch(`${BASE_URL}/works/${workId}`, {
-      method: "DELETE",
-      credentials: "include"
+      ...fetchConfig,
+      method: "DELETE"
     });
 
     return { status: response.status };
