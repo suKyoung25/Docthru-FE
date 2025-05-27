@@ -57,7 +57,7 @@ export default function DraftModal({ onClose, isLoggedIn = true, onLoadItem }) {
           </button>
         </div>
         <div className="mb-1 text-xs font-normal text-gray-800">총 {items.length}개</div>
-        <ul>
+        <ul className="max-h-[300px] overflow-y-auto">
           {items.map((item, idx) => (
             <li
               key={item.id || idx}
