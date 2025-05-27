@@ -166,7 +166,7 @@ export default function page() {
         <BtnText
           theme="solidblack"
           onClick={handlePost}
-          // icon={} className={} children={}
+        // icon={} className={} children={}
         >
           신청하기
         </BtnText>

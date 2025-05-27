@@ -44,7 +44,7 @@ export default function page() {
     if (user) appliedChallengesData();
   }, []);
 
-  return (
+  return (-
     <Container>
       <div className="flex justify-between h-10 mt-4">
         <h2 className="flex-1 text-xl font-semibold">나의 챌린지</h2>
