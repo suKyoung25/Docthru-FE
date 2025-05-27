@@ -51,6 +51,7 @@ export default function page() {
   // 초기 데이터 로드
   useEffect(() => {
     const fetchInitialData = async () => {
+      // 현재 테스트 코드
       const response = await workService.getWorkDetail();
       if (response.data) {
         setWorkData(response.data);
@@ -141,7 +142,7 @@ export default function page() {
     try {
       // 테스트 코드 작성함 현재는 서버에서 직접 작업물을 생성후 작업물 아이디를 넣어서 테스트 가능
       // const submitResult = await workService.updateWork(workData.workId, workData.content);
-      const submitResult = await workService.updateWork(65, workData.content);
+      const submitResult = await workService.updateWork(67, workData.content);
       console.log("제출할 content:", workData.content);
       console.log("작업물 업데이트 결과:", submitResult);
     } catch (error) {
@@ -157,7 +158,7 @@ export default function page() {
   // 작업물 포기(삭제)
   const onDiscard = async () => {
     // const deleteResult = await workService.deleteWork(workData.workId);
-    const deleteResult = await workService.deleteWork(65);
+    const deleteResult = await workService.deleteWork(67);
 
     // 삭제시 해당 챌린지 페이지로 이동
     if (deleteResult.status === 204) {

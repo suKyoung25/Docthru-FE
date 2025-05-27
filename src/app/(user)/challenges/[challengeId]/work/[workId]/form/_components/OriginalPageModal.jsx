@@ -1,8 +1,7 @@
-import Image from 'next/image';
-import React from 'react';
-import outCircle from '@/assets/icon/ic_out_circle.svg';
-import BtnText from '@/components/btn/text/BtnText';
-import Link from 'next/link';
+import Image from "next/image";
+import React from "react";
+import outCircle from "@/assets/icon/ic_out_circle.svg";
+import BtnText from "@/components/btn/text/BtnText";
 
 export default function OriginalPageModal({ pageUrl, onClose, modalState, originalPageUrl }) {
   return (
@@ -19,21 +18,27 @@ export default function OriginalPageModal({ pageUrl, onClose, modalState, origin
                 theme="link"
                 className="h-[32px]"
                 onClick={() => {
-                  window.open(originalPageUrl, '_blank');
+                  window.open(originalPageUrl, "_blank");
                 }}
               >
                 링크 열기
               </BtnText>
             </div>
           </div>
-          <iframe
-            src={pageUrl}
-            title="원문 페이지"
-            className="h-full w-full border-0"
-            loading="lazy"
-            allow="clipboard-read; clipboard-write"
-            sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-          />
+          {pageUrl ? (
+            <iframe
+              src={pageUrl}
+              title="원문 페이지"
+              className="h-full w-full border-0"
+              loading="lazy"
+              allow="clipboard-read; clipboard-write"
+              sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+            />
+          ) : (
+            <div className="flex items-center justify-center h-full text-gray-500">
+              원문 페이지를 불러올 수 없습니다.
+            </div>
+          )}
         </div>
       ) : (
         <div className="fixed top-[-350px] right-0 z-1 flex h-[350px] w-full flex-col sm:top-0 sm:right-[-300px] sm:h-full sm:w-[300px] xl:right-[-640px] xl:w-[640px]">
@@ -47,8 +52,7 @@ export default function OriginalPageModal({ pageUrl, onClose, modalState, origin
                 theme="link"
                 className="h-[32px]"
                 onClick={() => {
-                  window.open(originalPageUrl, '_blank');
-                  console.log('링크 열기');
+                  window.open(originalPageUrl, "_blank");
                 }}
               >
                 링크 열기
