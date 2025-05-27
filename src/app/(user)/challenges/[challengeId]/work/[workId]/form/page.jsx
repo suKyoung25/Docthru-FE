@@ -10,8 +10,8 @@ import OriginalPageModalBtn from "./_components/OriginalPageModalBtn";
 import { useEffect, useRef, useState } from "react";
 import workService from "@/lib/api/workService";
 import { useParams, useRouter } from "next/navigation";
-import DeletedModal from "./_components/DeletedModal";
 import EditorHeader from "./_components/EditorHeader";
+import ConfirmActionModal from "@/components/modal/ConfirmActionModal";
 
 export default function page() {
   const timeoutRef = useRef(null);
@@ -47,6 +47,9 @@ export default function page() {
 
   // 작업물 삭제 여부 확인
   const [isDeleted, setIsDeleted] = useState(false);
+
+  // 제출 or 수정 모달 상태
+  const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
 
   // 초기 데이터 로드
   useEffect(() => {
@@ -137,14 +140,18 @@ export default function page() {
     setIsOriginalPageModal((prev) => !prev);
   };
 
+  // 제출 모달 핸들러
+  const onSubmitModal = () => {
+    setIsSubmitModalOpen(!isSubmitModalOpen);
+  };
+
   // 제출 및 수정
   const onSubmit = async () => {
     try {
-      // 테스트 코드 작성함 현재는 서버에서 직접 작업물을 생성후 작업물 아이디를 넣어서 테스트 가능
-      // const submitResult = await workService.updateWork(workData.workId, workData.content);
       const submitResult = await workService.updateWork(67, workData.content);
       console.log("제출할 content:", workData.content);
       console.log("작업물 업데이트 결과:", submitResult);
+      onSubmitModal(); // 제출 완료 후 모달 닫기
     } catch (error) {
       console.error("작업물 업데이트 실패:", error);
     }
@@ -200,7 +207,7 @@ export default function page() {
             content={workData.content}
             onDraft={onDraft}
             isSubmitted={isSubmitted}
-            onSubmit={onSubmit}
+            isSubmitModal={() => setIsSubmitModalOpen((prev) => !prev)}
             onDiscardModal={onDiscardModal}
           />
           <EditorSection
@@ -219,7 +226,7 @@ export default function page() {
             content={workData.content}
             onDraft={onDraft}
             isSubmitted={isSubmitted}
-            onSubmit={onSubmit}
+            isSubmitModal={() => setIsSubmitModalOpen((prev) => !prev)}
             onDiscardModal={onDiscardModal}
           />
           <EditorSection
@@ -234,7 +241,23 @@ export default function page() {
 
       {hasDraft && <DraftCheckModal setHasDraft={setHasDraft} onDraftModal={toggleDraftModal} />}
       {draftModal && <DraftModal onClose={toggleDraftModal} isLoggedIn={true} onLoadItem={onLoadItem} />}
-      {isDeleted && <DeletedModal onClose={onDiscardModal} onConfirm={onDiscard} />}
+      {isDeleted && (
+        <ConfirmActionModal
+          text="정말 포기하시겠습니까?"
+          onClose={onDiscardModal}
+          onConfirm={onDiscard}
+          isLoggedIn={true}
+        />
+      )}
+
+      {isSubmitModalOpen && (
+        <ConfirmActionModal
+          text="작업물을 제출하시겠습니까?"
+          onClose={onSubmitModal}
+          onConfirm={onSubmit}
+          isLoggedIn={true}
+        />
+      )}
     </div>
   );
 }
