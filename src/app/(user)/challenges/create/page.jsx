@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import Input from "./_components/Input";
 import CategoryClosed from "@/components/dropDown/category/CategoryClosed";
 import CategoryItems from "@/components/dropDown/category/CategoryItems";
-import { postChallenges } from "@/lib/api/challenges-first/createChallenge";
+import { postChallenges } from "@/lib/api/challenge-api/createChallenge";
 import { useRouter } from "next/navigation";
 import { getServerSideToken } from "@/lib/actions/auth";
 
@@ -156,9 +156,7 @@ export default function page() {
       </div>
 
       <div className="h-[48px] w-full">
-
         <BtnText theme="solidblack" onClick={handlePost}>
-
           신청하기
         </BtnText>
       </div>

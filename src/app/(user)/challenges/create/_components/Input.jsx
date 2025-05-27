@@ -6,6 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import Image from "next/image";
 import calender from "@/assets/icon/calendar_48px.svg";
 
+//챌린지, 어드민 페이지에서 사용됨
 function Input({ type, title, placeholder, onChange, value, height, deadline, setDeadline }) {
   const isHeight = Boolean(height);
 
