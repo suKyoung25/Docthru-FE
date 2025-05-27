@@ -179,69 +179,45 @@ export default function page() {
 
   return (
     <div className="relative">
+      {/* 에디터 */}
+      <Container
+        maxWidth="max-w-4xl"
+        className={
+          isOriginalPageModal ? "mt-[350px] transition-all duration-300 sm:mt-0 sm:mr-[300px] xl:mr-[640px]" : ""
+        }
+      >
+        <EditorHeader
+          workId={workId}
+          challengeTitle={workData.challengeTitle}
+          content={workData.content}
+          onDraft={onDraft}
+          isSubmitted={isSubmitted}
+          isSubmitModal={() => setIsSubmitModalOpen((prev) => !prev)}
+          onDiscardModal={onDiscardModal}
+        />
+        <EditorSection
+          challengeTitle={workData.challengeTitle}
+          content={workData.content}
+          handleContent={(newContent) => setWorkData((prev) => ({ ...prev, content: newContent }))}
+          onDraft={onDraft}
+          isDrafting={isDrafting}
+        />
+      </Container>
+
+      {/* 원문 페이지 모달 on/off 버튼 */}
       <OriginalPageModalBtn
         isOriginalPageModal={isOriginalPageModal}
         onOpenOriginalPageModal={toggleOriginalPageModal}
       />
 
-      {isOriginalPageModal ? (
-        <OriginalPageModal
-          pageUrl={workData.originalUrl}
-          onClose={toggleOriginalPageModal}
-          modalState={isOriginalPageModal}
-          originalPageUrl={workData.originalUrl}
-        />
-      ) : (
-        <OriginalPageModal
-          pageUrl={workData.originalUrl}
-          onClose={toggleOriginalPageModal}
-          modalState={isOriginalPageModal}
-          originalPageUrl={workData.originalUrl}
-        />
-      )}
+      {/* 원문 페이지 모달 */}
+      <OriginalPageModal
+        pageUrl={workData.originalUrl}
+        onClose={toggleOriginalPageModal}
+        modalState={isOriginalPageModal}
+        originalPageUrl={workData.originalUrl}
+      />
 
-      {isOriginalPageModal ? (
-        <Container
-          maxWidth="max-w-4xl"
-          className="mt-[350px] transition-all duration-300 sm:mt-0 sm:mr-[300px] xl:mr-[640px]"
-        >
-          <EditorHeader
-            workId={workId}
-            challengeTitle={workData.challengeTitle}
-            content={workData.content}
-            onDraft={onDraft}
-            isSubmitted={isSubmitted}
-            isSubmitModal={() => setIsSubmitModalOpen((prev) => !prev)}
-            onDiscardModal={onDiscardModal}
-          />
-          <EditorSection
-            challengeTitle={workData.challengeTitle}
-            content={workData.content}
-            handleContent={(newContent) => setWorkData((prev) => ({ ...prev, content: newContent }))}
-            onDraft={onDraft}
-            isDrafting={isDrafting}
-          />
-        </Container>
-      ) : (
-        <Container maxWidth="max-w-4xl">
-          <EditorHeader
-            workId={workId}
-            challengeTitle={workData.challengeTitle}
-            content={workData.content}
-            onDraft={onDraft}
-            isSubmitted={isSubmitted}
-            isSubmitModal={() => setIsSubmitModalOpen((prev) => !prev)}
-            onDiscardModal={onDiscardModal}
-          />
-          <EditorSection
-            challengeTitle={workData.challengeTitle}
-            content={workData.content}
-            handleContent={(newContent) => setWorkData((prev) => ({ ...prev, content: newContent }))}
-            onDraft={onDraft}
-            isDrafting={isDrafting}
-          />
-        </Container>
-      )}
 
       {hasDraft && <DraftCheckModal setHasDraft={setHasDraft} onDraftModal={toggleDraftModal} />}
       {draftModal && <DraftModal onClose={toggleDraftModal} isLoggedIn={true} onLoadItem={onLoadItem} />}

@@ -6,24 +6,22 @@ import BtnText from "@/components/btn/text/BtnText";
 export default function OriginalPageModal({ pageUrl, onClose, modalState, originalPageUrl }) {
   return (
     <div>
+      {/* 모달 상태에 따라 모달 렌더링 (삼항 연산으로 한 이유는 애니메이션시 이게더 자연스럽게 나와서) */}
       {modalState ? (
         <div className="fixed top-0 right-0 z-1 flex h-[350px] w-full flex-col transition-all duration-300 sm:h-full sm:w-[300px] xl:w-[640px]">
           <div className="flex h-[48px] items-center justify-between gap-2 bg-gray-800/50 px-4 py-2">
             <button onClick={onClose}>
               <Image src={outCircle} alt="모달닫기" className="h-8 w-8" />
             </button>
-            {/* 이부분은 리팩터링 필요함 버튼의 w 가 안 덮어씌워짐 */}
-            <div className="w-[110px]">
-              <BtnText
-                theme="link"
-                className="h-[32px]"
-                onClick={() => {
-                  window.open(originalPageUrl, "_blank");
-                }}
-              >
-                링크 열기
-              </BtnText>
-            </div>
+            <BtnText
+              theme="link"
+              className="h-[32px]"
+              onClick={() => {
+                window.open(originalPageUrl, "_blank");
+              }}
+            >
+              링크 열기
+            </BtnText>
           </div>
           {pageUrl ? (
             <iframe
@@ -47,17 +45,15 @@ export default function OriginalPageModal({ pageUrl, onClose, modalState, origin
               <Image src={outCircle} alt="모달닫기" className="h-8 w-8" />
             </button>
             {/* 이부분은 리팩터링 필요함 버튼의 w 가 안 덮어씌워짐 */}
-            <div className="w-[110px]">
-              <BtnText
-                theme="link"
-                className="h-[32px]"
-                onClick={() => {
-                  window.open(originalPageUrl, "_blank");
-                }}
-              >
-                링크 열기
-              </BtnText>
-            </div>
+            <BtnText
+              theme="link"
+              className="h-[32px]"
+              onClick={() => {
+                window.open(originalPageUrl, "_blank");
+              }}
+            >
+              링크 열기
+            </BtnText>
           </div>
           <iframe
             src={pageUrl}
