@@ -16,7 +16,9 @@ export default function FeedbackBox() {
   // 피드백 목록 불러오기
   const fetchFeedbackList = async () => {
     try {
-      const res = await fetch(`http://localhost:8080/works/${workId}/feedbacks`, { credentials: 'include' });
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/works/${workId}/feedbacks`, {
+        credentials: 'include'
+      });
       if (!res.ok) throw new Error('데이터 불러오기 실패');
       const data = await res.json();
       setFeedbacks(data || []);
@@ -36,7 +38,7 @@ export default function FeedbackBox() {
     if (!feedback.trim()) return;
 
     try {
-      const res = await fetch(`http://localhost:8080/works/${workId}/feedbacks`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/works/${workId}/feedbacks`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -54,7 +56,7 @@ export default function FeedbackBox() {
   // 피드백 수정
   const onEdit = async (feedbackId, editedContent) => {
     try {
-      const res = await fetch(`http://localhost:8080/works/${workId}/feedbacks/${feedbackId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/works/${workId}/feedbacks/${feedbackId}`, {
         method: 'PUT',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -69,7 +71,7 @@ export default function FeedbackBox() {
   // 피드백 삭제
   const onDelete = async (feedbackId) => {
     try {
-      const res = await fetch(`http://localhost:8080/works/${workId}/feedbacks/${feedbackId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/works/${workId}/feedbacks/${feedbackId}`, {
         method: 'DELETE',
         credentials: 'include'
       });

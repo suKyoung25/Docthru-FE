@@ -32,7 +32,7 @@ export default function Header() {
 
     const fetchChallenge = async () => {
       try {
-        const res = await fetch(`http://localhost:8080/challenges/${challengeId}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/challenges/${challengeId}`);
         if (!res.ok) throw new Error('챌린지 불러오기 실패');
         const { data } = await res.json();
         setChallenge(data);

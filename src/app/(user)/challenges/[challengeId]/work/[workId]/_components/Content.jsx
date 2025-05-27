@@ -17,7 +17,7 @@ export default function Content() {
 
     const fetchWork = async () => {
       try {
-        const res = await fetch(`http://localhost:8080/works/${workId}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/works/${workId}`, {
           credentials: 'include'
         });
         if (!res.ok) throw new Error('작업 불러오기 실패');
