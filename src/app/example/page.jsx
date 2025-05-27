@@ -1,28 +1,28 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import BtnText, { BtnRoundedWithIcon } from '@/components/btn/text/BtnText';
-import Container from '@/components/container/PageContainer';
-import DeclineModal from '@/components/modal/DeclineModal';
-import DeleteModal from '@/components/modal/DeleteModal';
-import FilterModal from '@/components/modal/FilterModal';
-import NotificationModal from '@/components/modal/NotificationModal';
-import SignupModal from '@/components/modal/SignupModal';
-import TemporaryStorage from '@/components/modal/DraftModal';
-import Sort from '@/components/sort/Sort';
-import RankingListItem from '@/components/list/RankingListItem';
-import Reply from '@/components/reply/Reply';
-import IconPasswordVisible from '@/components/btn/icon/BtnIcon';
-import BtnCheckbox from '@/components/btn/form/BtnCheckbox';
-import BtnRadio from '@/components/btn/form/BtnRadio';
-import Pagination from '@/components/pagination/Pagination';
-import ChallengeContainerd from '../(user)/challenges/_components/challengeCard/ChallengeContainer';
-import SearchInput from '@/components/input/SearchInput';
-import Profile from '@/components/dropDown/Profile';
-import ApplyChallenge from '../(user)/challenges/_components/ApplyChallenge';
-import Input from '../(user)/challenges/create/component/Input';
+import { useState } from "react";
+import BtnText, { BtnRoundedWithIcon } from "@/components/btn/text/BtnText";
+import Container from "@/components/container/PageContainer";
+import DeclineModal from "@/components/modal/DeclineModal";
+import DeleteModal from "@/components/modal/DeleteModal";
+import FilterModal from "@/components/modal/FilterModal";
+import NotificationModal from "@/components/modal/NotificationModal";
+import SignupModal from "@/components/modal/SignupModal";
+import TemporaryStorage from "@/components/modal/DraftModal";
+import Sort from "@/components/sort/Sort";
+import RankingListItem from "@/components/list/RankingListItem";
+import Reply from "@/components/reply/Reply";
+import IconPasswordVisible from "@/components/btn/icon/BtnIcon";
+import BtnCheckbox from "@/components/btn/form/BtnCheckbox";
+import BtnRadio from "@/components/btn/form/BtnRadio";
+import Pagination from "@/components/pagination/Pagination";
+import ChallengeContainerd from "../(user)/challenges/_components/challengeCard/ChallengeContainer";
+import SearchInput from "@/components/input/SearchInput";
+import Profile from "@/components/dropDown/Profile";
+import ApplyChallenge from "../(user)/challenges/_components/ApplyChallenge";
+import Input from "../(user)/challenges/create/_components/Input";
 
-const themesTitle = 'mb-1 font-[600]';
+const themesTitle = "mb-1 font-[600]";
 const MODAL_COMPONENTS = {
   signup: SignupModal,
   decline: DeclineModal,
@@ -34,7 +34,7 @@ const MODAL_COMPONENTS = {
 
 const page = () => {
   const [openModal, setOpenModal] = useState(null);
-  const [selected, setSelected] = useState('option1');
+  const [selected, setSelected] = useState("option1");
   const [page, setPage] = useState(1);
 
   const handleOpen = (modalName) => setOpenModal(modalName);
@@ -124,11 +124,11 @@ const page = () => {
               <div>
                 <h2 className="mb-4 text-lg font-semibold">옵션 선택</h2>
 
-                <BtnRadio value="option1" checked={selected === 'option1'} onChange={setSelected}>
+                <BtnRadio value="option1" checked={selected === "option1"} onChange={setSelected}>
                   옵션 1
                 </BtnRadio>
 
-                <BtnRadio value="option2" checked={selected === 'option2'} onChange={setSelected}>
+                <BtnRadio value="option2" checked={selected === "option2"} onChange={setSelected}>
                   옵션 2
                 </BtnRadio>
               </div>
@@ -174,24 +174,24 @@ const page = () => {
             <RankingListItem
               item={{
                 rank: 1,
-                userName: '홍길동',
-                userRole: '프로그래머',
+                userName: "홍길동",
+                userRole: "프로그래머",
                 likes: 10000,
                 isLiked: false,
                 workId: 1
               }}
-              toggleLike={() => { }}
+              toggleLike={() => {}}
             />
             <RankingListItem
               item={{
                 rank: 2,
-                userName: '김코딩',
-                userRole: '디자이너',
+                userName: "김코딩",
+                userRole: "디자이너",
                 likes: 8500,
                 isLiked: true,
                 workId: 2
               }}
-              toggleLike={() => { }}
+              toggleLike={() => {}}
             />
           </div>
         </div>
@@ -214,15 +214,15 @@ const page = () => {
               userName="홍길동"
               timestamp="방금 전"
               content="이것은 예시 댓글입니다."
-              onEdit={() => { }}
-              onDelete={() => { }}
+              onEdit={() => {}}
+              onDelete={() => {}}
             />
             <Reply
               userName="김코딩"
               timestamp="1시간 전"
               content="여러 줄 작성이 가능한\n댓글 예시입니다."
-              onEdit={() => { }}
-              onDelete={() => { }}
+              onEdit={() => {}}
+              onDelete={() => {}}
             />
           </div>
         </div>
@@ -233,37 +233,37 @@ const page = () => {
           <div className="flex flex-wrap gap-2">
             <button
               className="rounded-lg bg-gray-100 px-4 py-2 font-semibold text-gray-800 hover:bg-gray-200"
-              onClick={() => handleOpen('signup')}
+              onClick={() => handleOpen("signup")}
             >
               회원가입
             </button>
             <button
               className="rounded-lg bg-gray-100 px-4 py-2 font-semibold text-gray-800 hover:bg-gray-200"
-              onClick={() => handleOpen('decline')}
+              onClick={() => handleOpen("decline")}
             >
               거절 사유
             </button>
             <button
               className="rounded-lg bg-gray-100 px-4 py-2 font-semibold text-gray-800 hover:bg-gray-200"
-              onClick={() => handleOpen('delete')}
+              onClick={() => handleOpen("delete")}
             >
               삭제
             </button>
             <button
               className="rounded-lg bg-gray-100 px-4 py-2 font-semibold text-gray-800 hover:bg-gray-200"
-              onClick={() => handleOpen('notification')}
+              onClick={() => handleOpen("notification")}
             >
               알림
             </button>
             <button
               className="rounded-lg bg-gray-100 px-4 py-2 font-semibold text-gray-800 hover:bg-gray-200"
-              onClick={() => handleOpen('filter')}
+              onClick={() => handleOpen("filter")}
             >
               필터
             </button>
             <button
               className="rounded-lg bg-gray-100 px-4 py-2 font-semibold text-gray-800 hover:bg-gray-200"
-              onClick={() => handleOpen('temp')}
+              onClick={() => handleOpen("temp")}
             >
               임시저장
             </button>
@@ -281,8 +281,8 @@ const page = () => {
       {/* Challenge container 컴포넌트*/}
       <div className="m-10 flex flex-col gap-8 bg-white p-4">
         <h2 className="text-3xl font-bold">challenge container</h2>
-        <ChallengeContainerd height={'h-[176px]'} type={''} />
-        <ChallengeContainerd height={'h-[104px]'} type={'slim'} />
+        <ChallengeContainerd height={"h-[176px]"} type={""} />
+        <ChallengeContainerd height={"h-[104px]"} type={"slim"} />
       </div>
 
       {/* SearchInput 컴포넌트
@@ -291,7 +291,7 @@ const page = () => {
       onChange={(e)=>setKeyword(e.target.value)}*/}
       <div className="m-10 flex flex-col gap-8 bg-white p-4">
         <h2 className="text-3xl font-bold">Search Input</h2>
-        <SearchInput text={'text-[14px]'} />
+        <SearchInput text={"text-[14px]"} />
       </div>
 
       {/* Dropdown Profile 컴포넌트
@@ -314,7 +314,7 @@ const page = () => {
           onChange={(e) => setOriginUrl(e.target.value)}*/}
       <div className="m-10 flex flex-col gap-8 bg-white p-4">
         <h2 className="text-3xl font-bold">정보입력(공통X)</h2>
-        <Input title={'제목'} placeholder={'제목을 입력해주세요'} height={'h-[48px]'} />
+        <Input title={"제목"} placeholder={"제목을 입력해주세요"} height={"h-[48px]"} />
       </div>
     </Container>
   );

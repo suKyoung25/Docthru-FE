@@ -2,7 +2,7 @@
 
 import BtnText from "@/components/btn/text/BtnText";
 import React, { useState } from "react";
-import Input from "./component/Input";
+import Input from "./_components/Input";
 import CategoryClosed from "@/components/dropDown/category/CategoryClosed";
 import CategoryItems from "@/components/dropDown/category/CategoryItems";
 import { postChallenges } from "@/lib/api/challenges-first/createChallenge";
@@ -11,18 +11,19 @@ import "react-datepicker/dist/react-datepicker.css";
 
 export default function page() {
   const [title, setTitle] = useState("");
-  const [originUrl, setOriginUrl] = useState("");
+  const [originalUrl, setOriginalUrl] = useState("");
   const [maxParticipant, setMaxParticipant] = useState(null);
   const [description, setDescription] = useState("");
   const [isCategory, setIsCategory] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("카테고리");
   const [isDocType, setIsDocType] = useState(false);
   const [selectedDocType, setSelectedDocType] = useState("카테고리");
+  const [deadline, setDeadline] = useState(null);
   const router = useRouter();
 
   //디버깅 (추후 토큰 로직 확인 후 삭제 필요)
   const accessToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbWIwYWlzeXAwMDAwY2NveWFhem1tbzllIiwiZW1haWwiOiJna3NrdGwxMjNAbmF2ZXIuY29tIiwibmlja25hbWUiOiLrgpjripTslbzrqYvsp4TquIjrtpXslrQiLCJpYXQiOjE3NDgyNTEwNzMsImV4cCI6MTc0ODI1NDY3M30.7lie0JbIO_-HYK9-pl3hv7QhyCJ-4M0-UxQU7RgLxrA";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbWIwYWlzeXAwMDAwY2NveWFhem1tbzllIiwiZW1haWwiOiJna3NrdGwxMjNAbmF2ZXIuY29tIiwibmlja25hbWUiOiLrgpjripTslbzrqYvsp4TquIjrtpXslrQiLCJpYXQiOjE3NDgzMDkxNTksImV4cCI6MTc0ODMxMjc1OX0.4Wr-0GU0qPeOvJqPdXvBuvjdDnpNLS4_FDlaWXmU-GU";
 
   //챌린지 신청하기
   const handlePost = async () => {
@@ -30,21 +31,25 @@ export default function page() {
 
     //쿠키에서 토큰 가져오는 함수 추가 필요
 
-    const postDate = {
+    //ISO 8601 문자열로 변환환
+    const formatDeadline = new Date(deadline).toISOString();
+
+    const postData = {
+      accessToken,
       title,
-      originUrl,
+      originalUrl,
       maxParticipant,
       description,
-      accessToken,
+      deadline: formatDeadline,
       category: selectedCategory,
       docType: selectedDocType
     };
 
-    //디버깅
-    console.log("accessToken", accessToken);
-
     try {
-      const createdChallenge = await postChallenges(postDate);
+      //디버깅
+      console.log("accessToken", accessToken);
+
+      const createdChallenge = await postChallenges(postData);
 
       //디버깅
       console.log("createdChallenge", createdChallenge);
@@ -55,6 +60,7 @@ export default function page() {
 
       //디버깅
       console.log("challengeId", challengeId);
+      console.log("챌린지 생성 완료");
 
       router.push(`/challenges/${challengeId}`);
     } catch (error) {
@@ -86,8 +92,8 @@ export default function page() {
         <Input
           title={"원문 링크"}
           placeholder={"원문 링크를 입력해주세요"}
-          value={originUrl}
-          onChange={(e) => setOriginUrl(e.target.value)}
+          value={originalUrl}
+          onChange={(e) => setOriginalUrl(e.target.value)}
         />
         <div className="flex h-full flex-col gap-[8px]">
           <div className="flex flex-col gap-[24px] text-sm font-medium text-[var(--color-gray-900)]">
@@ -131,7 +137,7 @@ export default function page() {
             </div>
           </div>
         </div>
-        <Input type={"date"} />
+        <Input type={"date"} deadline={deadline} setDeadline={setDeadline} />
         <div>
           <Input
             title={"최대 인원"}
