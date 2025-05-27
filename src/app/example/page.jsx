@@ -16,7 +16,7 @@ import IconPasswordVisible from "@/components/btn/icon/BtnIcon";
 import BtnCheckbox from "@/components/btn/form/BtnCheckbox";
 import BtnRadio from "@/components/btn/form/BtnRadio";
 import Pagination from "@/components/pagination/Pagination";
-import ChallengeContainerd from "../(user)/challenges/_components/challengeCard/ChallengeContainer";
+import ChallengeContainer from "../(user)/challenges/_components/ChallengeContainer";
 import SearchInput from "@/components/input/SearchInput";
 import Profile from "@/components/dropDown/Profile";
 import ApplyChallenge from "../(user)/challenges/_components/ApplyChallenge";
@@ -282,8 +282,8 @@ const page = () => {
       {/* Challenge container 컴포넌트*/}
       <div className="m-10 flex flex-col gap-8 bg-white p-4">
         <h2 className="text-3xl font-bold">challenge container</h2>
-        <ChallengeContainerd height={"h-[176px]"} type={""} />
-        <ChallengeContainerd height={"h-[104px]"} type={"slim"} />
+        <ChallengeContainer height={"h-[176px]"} type={""} />
+        <ChallengeContainer height={"h-[104px]"} type={"slim"} />
       </div>
 
       {/* SearchInput 컴포넌트
