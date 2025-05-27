@@ -15,9 +15,6 @@ export async function postChallenges(data) {
     docType
   };
 
-  //디버깅
-  console.log("accessToken", accessToken);
-
   const res = await fetch(BASE_URL, {
     method: "post",
     headers: {
@@ -28,9 +25,6 @@ export async function postChallenges(data) {
   });
 
   if (!res.ok) throw new Error("챌린지를 생성할 수 없습니다.");
-
-  //디버깅
-  console.log("res", res);
 
   return res.json();
 }

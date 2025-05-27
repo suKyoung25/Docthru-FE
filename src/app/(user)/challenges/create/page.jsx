@@ -7,7 +7,7 @@ import CategoryClosed from "@/components/dropDown/category/CategoryClosed";
 import CategoryItems from "@/components/dropDown/category/CategoryItems";
 import { postChallenges } from "@/lib/api/challenges-first/createChallenge";
 import { useRouter } from "next/navigation";
-import "react-datepicker/dist/react-datepicker.css";
+import { getServerSideToken } from "@/lib/actions/auth";
 
 export default function page() {
   const [title, setTitle] = useState("");
@@ -21,17 +21,14 @@ export default function page() {
   const [deadline, setDeadline] = useState(null);
   const router = useRouter();
 
-  //디버깅 (추후 토큰 로직 확인 후 삭제 필요)
-  const accessToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbWIwYWlzeXAwMDAwY2NveWFhem1tbzllIiwiZW1haWwiOiJna3NrdGwxMjNAbmF2ZXIuY29tIiwibmlja25hbWUiOiLrgpjripTslbzrqYvsp4TquIjrtpXslrQiLCJpYXQiOjE3NDgzMDkxNTksImV4cCI6MTc0ODMxMjc1OX0.4Wr-0GU0qPeOvJqPdXvBuvjdDnpNLS4_FDlaWXmU-GU";
-
   //챌린지 신청하기
   const handlePost = async () => {
     if (maxParticipantErrorMessage) return alert("신청 형식을 확인해주세요");
 
-    //쿠키에서 토큰 가져오는 함수 추가 필요
+    //액세스 토큰 받아오기 (서버액션으로)
+    const accessToken = getServerSideToken("accessToken");
 
-    //ISO 8601 문자열로 변환환
+    //ISO 8601 문자열로 변환
     const formatDeadline = new Date(deadline).toISOString();
 
     const postData = {
@@ -46,21 +43,11 @@ export default function page() {
     };
 
     try {
-      //디버깅
-      console.log("accessToken", accessToken);
-
       const createdChallenge = await postChallenges(postData);
-
-      //디버깅
-      console.log("createdChallenge", createdChallenge);
 
       if (!createdChallenge) throw new Error("챌린지 생성 중 오류 발생");
 
       const challengeId = createdChallenge.createdChallenge.id;
-
-      //디버깅
-      console.log("challengeId", challengeId);
-      console.log("챌린지 생성 완료");
 
       router.push(`/challenges/${challengeId}`);
     } catch (error) {
@@ -169,14 +156,9 @@ export default function page() {
       </div>
 
       <div className="h-[48px] w-full">
-        <BtnText
-          theme="solidblack"
-          onClick={handlePost}
-          // icon={} className={} children={}
-        >
+        <BtnText theme="solidblack" onClick={handlePost}>
           신청하기
         </BtnText>
-        {/* <button onClick={handlePost}>신청하기</button> */}
       </div>
     </div>
   );
