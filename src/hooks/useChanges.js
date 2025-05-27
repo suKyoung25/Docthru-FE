@@ -1,5 +1,5 @@
+import { getChallenges } from "@/lib/api/challenges-first/searchChallenge";
 import { useState, useEffect, useCallback } from "react";
-import { getChallenges } from "@/lib/api/searchChallenges";
 
 const useChallenges = () => {
   const [filters, setFilters] = useState({
