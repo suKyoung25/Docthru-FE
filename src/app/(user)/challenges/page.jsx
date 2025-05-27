@@ -79,7 +79,9 @@ function Page() {
 
       <div className="flex flex-col gap-[24px] py-[24px]">
         {isLoading ? (
-          <div>챌린지 목록을 불러오는 중...</div>
+          <div className="flex text-[var(--color-gray-500)] flex-col w-full h-full justify-center items-center text-[16px] font-medium font-pretendard">
+            챌린지 목록을 불러오는 중...
+          </div>
         ) : error ? (
           <div className="text-red-500">{error}</div>
         ) : challenges.length > 0 ? (
@@ -96,7 +98,10 @@ function Page() {
             />
           ))
         ) : (
-          <div>챌린지가 존재하지 않습니다.</div>
+          <div className="flex text-[var(--color-gray-500)] flex-col w-full h-full justify-center items-center text-[16px] font-medium font-pretendard">
+            <div>아직 챌린지가 없어요.</div>
+            <div>지금 바로 챌린지를 신청해보세요!</div>
+          </div>
         )}
       </div>
 
