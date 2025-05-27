@@ -39,11 +39,12 @@ export default function DevNavigation() {
       name: "작업물 상세",
       group: "user"
     },
-    { path: "/challenges/my", name: "나의 챌린지", group: "user" },
+    { path: "/challenges/mychallenges", name: "나의 챌린지", group: "user" },
 
     // 관리자 관련 라우트 (@admin)
     { path: "/admin/management", name: "챌린지 관리", group: "admin" },
-    { path: "/admin/challenges", name: "챌린지 목록", group: "admin" }
+    { path: "/admin/challenges", name: "챌린지 목록", group: "admin" },
+    { path: "/admin/challenges/[challengeId]/edit", name: "챌린지 수정", group: "admin" }
   ];
 
   // 라우트를 그룹별로 분류

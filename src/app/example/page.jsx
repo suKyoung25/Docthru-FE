@@ -7,7 +7,7 @@ import DeclineModal from "@/components/modal/DeclineModal";
 import DeleteModal from "@/components/modal/ConfirmActionModal";
 import FilterModal from "@/components/modal/FilterModal";
 import NotificationModal from "@/components/modal/NotificationModal";
-import SignupModal from "@/components/modal/AuthModal";
+// import SignupModal from "@/components/modal/SignupModal";
 import TemporaryStorage from "@/components/modal/DraftModal";
 import Sort from "@/components/sort/Sort";
 import RankingListItem from "@/components/list/RankingListItem";
@@ -20,11 +20,12 @@ import ChallengeContainer from "../(user)/challenges/_components/ChallengeContai
 import SearchInput from "@/components/input/SearchInput";
 import Profile from "@/components/dropDown/Profile";
 import ApplyChallenge from "../(user)/challenges/_components/ApplyChallenge";
-import Input from "../(user)/challenges/create/component/Input";
+
+import Input from "../(user)/challenges/create/_components/Input";
 
 const themesTitle = "mb-1 font-[600]";
 const MODAL_COMPONENTS = {
-  signup: SignupModal,
+  // signup: SignupModal,
   decline: DeclineModal,
   delete: DeleteModal,
   notification: NotificationModal,
