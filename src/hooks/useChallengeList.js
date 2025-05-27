@@ -56,6 +56,34 @@ const useChallenges = () => {
     }
   }, [page, pageSize, keyword, filters]);
 
+  const deleteChallenge = async (challengeId, adminMessage) => {
+    try {
+      const response = await fetch(`http://localhost:8080/admin/challenges/${challengeId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          adminStatus: "DELETED",
+          adminMessage: adminMessage
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error("챌린지 삭제에 실패했습니다.");
+      }
+
+      const data = await response.json();
+      console.log("챌린지 삭제 성공:", data);
+      setChallenges((prevChallenges) => prevChallenges.filter((challenge) => challenge.id !== challengeId));
+      setTotalCount((prevCount) => prevCount - 1);
+      return data;
+    } catch (err) {
+      console.error("챌린지 삭제 오류:", err);
+      throw err;
+    }
+  };
+
   useEffect(() => {
     getChallengesData();
   }, [getChallengesData]);
