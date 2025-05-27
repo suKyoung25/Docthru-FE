@@ -1,10 +1,10 @@
 "use client";
 
 import AppliedChallenges from "@/app/(user)/challenges/my/apply/_components/AppliedChallenges";
-import DropdownListLeftSmall from "@/components/dropDown/list/DropdownListLeftSmall";
+import ApplyDropdown from "@/components/dropDown/list/ApplyDropdown";
 import SearchInput from "@/components/input/SearchInput";
 import Sort from "@/components/sort/Sort";
-import { columnSetting, ITEM_COUNT } from "@/constant/constant";
+import { ITEM_COUNT } from "@/constant/constant";
 import { getChallenges } from "@/lib/api/challenge-api/searchChallenge";
 import { useEffect, useState } from "react";
 
@@ -35,12 +35,11 @@ function AdminManagementPage() {
         <SearchInput />
         <div className="relative">
           <Sort isAdminStatus={true} onClick={handleClickSort} />
-          <div className="absolute right-0 mt-2">{isDropdownOpen && <DropdownListLeftSmall />}</div>
+          <div className="absolute right-0 mt-2">{isDropdownOpen && <ApplyDropdown />}</div>
         </div>
       </div>
       <AppliedChallenges
-        columnSetting={columnSetting}
-        result={applications}
+        resultData={applications}
         totalCount={totalCount}
         page={page}
         pageSize={pageSize}
