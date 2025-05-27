@@ -1,6 +1,6 @@
-import BtnText from "@/components/btn/text/BtnText";
-import outCircle from "@/assets/icon/ic_out_circle.svg";
-import Image from "next/image";
+import BtnText from '@/components/btn/text/BtnText';
+import outCircle from '@/assets/icon/ic_out_circle.svg';
+import Image from 'next/image';
 
 export default function DraftCheckModal({ setHasDraft, onDraftModal }) {
   return (
@@ -15,11 +15,7 @@ export default function DraftCheckModal({ setHasDraft, onDraftModal }) {
           </span>
         </div>
 
-        <BtnText
-          theme="solidblack"
-          className="h-[32px] max-w-[90px] rounded-xl py-2"
-          onClick={onDraftModal}
-        >
+        <BtnText theme="solidblack" className="h-[32px] max-w-[90px] rounded-xl py-2" onClick={onDraftModal}>
           불러오기
         </BtnText>
       </div>

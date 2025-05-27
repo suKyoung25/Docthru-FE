@@ -5,7 +5,7 @@ import DropdownListLeftSmall from "@/components/dropDown/list/DropdownListLeftSm
 import SearchInput from "@/components/input/SearchInput";
 import Sort from "@/components/sort/Sort";
 import { columnSetting, ITEM_COUNT } from "@/constant/constant";
-import { getChallenges } from "@/lib/api/searchChallenges";
+import { getChallenges } from "@/lib/api/challenges-first/searchChallenge";
 import { useEffect, useState } from "react";
 
 function AdminManagementPage() {

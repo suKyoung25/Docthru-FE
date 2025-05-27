@@ -4,6 +4,8 @@
 import Sort from "@/components/sort/Sort";
 import ApplyChallenge from "./_components/ApplyChallenge";
 import SearchInput from "@/components/input/SearchInput";
+import { useEffect, useState } from "react";
+import { getChallenges } from "@/lib/api/challenges-first/searchChallenge";
 import ChallengeCard from "@/components/card/Card";
 import FilterModal from "@/components/modal/FilterModal";
 import Pagination from "@/components/pagination/Pagination";
