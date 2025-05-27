@@ -3,19 +3,9 @@
 import { BASE_URL } from "@/constant/constant";
 import { cookies } from "next/headers";
 
-export async function getServerSideToken(cookieName) {
-  try {
-    const cookieStore = cookies();
-    const token = await cookieStore.get(cookieName)?.value;
-    return token;
-  } catch (error) {
-    return undefined;
-  }
-}
-
 export async function loginAction(email, password) {
   try {
-    const response = await fetch(`${BASE_URL}/auth/sign-in`, {
+    const res = await fetch(`${BASE_URL}/auth/sign-in`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -24,15 +14,15 @@ export async function loginAction(email, password) {
       cache: "no-store"
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("로그인 실패 응답:", errorData);
-      return { error: true, message: errorData.message || "로그인 실패" };
+    if (!res.ok) {
+      const data = await res.json();
+      console.error("로그인 실패 응답:", data);
+      return { error: true, message: data.message || "로그인 실패" };
     }
 
-    const userData = await response.json();
+    const userData = await res.json();
 
-    const setCookieHeader = response.headers.get("Set-Cookie");
+    const setCookieHeader = res.headers.get("Set-Cookie");
 
     if (setCookieHeader) {
       console.log("Backend Set-Cookie header received in loginAction:", setCookieHeader);
@@ -78,29 +68,24 @@ export async function loginAction(email, password) {
   }
 }
 
-export async function registerAction(nickname, email, password, passwordConfirmation) {
-  const baseURL = process.env.NEXT_PUBLIC_API_URL;
+export async function registerAction(email, nickname, password, passwordConfirmation) {
   try {
-    const response = await fetch(`${baseURL}/auth/sign-up`, {
+    const res = await fetch(`${BASE_URL}/auth/sign-up`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ nickname, email, password, passwordConfirmation }),
+      body: JSON.stringify({ email, nickname, password, passwordConfirmation }),
       cache: "no-store"
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("회원가입 실패 응답:", errorData);
-      return { error: true, message: errorData.message || "회원가입 실패" };
+    const data = await res.json();
+    if (!res.ok) {
+      return { error: true, message: data.message || "회원가입 실패" };
     }
-
-    const userData = await response.json();
-    return { success: true, user: userData };
+    return { success: true, user: data };
   } catch (error) {
-    console.error("회원가입 액션 오류:", error.message);
-    return { error: true, message: error.message || "회원가입 중 알 수 없는 오류 발생" };
+    return { error: true, message: error.message || "회원가입 오류" };
   }
 }
 
@@ -109,70 +94,34 @@ export async function logoutAction() {
     const cookieStore = cookies();
     cookieStore.delete("accessToken");
     cookieStore.delete("refreshToken");
-    console.log("[logoutAction] All tokens cleared successfully via logoutAction.");
     return { success: true };
   } catch (error) {
-    console.error("[logoutAction] Error clearing tokens in logoutAction:", error);
     return { error: true, message: error.message };
-  }
-}
-
-// 리프레쉬 토큰 로직
-export async function refreshAccessToken(newAccessToken) {
-  try {
-    const cookieStore = cookies();
-    cookieStore.set("accessToken", newAccessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 3600, // 1시간 (백엔드와 일치하도록 설정)
-      path: "/",
-      sameSite: "Lax"
-    });
-  } catch (error) {
-    console.error("토큰 갱신 실패", error);
-    throw error;
   }
 }
 
 // 401 에러 발생 시 토큰 자동 갱신(TODO: 수정필요)
 export async function getUserWithAutoRefresh() {
-  const res = await fetch(`${BASE_URL}/users/me`, {
-    method: "GET",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    cache: "no-store"
-  });
+  const tryFetch = async () =>
+    await fetch(`${BASE_URL}/users/me`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      cache: "no-store"
+    });
 
-  if (res.ok) {
-    return await res.json();
-  }
-
+  const res = await tryFetch();
+  if (res.ok) return await res.json();
   if (res.status === 401) {
-    console.log("Access token expired. Trying to refresh...");
     const refreshRes = await fetch(`${BASE_URL}/auth/refresh`, {
       method: "POST",
       credentials: "include",
       cache: "no-store"
     });
-
-    if (!refreshRes.ok) throw new Error("리프레시 토큰도 만료됨");
-
-    console.log("Access token refreshed. Retrying...");
-    const retryRes = await fetch(`${BASE_URL}/users/me`, {
-      method: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      cache: "no-store"
-    });
-
-    if (!retryRes.ok) throw new Error("토큰 갱신 후 유저 정보 조회 실패");
-
-    return await retryRes.json();
+    if (!refreshRes.ok) throw new Error("리프레시 토큰 만료됨");
+    const retry = await tryFetch();
+    if (!retry.ok) throw new Error("토큰 갱신 후 재요청 실패");
+    return await retry.json();
   }
-
   throw new Error("유저 정보 조회 실패");
 }
