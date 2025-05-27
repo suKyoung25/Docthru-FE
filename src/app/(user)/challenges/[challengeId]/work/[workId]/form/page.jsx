@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import Container from '@/components/container/PageContainer';
-import EditorHeader from '../../_components/EditorHeader';
-import EditorSection from '../../_components/EditorSection';
-import DraftModal from '@/components/modal/DraftModal';
-import OriginalPageModal from '../../_components/OriginalPageModal';
-import DraftCheckModal from '../../_components/DraftCheckModal';
-import OriginalPageModalBtn from '../../_components/OriginalPageModalBtn';
+import Container from "@/components/container/PageContainer";
+import EditorSection from "./_components/EditorSection";
+import DraftModal from "@/components/modal/DraftModal";
+import OriginalPageModal from "./_components/OriginalPageModal";
+import DraftCheckModal from "./_components/DraftCheckModal";
+import OriginalPageModalBtn from "./_components/OriginalPageModalBtn";
 
-import { useEffect, useRef, useState } from 'react';
-import workService from '@/lib/api/workService';
-import { useParams, useRouter } from 'next/navigation';
-import DeletedModal from '../../_components/DeletedModal';
+import { useEffect, useRef, useState } from "react";
+import workService from "@/lib/api/workService";
+import { useParams, useRouter } from "next/navigation";
+import DeletedModal from "./_components/DeletedModal";
+import EditorHeader from "./_components/EditorHeader";
 
 export default function page() {
   const timeoutRef = useRef(null);
@@ -21,12 +21,12 @@ export default function page() {
   // 작업물 관련 상태
   const [workData, setWorkData] = useState({
     workId: null,
-    challengeTitle: '',
-    content: '',
-    originalUrl: '',
+    challengeTitle: "",
+    content: "",
+    originalUrl: "",
     author: {
-      authorId: '',
-      authorNickname: ''
+      authorId: "",
+      authorNickname: ""
     },
     createdAt: null,
     updatedAt: null,
@@ -54,7 +54,7 @@ export default function page() {
       const response = await workService.getWorkDetail();
       if (response.data) {
         setWorkData(response.data);
-        setIsSubmitted(response.data.content === '' ? true : false);
+        setIsSubmitted(response.data.content === "" ? true : false);
       }
     };
     fetchInitialData();
@@ -62,7 +62,7 @@ export default function page() {
 
   // 현재 draft 가 존재하면 isDraft 를 true 로 설정
   useEffect(() => {
-    const localDraft = localStorage.getItem('draft');
+    const localDraft = localStorage.getItem("draft");
     if (localDraft?.length > 0) {
       setHasDraft(true);
     }
@@ -89,7 +89,7 @@ export default function page() {
   const onDraft = (challengeTitle, content) => {
     setIsDrafting(true);
 
-    const oldDraft = localStorage.getItem('draft');
+    const oldDraft = localStorage.getItem("draft");
     const currentWorkId = workData.workId;
 
     const newDraftItem = {
@@ -117,9 +117,9 @@ export default function page() {
         drafts.push(newDraftItem);
       }
 
-      localStorage.setItem('draft', JSON.stringify(drafts));
+      localStorage.setItem("draft", JSON.stringify(drafts));
     } else {
-      localStorage.setItem('draft', JSON.stringify([newDraftItem]));
+      localStorage.setItem("draft", JSON.stringify([newDraftItem]));
     }
 
     if (timeoutRef.current) {
@@ -142,10 +142,10 @@ export default function page() {
       // 테스트 코드 작성함 현재는 서버에서 직접 작업물을 생성후 작업물 아이디를 넣어서 테스트 가능
       // const submitResult = await workService.updateWork(workData.workId, workData.content);
       const submitResult = await workService.updateWork(65, workData.content);
-      console.log('제출할 content:', workData.content);
-      console.log('작업물 업데이트 결과:', submitResult);
+      console.log("제출할 content:", workData.content);
+      console.log("작업물 업데이트 결과:", submitResult);
     } catch (error) {
-      console.error('작업물 업데이트 실패:', error);
+      console.error("작업물 업데이트 실패:", error);
     }
   };
 

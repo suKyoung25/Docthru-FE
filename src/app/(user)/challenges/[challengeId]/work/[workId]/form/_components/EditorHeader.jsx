@@ -1,11 +1,11 @@
-import BtnText from '@/components/btn/text/BtnText';
-import Logo from '@/layout/_components/Logo';
+import BtnText from "@/components/btn/text/BtnText";
+import Logo from "@/layout/_components/Logo";
 
 // 제출하기 or 수정하기 선택 가능
 export default function EditorHeader({ challengeTitle, content, onDraft, isSubmitted, onSubmit, onDiscardModal }) {
   return (
     <header className="flex items-center justify-between py-4">
-      <Logo />
+      <Logo className="md:w-30 md:h-[27px]" />
 
       <div className="flex gap-2">
         <BtnText
