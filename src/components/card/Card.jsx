@@ -8,6 +8,7 @@ import { typeChipMap, categoryChipMap } from "../chip/chipMaps";
 
 import ChipCardStatus from "@/components/chip/chipComplete/ChipCardStatus"; // 좌상단 chip
 import { useEffect, useState } from "react";
+import { useAuth } from "@/providers/AuthProvider";
 
 export default function ChallengeCard({
   title,
@@ -16,9 +17,13 @@ export default function ChallengeCard({
   deadline,
   participants,
   maxParticipant,
-  variant = "default"
+  variant = "default",
+  isAdmin
 }) {
   const [status, setStatus] = useState("");
+
+  //디버깅
+  console.log("isAdmin", isAdmin);
 
   //챌린지 상태(status) 계산
   useEffect(() => {
@@ -57,9 +62,11 @@ export default function ChallengeCard({
           <div className="text-xl font-semibold text-gray-800">{title}</div>
         )}
 
-        <button>
-          <Image src={dropdownIcon} alt="드롭다운" width={24} height={24} />
-        </button>
+        {isAdmin ? (
+          <button>
+            <Image src={dropdownIcon} alt="드롭다운" width={24} height={24} />
+          </button>
+        ) : null}
       </div>
 
       {status && <div className="mt-2 text-xl font-semibold text-gray-800">{title}</div>}

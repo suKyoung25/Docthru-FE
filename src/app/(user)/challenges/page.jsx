@@ -8,9 +8,26 @@ import FilterModal from "@/components/modal/FilterModal";
 import Pagination from "@/components/pagination/Pagination";
 import { useState } from "react";
 import useChallenges from "@/hooks/useChallengeList";
+import { useAuth } from "@/providers/AuthProvider";
 
 function Page() {
   const [isModal, setIsModal] = useState(false);
+
+  //현재 사용자가 일반유저인지, 관리자인지 확인
+  const { user } = useAuth();
+  const isAdmin = user?.role === "ADMIN";
+
+  //디버깅
+  if (isAdmin) {
+    console.log("관리자");
+  } else if (user?.role === "USER") {
+    console.log("일반 유저");
+  } else {
+    console.log("로그인 필요");
+  }
+
+  // const isExpert = user?.grade === "EXPERT";
+  // const grade = isAdmin ? "어드민" : isExpert ? "전문가" : "일반";
 
   const {
     challenges,
@@ -75,6 +92,7 @@ function Page() {
               deadline={challenge.deadline}
               participants={challenge.participants.length}
               maxParticipant={challenge.maxParticipant}
+              isAdmin={isAdmin}
             />
           ))
         ) : (
