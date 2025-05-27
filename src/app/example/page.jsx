@@ -7,7 +7,7 @@ import DeclineModal from "@/components/modal/DeclineModal";
 import DeleteModal from "@/components/modal/DeleteModal";
 import FilterModal from "@/components/modal/FilterModal";
 import NotificationModal from "@/components/modal/NotificationModal";
-import SignupModal from "@/components/modal/SignupModal";
+import SignupModal from "@/components/modal/SignupModal.jsx";
 import TemporaryStorage from "@/components/modal/DraftModal";
 import Sort from "@/components/sort/Sort";
 import RankingListItem from "@/components/list/RankingListItem";
