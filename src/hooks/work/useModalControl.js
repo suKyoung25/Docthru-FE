@@ -8,6 +8,8 @@ export const useModalControl = () => {
   });
 
   const updateModalState = (modalType, isOpen) => {
+    console.log("modalType", modalType);
+    console.log("isOpen", isOpen);
     setModalState((prev) => ({
       ...prev,
       [modalType]: isOpen

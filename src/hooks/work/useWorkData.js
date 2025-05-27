@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import workService from "@/lib/api/workService";
 import { useRouter } from "next/navigation";
 
-export const useWorkData = (challengeId) => {
+export const useWorkData = (challengeId, updateModalState) => {
   const router = useRouter();
 
   // 에디터 핵심 상태
@@ -19,6 +19,8 @@ export const useWorkData = (challengeId) => {
   // 초기 데이터 로드
   useEffect(() => {
     const fetchInitialData = async () => {
+      // TODO : 현재는 테스트 코드 수정하기 버튼 완성되면 주석 해제하기
+      //   const response = await workService.getWorkDetail(challengeId, workMeta.workId);
       const response = await workService.getWorkDetail();
       if (response.data) {
         setWorkMeta({
@@ -34,9 +36,10 @@ export const useWorkData = (challengeId) => {
   }, []);
 
   // 작업물 업데이트
-  const updateWork = async () => {
+  const handleUpdateWork = async () => {
     try {
       await workService.updateWork(workMeta.workId, content === "<p></p>" ? "" : content);
+      updateModalState("isSubmitConfirmOpen", false);
       router.refresh();
       return true;
     } catch (error) {
@@ -46,10 +49,11 @@ export const useWorkData = (challengeId) => {
   };
 
   // 작업물 삭제
-  const deleteWork = async () => {
+  const handleDeleteWork = async () => {
     try {
       const deleteResult = await workService.deleteWork(workMeta.workId);
       if (deleteResult.status === 204) {
+        updateModalState("isDeleteConfirmOpen", false);
         router.push(`/challenges/${challengeId}`);
         return true;
       }
@@ -65,7 +69,7 @@ export const useWorkData = (challengeId) => {
     setContent,
     isSubmitted,
     workMeta,
-    updateWork,
-    deleteWork
+    handleUpdateWork,
+    handleDeleteWork
   };
 };

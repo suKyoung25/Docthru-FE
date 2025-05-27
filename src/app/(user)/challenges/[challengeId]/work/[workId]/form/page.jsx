@@ -7,24 +7,25 @@ import OriginalPageModal from "./_components/OriginalPageModal";
 import DraftCheckModal from "./_components/DraftCheckModal";
 import OriginalPageModalBtn from "./_components/OriginalPageModalBtn";
 import ConfirmActionModal from "@/components/modal/ConfirmActionModal";
+import EditorHeader from "./_components/EditorHeader";
 
 import { useParams } from "next/navigation";
 import { useDraft } from "@/hooks/work/useDraft";
 import { useModalControl } from "@/hooks/work/useModalControl";
 import { useWorkData } from "@/hooks/work/useWorkData";
-import EditorHeader from "./_components/EditorHeader";
 
 export default function page() {
   const { challengeId, workId } = useParams();
 
-  const { content, setContent, isSubmitted, workMeta, updateWork, deleteWork } = useWorkData(challengeId);
   const { modalState, updateModalState } = useModalControl();
-  const { draftState, updateDraftState, toggleDraftModal, saveDraft } = useDraft(workMeta.workId);
-
-  // 임시저장 불러오기
-  const onLoadItem = (item) => {
-    setContent(item.content);
-  };
+  const { content, setContent, isSubmitted, workMeta, handleUpdateWork, handleDeleteWork } = useWorkData(
+    challengeId,
+    updateModalState
+  );
+  const { draftState, updateDraftState, toggleDraftModal, saveDraft, loadDraft } = useDraft(
+    workMeta.workId,
+    setContent
+  );
 
   return (
     <div className="relative">
@@ -37,7 +38,6 @@ export default function page() {
             : ""
         }
       >
-        {/* 에디터 헤더 */}
         <EditorHeader
           workId={workId}
           challengeTitle={workMeta.challengeTitle}
@@ -47,7 +47,6 @@ export default function page() {
           isSubmitModal={() => updateModalState("isSubmitConfirmOpen", true)}
           onDiscardModal={() => updateModalState("isDeleteConfirmOpen", true)}
         />
-        {/* 에디터 메인 */}
         <EditorSection
           challengeTitle={workMeta.challengeTitle}
           content={content}
@@ -71,30 +70,20 @@ export default function page() {
         originalPageUrl={workMeta.originalUrl}
       />
 
-      {/* 임시저장 존재 여부 확인 모달 */}
       {draftState.hasDraft && (
         <DraftCheckModal setHasDraft={(value) => updateDraftState("hasDraft", value)} onDraftModal={toggleDraftModal} />
       )}
 
-      {/* 임시저장 모달 */}
-      {draftState.isModalOpen && <DraftModal onClose={toggleDraftModal} isLoggedIn={true} onLoadItem={onLoadItem} />}
+      {draftState.isModalOpen && <DraftModal onClose={toggleDraftModal} isLoggedIn={true} onLoadItem={loadDraft} />}
 
-      {/* 포기 확인 모달 */}
       {modalState.isDeleteConfirmOpen && (
-        <ConfirmActionModal
-          text="정말 포기하시겠습니까?"
-          onClose={() => updateModalState("isDeleteConfirmOpen", false)}
-          onConfirm={deleteWork}
-          isLoggedIn={true}
-        />
+        <ConfirmActionModal text="정말 포기하시겠습니까?" onConfirm={handleDeleteWork} isLoggedIn={true} />
       )}
 
-      {/* 제출 및 수정 확인 모달 */}
       {modalState.isSubmitConfirmOpen && (
         <ConfirmActionModal
           text={`${isSubmitted ? "제출" : "수정"}하시겠습니까?`}
-          onClose={() => updateModalState("isSubmitConfirmOpen", false)}
-          onConfirm={updateWork}
+          onConfirm={handleUpdateWork}
           isLoggedIn={true}
         />
       )}

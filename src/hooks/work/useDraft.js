@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 
-export const useDraft = (workId) => {
+export const useDraft = (workId, setContent) => {
   const timeoutRef = useRef(null);
   const [draftState, setDraftState] = useState({
     hasDraft: false,
@@ -30,6 +30,11 @@ export const useDraft = (workId) => {
     if (!draftState.isModalOpen) {
       updateDraftState("hasDraft", false);
     }
+  };
+
+  // 임시저장 불러오기
+  const loadDraft = (item) => {
+    setContent(item.content);
   };
 
   // 임시저장 로직
@@ -75,6 +80,7 @@ export const useDraft = (workId) => {
     draftState,
     updateDraftState,
     toggleDraftModal,
-    saveDraft
+    saveDraft,
+    loadDraft
   };
 };
