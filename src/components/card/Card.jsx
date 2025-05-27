@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import dropdownIcon from '@/assets/icon/ic_menu.svg';
-import clockIcon from '@/assets/icon/ic_clock.svg';
-import usersIcon from '@/assets/icon/ic_person.svg';
-import { typeChipMap, categoryChipMap } from '../chip/chipMaps';
+import Image from "next/image";
+import dropdownIcon from "@/assets/icon/ic_menu.svg";
+import clockIcon from "@/assets/icon/ic_clock.svg";
+import usersIcon from "@/assets/icon/ic_person.svg";
+import { typeChipMap, categoryChipMap } from "../chip/chipMaps";
 
-import ChipCardStatus from '@/components/chip/chipComplete/ChipCardStatus'; // 좌상단 chip
-import { useEffect, useState } from 'react';
+import ChipCardStatus from "@/components/chip/chipComplete/ChipCardStatus"; // 좌상단 chip
+import { useEffect, useState } from "react";
 
 export default function ChallengeCard({
   title,
@@ -16,40 +16,39 @@ export default function ChallengeCard({
   deadline,
   participants,
   maxParticipant,
-  variant = 'default'
+  variant = "default"
 }) {
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState("");
 
   //챌린지 상태(status) 계산
   useEffect(() => {
     const now = new Date();
     const deadlineDate = new Date(deadline);
     if (participants >= maxParticipant) {
-      setStatus('closed');
+      setStatus("closed");
     } else if (now > deadlineDate) {
-      setStatus('expired');
+      setStatus("expired");
     } else {
-      setStatus('');
+      setStatus("");
     }
   }, [deadline, maxParticipant, participants]);
 
   //날짜 prettier
   const formatDateToPretty = (dateString) => {
     const date = new Date(dateString);
-    return new Intl.DateTimeFormat('ko-KR', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+    return new Intl.DateTimeFormat("ko-KR", {
+      year: "numeric",
+      month: "long",
+      day: "numeric"
     }).format(date);
   };
 
   return (
     <div
-      className={`flex w-full flex-col
-  ${variant === 'simple' ? 'h-auto justify-start' : 'h-[227px] justify-between sm:h-[262px] md:h-[225px]'}
-  ${variant === 'simple' ? '' : 'rounded-[12px] border-2 border-[var(--color-gray-800)]'}
-  bg-white p-4 
-  max-w-[996px] sm:max-w-[343px] md:max-w-[696px]`}
+      className={`flex flex-col
+  ${variant === "simple" ? "h-auto justify-start" : "h-[227px] justify-between sm:h-[262px] md:h-[225px]"}
+  ${variant === "simple" ? "" : "rounded-[12px] border-2 border-[var(--color-gray-800)]"}
+  bg-white p-4`}
     >
       <div className="flex items-start justify-between">
         {status ? (
@@ -70,7 +69,7 @@ export default function ChallengeCard({
         {typeChipMap[type] ?? null}
       </div>
 
-      {variant !== 'simple' && (
+      {variant !== "simple" && (
         <>
           <hr className="my-4 border-gray-200" />
 

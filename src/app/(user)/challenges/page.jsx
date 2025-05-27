@@ -24,7 +24,7 @@ function Page() {
     error,
     setPage,
     setKeyword,
-    applyFilters,
+    applyFilters
   } = useChallenges();
 
   const handleClickFilter = () => {
@@ -37,18 +37,14 @@ function Page() {
   };
 
   return (
-    <div className="mx-[16px] mt-[16px] mb-[65px]">
+    <div className="mx-[16px] [@media(min-width:1200px)]:mx-[462px] mt-[16px] mb-[65px]">
       <div className="font-pretendard flex flex-row items-center justify-between text-[20px] font-semibold">
         챌린지 목록 <ApplyChallenge />
       </div>
 
       <div className="mt-[16px] flex flex-row gap-[8px]">
         <div className="flex-[1]">
-          <Sort
-            onClick={handleClickFilter}
-            isFiltered={filterCount > 0}
-            count={filterCount}
-          />
+          <Sort onClick={handleClickFilter} isFiltered={filterCount > 0} count={filterCount} />
           {isModal && (
             <FilterModal
               onApply={handleApplyFilters}
@@ -60,11 +56,7 @@ function Page() {
           )}
         </div>
         <div className="flex-[2.5]">
-          <SearchInput
-            text={"text-[14px]"}
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-          />
+          <SearchInput text={"text-[14px]"} value={keyword} onChange={(e) => setKeyword(e.target.value)} />
         </div>
       </div>
 
