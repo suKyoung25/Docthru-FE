@@ -3,7 +3,7 @@ const BASE_URL = "http://localhost:8080/challenges";
 
 //챌린지 신청하기
 export async function postChallenges(data) {
-  const { accessToken, title, originalUrl, maxParticipant, description, deadline, category, docType } = data;
+  const { title, originalUrl, maxParticipant, description, deadline, category, docType } = data;
 
   const postData = {
     title,
