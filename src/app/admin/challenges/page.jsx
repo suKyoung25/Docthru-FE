@@ -1,4 +1,3 @@
-// page.js
 "use client";
 
 import Sort from "@/components/sort/Sort";

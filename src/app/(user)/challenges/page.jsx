@@ -1,11 +1,8 @@
-// page.js
 "use client";
 
 import Sort from "@/components/sort/Sort";
 import ApplyChallenge from "./_components/ApplyChallenge";
 import SearchInput from "@/components/input/SearchInput";
-import { useEffect, useState } from "react";
-import { getChallenges } from "@/lib/api/challenges-first/searchChallenge";
 import ChallengeCard from "@/components/card/Card";
 import FilterModal from "@/components/modal/FilterModal";
 import Pagination from "@/components/pagination/Pagination";
@@ -15,7 +12,6 @@ import useChallenges from "@/hooks/useChanges";
 function Page() {
   const [isModal, setIsModal] = useState(false);
 
-  // 커스텀 훅에서 필요한 값과 함수들을 가져옵니다.
   const {
     challenges,
     totalCount,
@@ -24,8 +20,8 @@ function Page() {
     keyword,
     filters,
     filterCount,
-    isLoading, // 로딩 상태
-    error, // 에러 상태
+    isLoading,
+    error,
     setPage,
     setKeyword,
     applyFilters,
@@ -36,7 +32,7 @@ function Page() {
   };
 
   const handleApplyFilters = (newFilters) => {
-    applyFilters(newFilters); // 훅에서 정의된 필터 적용 함수 호출
+    applyFilters(newFilters);
     setIsModal(false);
   };
 
@@ -53,7 +49,7 @@ function Page() {
             isFiltered={filterCount > 0}
             count={filterCount}
           />
-          {isModal && ( // 모달은 isModal 상태에 따라 렌더링
+          {isModal && (
             <FilterModal
               onApply={handleApplyFilters}
               onClose={() => setIsModal(false)}
@@ -73,11 +69,11 @@ function Page() {
       </div>
 
       <div className="flex flex-col gap-[24px] py-[24px]">
-        {isLoading ? ( // 로딩 중일 때
+        {isLoading ? (
           <div>챌린지 목록을 불러오는 중...</div>
-        ) : error ? ( // 에러 발생 시
+        ) : error ? (
           <div className="text-red-500">{error}</div>
-        ) : challenges.length > 0 ? ( // 챌린지가 있을 때
+        ) : challenges.length > 0 ? (
           challenges.map((challenge) => (
             <ChallengeCard
               key={challenge.id}
@@ -89,7 +85,7 @@ function Page() {
               maxParticipant={challenge.maxParticipant}
             />
           ))
-        ) : ( // 챌린지가 없을 때
+        ) : (
           <div>챌린지가 존재하지 않습니다.</div>
         )}
       </div>
