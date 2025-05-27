@@ -5,13 +5,13 @@ import Logo from "@/layout/_components/Logo";
 export default function EditorHeader({ challengeTitle, content, onDraft, isSubmitted, isSubmitModal, onDiscardModal }) {
   return (
     <header className="flex items-center justify-between py-4">
-      <Logo className="md:w-30 md:h-[27px]" />
+      <Logo className="sm:w-30 sm:h-[27px]" />
 
       <div className="flex gap-2">
         <BtnText
           theme="tonal"
           icon
-          className="min-w-[36px] px-3 py-2 sm:min-w-[90px] sm:px-0"
+          className="min-w-[36px] px-4 py-2 sm:min-w-[90px] sm:px-0"
           onClick={onDiscardModal}
         />
 

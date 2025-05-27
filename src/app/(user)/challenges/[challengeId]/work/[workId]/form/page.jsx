@@ -91,6 +91,11 @@ export default function page() {
 
   // 임시저장 로직
   const onDraft = (challengeTitle, content) => {
+    // content가 빈 문자열이면 임시저장 하지 않음
+    if (content === "<p></p>") {
+      return;
+    }
+
     setIsDrafting(true);
 
     const oldDraft = localStorage.getItem("draft");
@@ -142,16 +147,15 @@ export default function page() {
 
   // 제출 모달 핸들러
   const onSubmitModal = () => {
-    setIsSubmitModalOpen(!isSubmitModalOpen);
+    setIsSubmitModalOpen((prev) => !prev);
   };
 
   // 제출 및 수정
   const onSubmit = async () => {
     try {
-      const submitResult = await workService.updateWork(67, workData.content);
-      console.log("제출할 content:", workData.content);
-      console.log("작업물 업데이트 결과:", submitResult);
+      const updated = await workService.updateWork(67, workData.content === "<p></p>" ? "" : workData.content);
       onSubmitModal(); // 제출 완료 후 모달 닫기
+      router.refresh(); // ✅ 현재 페이지 새로고침
     } catch (error) {
       console.error("작업물 업데이트 실패:", error);
     }
@@ -252,7 +256,7 @@ export default function page() {
 
       {isSubmitModalOpen && (
         <ConfirmActionModal
-          text="작업물을 제출하시겠습니까?"
+          text={`${isSubmitted ? "제출" : "수정"}하시겠습니까?`}
           onClose={onSubmitModal}
           onConfirm={onSubmit}
           isLoggedIn={true}
