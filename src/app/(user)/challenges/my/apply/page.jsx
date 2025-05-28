@@ -5,7 +5,6 @@ import AppliedChallenges from "./_components/AppliedChallenges";
 import Sort from "@/components/sort/Sort";
 import useChallenges from "@/hooks/useChallengeList";
 import { useRouter } from "next/navigation";
-import { columnSetting } from "@/constant/constant";
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@/providers/AuthProvider";
 import { userService } from "@/lib/service/userService";
@@ -54,7 +53,6 @@ export default function ApplicationsPage() {
           <div className="text-red-500">{error}</div>
         ) : challenges.length > 0 ? (
             <AppliedChallenges
-              columnSetting={columnSetting}
               resultData={challenges}
               onClick={(id) => router.push(`)/challenges/${id}`)}
               totalCount={totalCount}

@@ -14,12 +14,12 @@ export default function AppliedChallenges({ resultData, totalCount, page, pageSi
     <div className="overflow-scroll">
       <ListHead />
       <div>
-        {resultData?.map((data, idx) => (
+        {resultData?.map((data) => (
           <Link
-            key={idx}
+            key={data.id}
             href={pathname.startsWith("/admin") ? `/admin/management/${data.id}` : `/challenges/my/apply/${data.id}`}
           >
-            <ListRow key={idx} data={data} />
+            <ListRow data={data} />
           </Link>
         ))}
       </div>
