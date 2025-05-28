@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Image from "next/image";
@@ -9,12 +9,17 @@ import calender from "@/assets/icon/calendar_48px.svg";
 //챌린지, 어드민 페이지에서 사용됨
 function Input({ type, title, placeholder, onChange, value, height, deadline, setDeadline }) {
   const isHeight = Boolean(height);
+  const datePickerRef = useRef(null);
 
   if (type === "date")
     return (
       <div className="flex w-full flex-col gap-[8px]">
         <label className="text-sm font-medium text-[var(--color-gray-900)]">마감일</label>
+        <div className="relative" onClick={() => datePickerRef.current.setFocus()}>
+          <Image className="absolute top-[15px] right-[15px]" src={calender} alt="달력 아이콘" priority />
+        </div>
         <DatePicker
+          ref={datePickerRef}
           selected={deadline}
           onChange={(date) => setDeadline(date)}
           dateFormat="yy/MM/dd"
@@ -22,9 +27,6 @@ function Input({ type, title, placeholder, onChange, value, height, deadline, se
           className="h-[48px] w-full rounded-xl border border-gray-300 px-4 py-2 focus:ring-2 focus:outline-none"
           calendarClassName="!z-50"
         />
-        <div className="relative">
-          <Image className="absolute right-[15px] bottom-[15px]" src={calender} alt="달력 아이콘" />
-        </div>
       </div>
     );
 
