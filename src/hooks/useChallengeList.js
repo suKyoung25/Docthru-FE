@@ -1,7 +1,7 @@
 import { getChallenges } from "@/lib/api/challenge-api/searchChallenge";
 import { useState, useEffect, useCallback } from "react";
 
-const useChallenges = () => {
+const useChallenges = (myChallengeStatus) => {
   const [filters, setFilters] = useState({
     categories: [],
     docType: "",
@@ -26,7 +26,8 @@ const useChallenges = () => {
         keyword,
         category: filters.categories[0] || "",
         docType: filters.docType,
-        status: filters.status
+        status: filters.status,
+        myChallengeStatus
       };
 
       const challengesResults = await getChallenges(options);
@@ -47,10 +48,12 @@ const useChallenges = () => {
           return deadlineDate.getTime() < currentDate.getTime();
         });
       }
+      console.log(filteredResults)
       setChallenges(filteredResults);
     } catch (err) {
       console.error("챌린지 목록 불러오기 실패:", err);
       setError("챌린지 목록을 불러오는 데 실패했습니다.");
+      setChallenges([]); 
     } finally {
       setIsLoading(false);
     }

@@ -48,8 +48,7 @@ export default function ChallengeCard({
       className={`flex w-full flex-col
   ${variant === 'simple' ? 'h-auto justify-start' : 'h-[227px] justify-between sm:h-[262px] md:h-[225px]'}
   ${variant === 'simple' ? '' : 'rounded-[12px] border-2 border-[var(--color-gray-800)]'}
-  bg-white p-4 
-  max-w-[996px] sm:max-w-[343px] md:max-w-[696px]`}
+  bg-white p-4 `}
     >
       <div className="flex items-start justify-between">
         {status ? (

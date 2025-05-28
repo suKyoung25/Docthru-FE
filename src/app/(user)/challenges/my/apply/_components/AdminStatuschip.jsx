@@ -8,11 +8,11 @@ export default function AdminStatusChip({status}) {
     switch(status) {
         case 'PENDING':
             return <ApprovePendingChip />
-        case 'DELETE': 
+        case 'DELETED': 
             return <ChallengeDeleteChip />
-        case 'APPROVE':
+        case 'ACCEPTED':
             return <SubmitApproveChip />
-        case 'REJECT':
+        case 'REJECTED':
             return <SubmitRejectChip />
     }
 }
