@@ -4,14 +4,14 @@ import { columnSetting } from "@/constant/constant";
 
 export default function ListRow({ data }) {
   return (
-    <button className="w-full flex min-w-[670px] min-h-12 bg-white border-b border-gray-300 hover:bg-[#f5f5f5]">
+    <button className="flex min-h-12 w-full min-w-[670px] border-b border-gray-300 bg-white hover:bg-[#f5f5f5]">
       {columnSetting.map(({ key, className, flex, render }) => (
         <div
           key={key}
           style={{ flex }}
-          className={`${className} flex text-left px-1 text-gray-500 text-[13px] font-normal items-center break-all whitespace-normal `}
+          className={`${className} flex items-center px-1 text-left text-[13px] font-normal whitespace-normal text-gray-500`}
         >
-          {render ? render(data) : key === "createdAt" || key === "updatedAt" ? formatDate(data[key]) : data[key]}
+          {render ? render(data) : key === "createdAt" || key === "deadline" ? formatDate(data[key]) : data[key]}
         </div>
       ))}
     </button>

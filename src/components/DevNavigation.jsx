@@ -57,7 +57,7 @@ export default function DevNavigation() {
   }, {});
 
   // 동적 라우트 경로 변환 함수
-  const getHref = (path) => path.replace("[challengeId]", "3").replace("[workId]", "99"); // 임의의 mock ID
+  const getHref = (path) => path.replace("[challengeId]", "15").replace("[workId]", "67"); // 임의의 mock ID
 
   return (
     <div className="top-4 right-4 z-50">

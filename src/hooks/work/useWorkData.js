@@ -1,6 +1,8 @@
+"use client";
+
 import { useState, useEffect } from "react";
-import workService from "@/lib/api/workService";
 import { useRouter } from "next/navigation";
+import { deleteWorkAction, getWorkDetailAction, updateWorkAction } from "@/lib/actions/work";
 
 export const useWorkData = (challengeId, updateModalState) => {
   const router = useRouter();
@@ -8,6 +10,7 @@ export const useWorkData = (challengeId, updateModalState) => {
   // 에디터 핵심 상태
   const [content, setContent] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // 작업물 메타 정보
   const [workMeta, setWorkMeta] = useState({
@@ -19,48 +22,65 @@ export const useWorkData = (challengeId, updateModalState) => {
   // 초기 데이터 로드
   useEffect(() => {
     const fetchInitialData = async () => {
-      // TODO : 현재는 테스트 코드 수정하기 버튼 완성되면 주석 해제하기
-      //   const response = await workService.getWorkDetail(challengeId, workMeta.workId);
-      const response = await workService.getWorkDetail();
-      if (response.data) {
-        setWorkMeta({
-          workId: response.data.workId,
-          challengeTitle: response.data.challengeTitle,
-          originalUrl: response.data.originalUrl
-        });
-        setContent(response.data.content);
-        setIsSubmitted(response.data.content === "");
+      try {
+        // TODO: 테스트 ID는 실제 매개변수로 교체 필요
+        // const response = await getWorkDetailAction(challengeId, workMeta.workId);
+        const response = await getWorkDetailAction(15, 67);
+        if (response?.data) {
+          setWorkMeta({
+            workId: response.data.workId,
+            challengeTitle: response.data.challengeTitle,
+            originalUrl: response.data.originalUrl
+          });
+          setContent(response.data.content);
+          setIsSubmitted(response.data.content === "");
+        }
+      } catch (error) {
+        console.error("작업물 상세 조회 실패:", error.message);
       }
     };
+
     fetchInitialData();
   }, []);
 
   // 작업물 업데이트
   const handleUpdateWork = async () => {
     try {
-      await workService.updateWork(workMeta.workId, content === "<p></p>" ? "" : content);
+      if (isLoading) {
+        return;
+      }
+
+      setIsLoading(true);
+      const payload = content === "<p></p>" ? "" : content;
+      // await updateWorkAction(workMeta.workId, payload);
+      await updateWorkAction(67, payload);
       updateModalState("isSubmitConfirmOpen", false);
       router.refresh();
-      return true;
     } catch (error) {
-      console.error("작업물 업데이트 실패:", error);
-      return false;
+      console.error("작업물 업데이트 실패:", error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   // 작업물 삭제
   const handleDeleteWork = async () => {
     try {
-      const deleteResult = await workService.deleteWork(workMeta.workId);
-      if (deleteResult.status === 204) {
+      if (isLoading) {
+        return;
+      }
+
+      setIsLoading(true);
+      // const result = await deleteWorkAction(workMeta.workId);
+      const result = await deleteWorkAction(67);
+      if (result.status === 204) {
         updateModalState("isDeleteConfirmOpen", false);
         router.push(`/challenges/${challengeId}`);
-        return true;
       }
-      return false;
     } catch (error) {
-      console.error("작업물 삭제 실패:", error);
-      return false;
+      console.error("작업물 삭제 실패:", error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 

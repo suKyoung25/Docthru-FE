@@ -47,13 +47,21 @@ export default function page() {
           isSubmitModal={() => updateModalState("isSubmitConfirmOpen", true)}
           onDiscardModal={() => updateModalState("isDeleteConfirmOpen", true)}
         />
-        <EditorSection
-          challengeTitle={workMeta.challengeTitle}
-          content={content}
-          handleContent={setContent}
-          onDraft={saveDraft}
-          isDrafting={draftState.isDrafting}
-        />
+
+        {content ? (
+          <EditorSection
+            challengeTitle={workMeta.challengeTitle}
+            content={content}
+            handleContent={setContent}
+            onDraft={saveDraft}
+            isDrafting={draftState.isDrafting}
+          />
+        ) : (
+          <div className="flex h-full flex-col items-center justify-center gap-2">
+            <div className="mx-auto h-[100px] w-full animate-pulse rounded-md bg-gray-100" />
+            <div className="mx-auto h-[700px] w-full animate-pulse rounded-md bg-gray-100" />
+          </div>
+        )}
       </Container>
 
       {/* 원문 페이지 모달 on/off 버튼 */}
@@ -64,10 +72,9 @@ export default function page() {
 
       {/* 원문 페이지 모달 */}
       <OriginalPageModal
-        pageUrl={workMeta.originalUrl}
+        originalPageUrl={workMeta.originalUrl}
         onClose={() => updateModalState("isOriginalPageOpen", false)}
         modalState={modalState.isOriginalPageOpen}
-        originalPageUrl={workMeta.originalUrl}
       />
 
       {draftState.hasDraft && (

@@ -30,13 +30,13 @@ render : 해당 셀에 상태에 따라 다른 값을 노출해야 할 경우
 */
 
 export const columnSetting = [
-  { key: "id", label: "No.", flex: 0.6, className: "pl-4" },
+  { key: "applicationId", label: "No.", flex: 0.6, className: "pl-4", render: (data) => data.application?.id ?? "-" },
   { key: "docType", label: "분야", flex: 1.2 },
   { key: "category", label: "카테고리", flex: 1 },
   { key: "title", label: "챌린지 제목", flex: 5, className: "text-gray-700 font-medium" },
-  { key: "maxParticipant", label: "인원", flex: 1 },
+  { key: "maxParticipant", label: "모집 인원", flex: 1 },
   { key: "createdAt", label: "신청일", flex: 1 },
-  { key: "updatedAt", label: "마감기한", flex: 1 },
+  { key: "deadline", label: "마감 기한", flex: 1 },
   {
     key: "adminStatus",
     label: "상태",

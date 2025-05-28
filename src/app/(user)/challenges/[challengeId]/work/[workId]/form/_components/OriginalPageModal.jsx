@@ -3,7 +3,7 @@ import React from "react";
 import outCircle from "@/assets/icon/ic_out_circle.svg";
 import BtnText from "@/components/btn/text/BtnText";
 
-export default function OriginalPageModal({ pageUrl, onClose, modalState, originalPageUrl }) {
+export default function OriginalPageModal({ originalPageUrl, onClose, modalState }) {
   return (
     <div>
       {/* 모달 상태에 따라 모달 렌더링 (삼항 연산으로 한 이유는 애니메이션시 이게더 자연스럽게 나와서) */}
@@ -23,9 +23,9 @@ export default function OriginalPageModal({ pageUrl, onClose, modalState, origin
               링크 열기
             </BtnText>
           </div>
-          {pageUrl ? (
+          {originalPageUrl ? (
             <iframe
-              src={pageUrl}
+              src={originalPageUrl}
               title="원문 페이지"
               className="h-full w-full border-0"
               loading="lazy"
@@ -33,7 +33,7 @@ export default function OriginalPageModal({ pageUrl, onClose, modalState, origin
               sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
             />
           ) : (
-            <div className="flex items-center justify-center h-full text-gray-500">
+            <div className="flex h-full items-center justify-center text-gray-500">
               원문 페이지를 불러올 수 없습니다.
             </div>
           )}
@@ -56,7 +56,7 @@ export default function OriginalPageModal({ pageUrl, onClose, modalState, origin
             </BtnText>
           </div>
           <iframe
-            src={pageUrl}
+            src={originalPageUrl}
             title="원문 페이지"
             className="h-full w-full border-0"
             loading="lazy"
