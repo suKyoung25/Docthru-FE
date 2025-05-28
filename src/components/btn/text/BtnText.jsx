@@ -31,7 +31,7 @@ export default function BtnText({ theme, icon, disabled, onClick, className = ""
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`box-border w-full h-[48px] flex items-center justify-center gap-2 rounded-[10px] px-4 py-2 text-sm font-semibold sm:rounded-xl sm:text-base ${themes[theme]} ${className} ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
+      className={`box-border flex items-center justify-center gap-2 rounded-[10px] px-4 py-2 text-sm font-semibold sm:rounded-xl sm:text-base ${themes[theme]} ${className} ${disabled ? "cursor-not-allowed opacity-50" : ""}`}
     >
       {/* 포기 버튼 */}
       {icon && theme === "tonal" ? (

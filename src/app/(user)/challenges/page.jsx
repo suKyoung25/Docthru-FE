@@ -6,11 +6,10 @@ import SearchInput from "@/components/input/SearchInput";
 import ChallengeCard from "@/components/card/Card";
 import FilterModal from "@/components/modal/FilterModal";
 import Pagination from "@/components/pagination/Pagination";
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import useChallenges from "@/hooks/useChallengeList";
 import { useAuth } from "@/providers/AuthProvider";
 import { useRouter } from "next/navigation";
-import Hangul from "hangul-js";
 
 function Page() {
   const [isModal, setIsModal] = useState(false);
@@ -57,37 +56,37 @@ function Page() {
     setIsModal(false);
   };
 
-  //초성으로 검색하기 위한 함수 (검색어의 초성만 추출하여 문자열로 반환)
-  const getInitials = (text) => {
-    if (!text) return "";
-    return Hangul.d(text, true)
-      .map(([initial]) => initial)
-      .join("");
-  };
+  // //검색에서 초성만 문자열로 뽑아냄
+  // const getInitials = (text) => {
+  //   if (!text) return "";
+  //   return Hangul.d(text, true)
+  //     .map(([initial]) => initial)
+  //     .join(""); //>"ㅊㄹㄷ"
+  // };
 
-  //이미 검색어가 초성이라면 getInitials 함수 적용되면 오류남
-  const isInitialsOnly = (text) => {
-    // 초성 범위 (ㄱ ~ ㅎ) 정규식
-    return /^[ㄱ-ㅎ]+$/.test(text);
-  };
+  // //검색어가 이미 초성인지 확인 Boolean 리턴
+  // const isInitialsOnly = (text) => {
+  //   return /^[ㄱ-ㅎ]+$/.test(text);
+  // };
 
-  //초성 검색어로 챌린지를 찾아 반환하는 함수
-  const filteredChallenges = useMemo(() => {
-    if (!keyword) return challenges;
+  //띄어쓰기 잘못해도 검색 가능하도록
+  // const filteredChallenges = useMemo(() => {
+  //   if (!keyword) return challenges;
 
-    const keywordInitials = isInitialsOnly(keyword) ? keyword : getInitials(keyword);
+  //   const trimmedKeyword = keyword.trim();
 
-    const includeKeywordChallenges = challenges.filter((challenge) => {
-      const titleInitials = getInitials(challenge.title);
-      return titleInitials.includes(keywordInitials);
-    });
+  //   const includeKeywordChallenges = challenges.filter((challenge) => {
+  //     return challenge.title.includes(trimmedKeyword);
+  //   });
 
-    //디버깅
-    console.log("keywordInitials", keywordInitials); //정상
-    console.log("includeKeywordChallenges", includeKeywordChallenges);
+  //   return includeKeywordChallenges;
+  // }, [challenges, keyword]);
 
-    return includeKeywordChallenges;
-  }, [challenges, keyword]);
+  // //띄어뜨시 잘못해도 검색 가능 하도록
+  // const trimmedKeyword = () => (keyword ? keyword.trim() : "");
+
+  //디버깅
+  console.log("challenges", challenges);
 
   return (
     <div className="mx-[16px] mt-[16px] mb-[65px] [@media(min-width:1200px)]:mx-[462px]">
@@ -120,9 +119,9 @@ function Page() {
           </div>
         ) : error ? (
           <div className="text-red-500">{error}</div>
-        ) : filteredChallenges.length > 0 ? (
-          filteredChallenges.map((challenge) => (
-            <div key={challenge.id}>
+        ) : challenges.length > 0 ? (
+          challenges.map((challenge) => (
+            <div key={challenge.id} onClick={() => handleClickCard(challenge.id)}>
               <ChallengeCard
                 challengeId={challenge.id}
                 title={challenge.title}

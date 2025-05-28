@@ -1,3 +1,4 @@
+
 "use server";
 
 import { API_URL } from '@/constant/constant';
@@ -22,12 +23,17 @@ const getAuthHeaders = async () => {
 // 챌린지 목록 가져오기
 export async function getChallenges({ page = 1, pageSize = 4, category, docType, keyword, myChallengeStatus}) {
   const headers = await getAuthHeaders();
+
   const params = new URLSearchParams();
-  params.set('page', page);
-  params.set('pageSize', pageSize);
-  if (category) params.set('category', category);
-  if (docType) params.set('docType', docType);
-  if (keyword) params.set('keyword', keyword);
+  params.set("page", page);
+  params.set("pageSize", pageSize);
+  if (category) params.set("category", category);
+  if (docType) params.set("docType", docType);
+  if (keyword) {
+    const cleanedKeyword = keyword.replace(/\s+/g, "");
+    params.set("keyword", cleanedKeyword);
+  }
+
 
     try {
     let url = myChallengeStatus
@@ -47,3 +53,4 @@ export async function getChallenges({ page = 1, pageSize = 4, category, docType,
     throw error;
   }
 }
+

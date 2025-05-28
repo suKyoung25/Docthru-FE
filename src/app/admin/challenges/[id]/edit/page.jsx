@@ -192,11 +192,9 @@ export default function editChallengePageAdmin() {
         />
       </div>
 
-      <div className="h-[48px] w-full">
-        <BtnText theme="solidblack" disabled={!isFormValid} onClick={handleChallengeEdit}>
-          수정하기
-        </BtnText>
-      </div>
+      <BtnText theme="solidblack" className="h-[48px] w-full" disabled={!isFormValid} onClick={handleChallengeEdit}>
+        수정하기
+      </BtnText>
     </div>
   );
 }
