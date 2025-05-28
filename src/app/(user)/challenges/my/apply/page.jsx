@@ -48,7 +48,7 @@ export default function ApplicationsPage() {
         </div>
       </div>
        {isLoading ? (
-          <div>챌린지 목록을 불러오는 중...</div>
+          <div className="text-sm w-full h-full flex items-center justify-center text-gray-500">챌린지 목록을 불러오는 중...</div>
         ) : error ? (
           <div className="text-red-500">{error}</div>
         ) : challenges.length > 0 ? (
@@ -61,7 +61,7 @@ export default function ApplicationsPage() {
               onPageChange={(newPage) => setPage(newPage)}
             />
         ) : (
-          <div>챌린지가 존재하지 않습니다.</div>
+          <div className="text-sm w-full h-full flex items-center justify-center text-gray-500">챌린지가 존재하지 않습니다.</div>
         )}
     </>
   );

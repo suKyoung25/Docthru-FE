@@ -13,7 +13,7 @@ export async function getMyChallenges({ page = 1, pageSize = 4, category, docTyp
   if (docType) params.set('docType', docType);
   if (keyword) params.set('keyword', keyword);
 
-  const res = await fetch(`${BASE_URL}/user/me/challenges?myChallengeStatus=${status}&${params.toString()}`,{
+  const res = await fetch(`${BASE_URL}/users/me/challenges?myChallengeStatus=${status}&${params.toString()}`,{
     method: "GET",
     credentials: "include",
   });
@@ -23,32 +23,32 @@ export async function getMyChallenges({ page = 1, pageSize = 4, category, docTyp
 }
 
 
-// 신청한 챌린지
-export async function appliedChallenges({page=1, pageSize, category, docType, keyword }) {
-    try {
-        const res = await fetch(`${BASE_URL}/users/me/challenges?myChallengeStatus=applied&page=${page}&pageSize=${pageSize}`,{
-            method: "GET",
-            credentials: "include",
-        });
+// // 신청한 챌린지
+// export async function appliedChallenges({page=1, pageSize, category, docType, keyword }) {
+//     try {
+//         const res = await fetch(`${BASE_URL}/users/me/challenges?myChallengeStatus=applied&page=${page}&pageSize=${pageSize}`,{
+//             method: "GET",
+//             credentials: "include",
+//         });
         
-        if (!res.ok) throw new Error("챌린지 목록을 가져올 수 없습니다.");
+//         if (!res.ok) throw new Error("챌린지 목록을 가져올 수 없습니다.");
         
-        const data = await res.json();
-        console.log(data)
-        return {
-            data: data.data,
-            totalCount: data.totalCount,
-            currentPage: data.currentPage,
-            pageSize: data.pageSize,
-        }
+//         const data = await res.json();
+//         console.log(data)
+//         return {
+//             data: data.data,
+//             totalCount: data.totalCount,
+//             currentPage: data.currentPage,
+//             pageSize: data.pageSize,
+//         }
     
-    } catch (error) {
-        console.error(error);
-         return {
-            data: [],
-            totalCount: 0,
-            currentPage: page,
-            pageSize,
-        };
-    }  
-}
+//     } catch (error) {
+//         console.error(error);
+//          return {
+//             data: [],
+//             totalCount: 0,
+//             currentPage: page,
+//             pageSize,
+//         };
+//     }  
+// }
