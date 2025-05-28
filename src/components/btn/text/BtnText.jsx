@@ -35,7 +35,7 @@ export default function BtnText({ theme, icon, onClick, className = "", children
       {/* 포기 버튼 */}
       {icon && theme === "tonal" ? (
         <>
-          <span className="hidden sm:inline mr-[2.5px]">포기</span>
+          <span className="mr-[2.5px] hidden sm:inline">포기</span>
           <Image src={iconWithDraw} alt="포기하기" className="h-4 w-4 sm:h-5 sm:w-5" />
         </>
       ) : (
