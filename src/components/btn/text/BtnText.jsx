@@ -26,16 +26,17 @@ const iconMap = {
   }
 };
 
-export default function BtnText({ theme, icon, onClick, className = "", children }) {
+export default function BtnText({ theme, icon, disabled, onClick, className = "", children }) {
   return (
     <button
       onClick={onClick}
-      className={`box-border flex items-center justify-center gap-2 rounded-[10px] px-4 py-2 text-sm font-semibold sm:rounded-xl sm:text-base ${themes[theme]} ${className}`}
+      disabled={disabled}
+      className={`box-border w-full h-[48px] flex items-center justify-center gap-2 rounded-[10px] px-4 py-2 text-sm font-semibold sm:rounded-xl sm:text-base ${themes[theme]} ${className} ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
     >
       {/* 포기 버튼 */}
       {icon && theme === "tonal" ? (
         <>
-          <span className="hidden sm:inline">포기</span>
+          <span className="mr-[2.5px] hidden sm:inline">포기</span>
           <Image src={iconWithDraw} alt="포기하기" className="h-4 w-4 sm:h-5 sm:w-5" />
         </>
       ) : (
@@ -43,7 +44,7 @@ export default function BtnText({ theme, icon, onClick, className = "", children
       )}
 
       {/* 링크 버튼 아이콘 */}
-      {theme === "link" && <Image src={iconLink} alt="링크" className="h-4 w-4 sm:h-5 sm:w-5" />}
+      {theme === "link" && <Image src={iconLink} alt="링크" width={24} height={24} />}
     </button>
   );
 }

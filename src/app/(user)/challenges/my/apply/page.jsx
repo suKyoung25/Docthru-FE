@@ -1,20 +1,24 @@
 "use client";
 
 import SearchInput from "@/components/input/SearchInput";
-import React, { useEffect, useState } from "react";
 import AppliedChallenges from "./_components/AppliedChallenges";
-import { useRouter } from "next/navigation";
-import { columnSetting, ITEM_COUNT } from "@/constant/constant";
-import { useAuth } from "@/providers/AuthProvider";
-import { appliedChallenges } from "@/lib/api/myChallenges";
 import Sort from "@/components/sort/Sort";
 import useChallenges from "@/hooks/useChallengeList";
+import { useRouter } from "next/navigation";
+import { columnSetting } from "@/constant/constant";
+import React, { useEffect, useState } from "react";
+import { useAuth } from "@/providers/AuthProvider";
+import { userService } from "@/lib/service/userService";
+import ApplyDropdown from "@/components/dropDown/list/ApplyDropdown";
 
-export default function AppliedChallengesPage() {
-  const router = useRouter();
+export default function ApplicationsPage() {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [applications, setApplications] = useState();
   const { user } = useAuth();
+  const router = useRouter();
 
   const myChallengeStatus = "applied"
+  
   const {
     challenges,
     totalCount,
@@ -39,8 +43,9 @@ export default function AppliedChallengesPage() {
             onChange={(e) => setKeyword(e.target.value)}
           />
         </div>
-        <div className="flex-3 sm:flex-2">
-          <Sort />
+        <div className="flex-3 sm:flex-2 relative">
+          <Sort isAdminStatus={true} onClick={() => setIsDropdownOpen((prev) => !prev)} />
+          <div className="absolute right-0 mt-2">{isDropdownOpen && <ApplyDropdown />}</div>
         </div>
       </div>
        {isLoading ? (
@@ -50,6 +55,7 @@ export default function AppliedChallengesPage() {
         ) : challenges.length > 0 ? (
           challenges.map((challenge) => (
             <AppliedChallenges
+             
               columnSetting={columnSetting}
               result={challenges}
               onClick={(id) => router.push(`/challenges/${id}`)}
@@ -62,9 +68,6 @@ export default function AppliedChallengesPage() {
         ) : (
           <div>챌린지가 존재하지 않습니다.</div>
         )}
-
-
-      
     </>
   );
 }

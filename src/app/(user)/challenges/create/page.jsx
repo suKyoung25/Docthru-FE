@@ -65,8 +65,20 @@ export default function page() {
     maxParticipantErrorMessage = null;
   }
 
+  //신청하기 버튼 비활성화
+  const isFormValid =
+    title.trim() !== "" &&
+    originalUrl.trim() !== "" &&
+    selectedCategory !== "카테고리" &&
+    selectedDocType !== "카테고리" &&
+    deadline !== null &&
+    maxParticipant !== null &&
+    maxParticipant !== "" &&
+    description.trim() !== "" &&
+    !maxParticipantErrorMessage;
+
   return (
-    <div className="font-pretendard px-[16px] pt-[16px] pb-[87px] text-[18px] text-[var(--color-gray-900)]">
+    <div className="font-pretendard px-[16px] [@media(min-width:376px)]:px-[77px] [@media(min-width:1200px)]:px-[665px] pt-[16px] pb-[87px] text-[18px] text-[var(--color-gray-900)]">
       <div className="font-bold">신규 챌린지 신청</div>
 
       <div className="flex flex-col gap-[24px] pt-[16px] pb-[24px] text-[14px]">
@@ -156,7 +168,7 @@ export default function page() {
       </div>
 
       <div className="h-[48px] w-full">
-        <BtnText theme="solidblack" onClick={handlePost}>
+        <BtnText theme="solidblack" disabled={!isFormValid} onClick={handlePost}>
           신청하기
         </BtnText>
       </div>
