@@ -1,26 +1,41 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import StatusSection from "./_components/StatusSection";
 import LineDivider from "./_components/LineDivider";
 import OriginalUrlSection from "./_components/OriginalUrlSection";
 import ChallengeSection from "./_components/ChallengeSection";
+import { userService } from "@/lib/service/userService";
 
 export default function ApplicationDetailPage() {
   const { id } = useParams();
+  const [application, setApplication] = useState();
+  const [challenge, setChallenge] = useState();
+
+  const fetchDetail = async () => {
+    try {
+      const data = await userService.getApplication(id);
+      console.log(data.application);
+      console.log(data.challenge);
+      setApplication(data.application);
+      setChallenge(data.challenge);
+    } catch (error) {
+      console("신청한 챌린지 상세 불러오기 실패: ", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDetail();
+  }, []);
 
   return (
     <div>
-      <StatusSection
-        adminStatus="PENDING"
-        adminMessage="독스루는 개발 문서 번역 플랫폼으로,
-폭력성과 관련된 내용을 포함할 수 없음을 안내드립니다. 감사합니다."
-      />
+      <StatusSection application={application} />
       <LineDivider />
-      <ChallengeSection />
+      <ChallengeSection challenge={challenge} />
       <LineDivider />
-      <OriginalUrlSection />
+      <OriginalUrlSection originalPageUrl={challenge?.originalUrl} />
     </div>
   );
 }

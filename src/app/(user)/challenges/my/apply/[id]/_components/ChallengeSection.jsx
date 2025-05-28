@@ -2,11 +2,13 @@ import ChallengeContent from "@/app/(user)/challenges/[challengeId]/_components/
 import ChallengeInfo from "@/app/(user)/challenges/[challengeId]/_components/ChallengeInfo";
 import React from "react";
 
-function ChallengeSection() {
+function ChallengeSection({ challenge }) {
+  const { title, description, category, docType, deadline, participants, maxParticipant } = challenge || {};
+
   return (
     <section className="space-y-4">
-      <ChallengeContent />
-      <ChallengeInfo deadline="2024년 3월 3일" participant={5} maxParticipant={15} />
+      <ChallengeContent title={title} description={description} category={category} docType={docType} />
+      <ChallengeInfo deadline={deadline} participants={participants} maxParticipant={maxParticipant} />
     </section>
   );
 }
