@@ -7,7 +7,7 @@ import usersIcon from "@/assets/icon/ic_person.svg";
 import { typeChipMap, categoryChipMap } from "../chip/chipMaps";
 
 import ChipCardStatus from "@/components/chip/chipComplete/ChipCardStatus"; // 좌상단 chip
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react"; // useRef 추가
 import { useAuth } from "@/providers/AuthProvider";
 
 export default function ChallengeCard({
@@ -18,9 +18,12 @@ export default function ChallengeCard({
   participants,
   maxParticipant,
   variant = "default",
-  isAdmin
+  isAdmin,
+  onClick
 }) {
   const [status, setStatus] = useState("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     const now = new Date();
@@ -34,37 +37,77 @@ export default function ChallengeCard({
     }
   }, [deadline, maxParticipant, participants]);
 
+  // 외부 클릭 시 드롭다운 닫기
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
+
   const formatDateToPretty = (dateString) => {
     const date = new Date(dateString);
     return new Intl.DateTimeFormat("ko-KR", {
       year: "numeric",
       month: "long",
-      day: "numeric"
+      day: "numeric",
     }).format(date);
+  };
+
+  const handleEdit = () => {
+    alert("수정하기 클릭!");
+    setIsDropdownOpen(false);
+  };
+
+  const handleDelete = () => {
+    alert("삭제하기 클릭!");
+    setIsDropdownOpen(false);
   };
 
   return (
     <div
-      className={`flex flex-col
-  ${variant === "simple" ? "h-auto justify-start" : "h-[227px] justify-between sm:h-[262px] md:h-[225px]"}
-  ${variant === "simple" ? "" : "rounded-[12px] border-2 border-[var(--color-gray-800)]"}
-  bg-white p-4`}
+      className={`flex flex-col 
+      ${variant === "simple" ? "h-auto justify-start" : "h-[227px] justify-between sm:h-[262px] md:h-[225px]"}
+      ${variant === "simple" ? "" : "rounded-[12px] border-2 border-[var(--color-gray-800)]"}
+      bg-white p-4`}
     >
-      <div className="flex items-start justify-between">
+      <div className="relative flex items-start justify-between">
         {status ? (
           <ChipCardStatus status={status} />
         ) : (
-          <div className="text-xl font-semibold text-gray-800">{title}</div>
+          <div className="text-xl font-semibold text-gray-800" onClick={onClick}>{title}</div>
         )}
-
         {isAdmin ? (
-          <button>
-            <Image src={dropdownIcon} alt="드롭다운" width={24} height={24} />
-          </button>
+          <div ref={dropdownRef}>
+            <button onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+              <Image src={dropdownIcon} alt="드롭다운" width={24} height={24} />
+            </button>
+            {isDropdownOpen && (
+              <div className="absolute right-0 top-full z-10 mt-2 w-28 rounded-md border border-gray-200 bg-white shadow-lg">
+                <button
+                  onClick={handleEdit}
+                  className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  수정하기
+                </button>
+                <button
+                  onClick={handleDelete}
+                  className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  삭제하기
+                </button>
+              </div>
+            )}
+          </div>
         ) : null}
       </div>
 
-      {status && <div className="mt-2 text-xl font-semibold text-gray-800">{title}</div>}
+      {status && <div className="mt-2 text-xl font-semibold text-gray-800" onClick={onClick}>{title}</div>}
 
       <div className="mt-2 flex flex-wrap gap-2">
         {categoryChipMap[category] ?? null}
