@@ -9,44 +9,44 @@ import { useParams } from "next/navigation";
 
 export default function FeedbackBox() {
   const [feedback, setFeedback] = useState("");
-  const [feedbacks, setFeedbacks] = useState([]);
+  const [allFeedbacks, setAllFeedbacks] = useState([]); // 전체 피드백
+  const [displayedFeedbacks, setDisplayedFeedbacks] = useState([]); // 화면에 보여줄 피드백
   const [offset, setOffset] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const params = useParams();
   const workId = params.workId;
 
-  // 피드백 목록 불러오기
-  const fetchFeedbackList = async (loadMore = false) => {
+  // 피드백 목록 전체 불러오기
+  const fetchFeedbackList = async () => {
     try {
-      const limit = loadMore ? 5 : 3; // 처음엔 3개, 더보기 누를 때마다 5개
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/works/${workId}/feedbacks?limit=${limit}&offset=${offset}`,
-        {
-          credentials: "include"
-        }
-      );
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/works/${workId}/feedbacks`, {
+        credentials: "include"
+      });
       if (!res.ok) throw new Error("데이터 불러오기 실패");
       const data = await res.json();
-      if (loadMore) {
-        // 더보기 누를 때: 기존 피드백에 추가
-        setFeedbacks((prev) => [...prev, ...data]);
-      } else {
-        // 처음 로딩: 새로 불러오기
-        setFeedbacks(data || []);
-      }
-      // 더 불러올 피드백이 있는지 확인
-      setHasMore(data.length >= limit);
-      // offset 업데이트
-      setOffset((prev) => (loadMore ? prev + limit : limit));
+      setAllFeedbacks(data || []);
+      setHasMore(data.length > 0); // 초기에는 항상 true
+      // 처음엔 3개만 보여줌
+      setDisplayedFeedbacks(data.slice(0, 3));
+      setOffset(3);
     } catch (error) {
       console.error("피드백 불러오기 실패:", error);
-      setFeedbacks([]);
+      setAllFeedbacks([]);
+      setDisplayedFeedbacks([]);
     }
   };
 
   useEffect(() => {
     if (workId) fetchFeedbackList();
   }, [workId]);
+
+  // 더보기 버튼 클릭
+  const handleLoadMore = () => {
+    const newOffset = offset + 5;
+    setDisplayedFeedbacks(allFeedbacks.slice(0, newOffset));
+    setOffset(newOffset);
+    setHasMore(newOffset < allFeedbacks.length);
+  };
 
   // 피드백 등록
   const handleSubmit = async (e) => {
@@ -62,9 +62,8 @@ export default function FeedbackBox() {
       });
       if (res.ok) {
         // 피드백 등록 시 목록 갱신
-        setOffset(0);
-        fetchFeedbackList();
         setFeedback("");
+        fetchFeedbackList();
       }
     } catch (error) {
       console.error("피드백 등록 실패:", error);
@@ -75,14 +74,13 @@ export default function FeedbackBox() {
   const onEdit = async (feedbackId, editedContent) => {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/works/${workId}/feedbacks/${feedbackId}`, {
-        method: "PUT",
+        method: "PATCH",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content: editedContent })
       });
       if (res.ok) {
         // 피드백 수정 시 목록 갱신
-        setOffset(0);
         fetchFeedbackList();
       }
     } catch (error) {
@@ -99,17 +97,11 @@ export default function FeedbackBox() {
       });
       if (res.ok) {
         // 피드백 삭제 시 목록 갱신
-        setOffset(0);
         fetchFeedbackList();
       }
     } catch (error) {
       console.error("Error deleting feedback:", error);
     }
-  };
-
-  // 더보기 버튼 클릭
-  const handleLoadMore = () => {
-    fetchFeedbackList(true);
   };
 
   return (
@@ -125,7 +117,7 @@ export default function FeedbackBox() {
           />
         </button>
       </form>
-      {feedbacks.map((feedbackItem) => (
+      {displayedFeedbacks.map((feedbackItem) => (
         <Reply
           key={feedbackItem.id}
           userName={feedbackItem.user?.nickname || "익명"}
@@ -136,7 +128,7 @@ export default function FeedbackBox() {
           onDelete={() => onDelete(feedbackItem.id)}
         />
       ))}
-      {hasMore && feedbacks.length > 3 && (
+      {hasMore && allFeedbacks.length > 3 && (
         <div className="flex justify-center mt-2">
           <button onClick={handleLoadMore} className="w-45 text-center py-2 bg-gray-100 rounded-xl hover:bg-gray-50">
             더보기

@@ -10,6 +10,7 @@ import BlogChip from "@/components/chip/chipCategory/BlogChip";
 import OfficialDocChip from "@/components/chip/chipCategory/OfficialDocChip";
 import Menu from "./Menu";
 import { useAuth } from "@/providers/AuthProvider";
+import { useRouter } from "next/navigation";
 
 const categoryComponentMap = {
   "Next.js": NextjsChip,
@@ -31,6 +32,7 @@ export default function Header() {
   const [challenge, setChallenge] = useState(null);
   const [work, setWork] = useState(null);
   const { user } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchChallenge = async () => {
@@ -68,14 +70,24 @@ export default function Header() {
 
   // 수정
   const handleEdit = () => {
-    console.log("수정 로직 구현");
-    // TODO: 수정 모달 열기 또는 API 호출
+    router.push(`/challenges/${challengeId}/work/${workId}/form`);
   };
 
   // 삭제
-  const handleDelete = () => {
-    console.log("삭제 로직 구현");
-    // TODO: 삭제 모달 열기 또는 API 호출
+  const handleDelete = async () => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/works/${workId}`, {
+        method: "DELETE",
+        credentials: "include"
+      });
+
+      if (res.ok) {
+        // 삭제 성공 시, 해당 첼린지 페이지로 이동
+        router.push(`/challenges/${challengeId}`);
+      }
+    } catch (error) {
+      console.error("작업물 삭제 에러:", error);
+    }
   };
 
   return (
