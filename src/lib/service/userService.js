@@ -8,6 +8,6 @@ export const userService = {
 
   // 니의 챌린지 신청 목록 조회
   getApplications: async (page, pageSize) => {
-    return await getApplicationsAction({ page, pageSize });
+    return await getApplicationsAction({ params: { page, pageSize } });
   }
 };
