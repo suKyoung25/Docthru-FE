@@ -64,10 +64,9 @@ export default function page() {
 
       {/* 원문 페이지 모달 */}
       <OriginalPageModal
-        pageUrl={workMeta.originalUrl}
+        originalPageUrl={workMeta.originalUrl}
         onClose={() => updateModalState("isOriginalPageOpen", false)}
         modalState={modalState.isOriginalPageOpen}
-        originalPageUrl={workMeta.originalUrl}
       />
 
       {draftState.hasDraft && (

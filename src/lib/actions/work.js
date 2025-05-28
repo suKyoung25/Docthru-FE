@@ -2,36 +2,130 @@
 
 import { cookies } from "next/headers";
 
-export async function deleteWorkAction(workId, adminMessage) {
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get("accessToken")?.value;
+const BASE_URL = process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_API_URL : "http://localhost:8080";
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+// accessToken을 안전하게 추출
+const getAccessToken = async () => {
+  const cookieStore = await cookies(); // 동기
+  const token = cookieStore.get("accessToken"); // 동기
+  return token?.value;
+};
 
-  if (!accessToken) {
-    throw new Error("인증되지 않았습니다: 액세스 토큰이 없습니다.");
+// fetch 요청에 사용할 headers 구성
+const getAuthHeaders = async () => {
+  const accessToken = await getAccessToken(); // 반드시 await 필요
+  return {
+    "Content-Type": "application/json",
+    Cookie: `accessToken=${accessToken}`
+  };
+};
+
+// ✅ 작업물 상세 조회
+export async function getWorkDetailAction(challengeId, workId) {
+  const headers = await getAuthHeaders();
+
+  const res = await fetch(`${BASE_URL}/challenges/${challengeId}/works/${workId}`, {
+    method: "GET",
+    headers,
+    credentials: "include",
+    cache: "no-store"
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`작업물 조회 실패 (${res.status}): ${text}`);
   }
 
-  try {
-    const response = await fetch(`${API_URL}/admin/works/${workId}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Cookie: `accessToken=${accessToken}`
-      },
-      body: JSON.stringify({
-        deletionReason: "사용자 요청에 의해 삭제된 작업물입니다."
-      })
-    });
+  return await res.json();
+}
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "작업물 삭제에 실패했습니다.");
-    }
+// ✅ 작업물 생성
+export async function createWorkAction(challengeId) {
+  const headers = await getAuthHeaders();
 
-    return await response.json();
-  } catch (err) {
-    console.error("서버 액션 - 작업물 삭제 오류:", err);
-    throw err;
+  const res = await fetch(`${BASE_URL}/challenges/${challengeId}/works`, {
+    method: "POST",
+    headers,
+    credentials: "include",
+    cache: "no-store"
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`작업물 생성 실패 (${res.status}): ${text}`);
   }
+
+  return await res.json();
+}
+
+// ✅ 작업물 수정
+export async function updateWorkAction(workId, content) {
+  const headers = await getAuthHeaders();
+
+  const res = await fetch(`${BASE_URL}/works/${workId}`, {
+    method: "PATCH",
+    headers,
+    credentials: "include",
+    cache: "no-store",
+    body: JSON.stringify({ content })
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`작업물 수정 실패 (${res.status}): ${text}`);
+  }
+
+  return await res.json();
+}
+
+// ✅ 작업물 삭제
+export async function deleteWorkAction(workId) {
+  const headers = await getAuthHeaders();
+
+  const res = await fetch(`${BASE_URL}/works/${workId}`, {
+    method: "DELETE",
+    headers,
+    credentials: "include",
+    cache: "no-store"
+  });
+
+  return { status: res.status };
+}
+
+// ✅ 작업물 좋아요 생성
+export async function createWorkLikeAction(workId) {
+  const headers = await getAuthHeaders();
+
+  const res = await fetch(`${BASE_URL}/works/${workId}/like`, {
+    method: "POST",
+    headers,
+    credentials: "include",
+    cache: "no-store"
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`좋아요 실패 (${res.status}): ${text}`);
+  }
+
+  return await res.json();
+}
+
+// ✅ 작업물 좋아요 삭제
+export async function deleteWorkLikeAction(workId) {
+  const headers = await getAuthHeaders();
+
+  const res = await fetch(`${BASE_URL}/works/${workId}/like`, {
+    method: "DELETE",
+    headers,
+    credentials: "include",
+    cache: "no-store"
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`좋아요 취소 실패 (${res.status}): ${text}`);
+  }
+
+  return await res.json();
 }
