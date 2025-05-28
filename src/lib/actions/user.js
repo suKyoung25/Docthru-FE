@@ -53,3 +53,28 @@ export async function getApplicationsAction({ params = {} }) {
     throw err;
   }
 }
+
+// 챌린지 신청 상세 조회
+export async function getApplicationAction(applicationId) {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("accessToken")?.value;
+
+  try {
+    const res = await fetch(`${BASE_URL}/users/me/applications/${applicationId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: `accessToken=${accessToken}`
+      }
+    });
+
+    if (!res.ok) {
+      throw new Error("챌린지를 불러오는데 실패했습니다.");
+    }
+
+    return await res.json();
+  } catch (err) {
+    console.error("getApplicationAction 에러:", err);
+    throw err;
+  }
+}

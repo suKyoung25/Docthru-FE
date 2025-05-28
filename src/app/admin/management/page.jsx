@@ -10,25 +10,25 @@ import { useEffect, useState } from "react";
 
 export default function AdminManagementPage() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [applications, setApplications] = useState();
+  const [challenges, setChallenges] = useState();
   const [totalCount, setTotalCount] = useState(null);
   const [page, setPage] = useState(1);
   const pageSize = ITEM_COUNT.APPLICATION;
 
-  const getApplications = async () => {
+  const fetchChallengeApplications = async () => {
     const challenges = await getChallenges({ page, pageSize });
-    setApplications(challenges?.data);
+    setChallenges(challenges?.data);
     setTotalCount(challenges?.totalCount);
   };
 
   useEffect(() => {
-    getApplications();
+    fetchChallengeApplications();
   }, [page]);
 
   return (
     <>
-      <h1 className="text-xl font-semibold mt-[26px] md:mt-[34px] mb-[13px] md:mb-6">챌린지 신청 관리</h1>
-      <div className="mb-4 md:mb-6 grid grid-cols-[2.5fr_1fr] gap-3 md:grid-cols-[4fr_1fr] lg:grid-cols-[6fr_1fr]">
+      <h1 className="mt-[26px] mb-[13px] text-xl font-semibold md:mt-[34px] md:mb-6">챌린지 신청 관리</h1>
+      <div className="mb-4 grid grid-cols-[2.5fr_1fr] gap-3 md:mb-6 md:grid-cols-[4fr_1fr] lg:grid-cols-[6fr_1fr]">
         <SearchInput />
         <div className="relative">
           <Sort isAdminStatus={true} onClick={() => setIsDropdownOpen((prev) => !prev)} />
@@ -36,7 +36,7 @@ export default function AdminManagementPage() {
         </div>
       </div>
       <AppliedChallenges
-        resultData={applications}
+        resultData={challenges}
         totalCount={totalCount}
         page={page}
         pageSize={pageSize}
