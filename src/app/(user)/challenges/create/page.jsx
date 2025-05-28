@@ -8,6 +8,7 @@ import CategoryItems from "@/components/dropDown/category/CategoryItems";
 import { postChallenges } from "@/lib/api/challenge-api/createChallenge";
 import { useRouter } from "next/navigation";
 import { getServerSideToken } from "@/lib/actions/auth";
+import { isValidURL } from "@/lib/utils/verifyUrlForm";
 
 export default function page() {
   const [title, setTitle] = useState("");
@@ -23,7 +24,7 @@ export default function page() {
 
   //챌린지 신청하기
   const handlePost = async () => {
-    if (maxParticipantErrorMessage) return alert("신청 형식을 확인해주세요");
+    if (maxParticipantErrorMessage && isValidURL(originalUrl)) return alert("신청 형식을 확인해주세요");
 
     //액세스 토큰 받아오기 (서버액션으로)
     const accessToken = getServerSideToken("accessToken");
@@ -65,6 +66,12 @@ export default function page() {
     maxParticipantErrorMessage = null;
   }
 
+  //원문 링크 형식 검사
+  let originalUrlErrorMessage = null;
+  if (originalUrl !== "" && !isValidURL(originalUrl)) {
+    originalUrlErrorMessage = "원문 링크를 올바른 형식으로 작성해주세요.";
+  }
+
   //신청하기 버튼 비활성화
   const isFormValid =
     title.trim() !== "" &&
@@ -78,7 +85,7 @@ export default function page() {
     !maxParticipantErrorMessage;
 
   return (
-    <div className="font-pretendard px-[16px] [@media(min-width:376px)]:px-[77px] [@media(min-width:1200px)]:px-[665px] pt-[16px] pb-[87px] text-[18px] text-[var(--color-gray-900)]">
+    <div className="font-pretendard px-[16px] pt-[16px] pb-[87px] text-[18px] text-[var(--color-gray-900)] [@media(min-width:1200px)]:px-[665px] [@media(min-width:376px)]:px-[77px]">
       <div className="font-bold">신규 챌린지 신청</div>
 
       <div className="flex flex-col gap-[24px] pt-[16px] pb-[24px] text-[14px]">
@@ -88,12 +95,15 @@ export default function page() {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-        <Input
-          title={"원문 링크"}
-          placeholder={"원문 링크를 입력해주세요"}
-          value={originalUrl}
-          onChange={(e) => setOriginalUrl(e.target.value)}
-        />
+        <div>
+          <Input
+            title={"원문 링크"}
+            placeholder={"원문 링크를 입력해주세요"}
+            value={originalUrl}
+            onChange={(e) => setOriginalUrl(e.target.value)}
+          />
+          {originalUrlErrorMessage ? <div className="pl-[15px] text-red-500">{originalUrlErrorMessage}</div> : null}
+        </div>
         <div className="flex h-full flex-col gap-[8px]">
           <div className="flex flex-col gap-[24px] text-sm font-medium text-[var(--color-gray-900)]">
             <div>
