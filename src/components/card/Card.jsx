@@ -22,9 +22,6 @@ export default function ChallengeCard({
 }) {
   const [status, setStatus] = useState("");
 
-  //디버깅
-  console.log("isAdmin", isAdmin);
-
   //챌린지 상태(status) 계산
   useEffect(() => {
     const now = new Date();
