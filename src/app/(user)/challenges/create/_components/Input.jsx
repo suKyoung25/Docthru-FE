@@ -24,6 +24,7 @@ function Input({ type, title, placeholder, onChange, value, height, deadline, se
           onChange={(date) => setDeadline(date)}
           dateFormat="yy/MM/dd"
           placeholderText="YYYY-MM-DD"
+          minDate={new Date()}
           className="h-[48px] w-full rounded-xl border border-gray-300 px-4 py-2 focus:ring-2 focus:outline-none"
           calendarClassName="!z-50"
         />
