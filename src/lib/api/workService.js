@@ -5,8 +5,7 @@ const BASE_URL = process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC
 const fetchConfig = {
   credentials: "include",
   headers: {
-    "Content-Type": "application/json",
-    Origin: process.env.NEXT_PUBLIC_CLIENT_URL // 프론트엔드 도메인
+    "Content-Type": "application/json"
   },
   mode: "cors"
 };
