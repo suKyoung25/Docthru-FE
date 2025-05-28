@@ -5,11 +5,11 @@ import dropdownIcon from "@/assets/icon/ic_menu.svg";
 import clockIcon from "@/assets/icon/ic_clock.svg";
 import usersIcon from "@/assets/icon/ic_person.svg";
 import { typeChipMap, categoryChipMap } from "../chip/chipMaps";
-
-import ChipCardStatus from "@/components/chip/chipComplete/ChipCardStatus"; // 좌상단 chip
-import { useEffect, useState, useRef } from "react"; // useRef 추가
-import { useAuth } from "@/providers/AuthProvider";
+import ChipCardStatus from "@/components/chip/chipComplete/ChipCardStatus";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import DeclineModal from "../modal/DeclineModal";
+import { deleteChallengeAction } from "@/lib/actions/challenge";
 
 export default function ChallengeCard({
   challengeId,
@@ -25,6 +25,7 @@ export default function ChallengeCard({
 }) {
   const [status, setStatus] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isDeclineModalOpen, setIsDeclineModalOpen] = useState(false);
   const dropdownRef = useRef(null);
 
   const router = useRouter()
@@ -69,8 +70,23 @@ export default function ChallengeCard({
   };
 
   const handleDelete = () => {
-    router.push(`/admin/challenges/${challengeId}/edit`)
+    setIsDeclineModalOpen(true);
     setIsDropdownOpen(false);
+  };
+
+  const handleCloseDeclineModal = () => {
+    setIsDeclineModalOpen(false);
+  };
+
+  const handleConfirmDelete = async (adminMessage) => {
+    try {
+      await deleteChallengeAction(challengeId, adminMessage);
+      setIsDeclineModalOpen(false);
+      router.refresh();
+    } catch (error) {
+      console.error("챌린지 삭제 실패:", error);
+      alert("챌린지 삭제에 실패했습니다: " + error.message);
+    }
   };
 
   return (
@@ -95,13 +111,13 @@ export default function ChallengeCard({
               <div className="absolute right-0 top-full z-10 mt-2 w-28 rounded-md border border-gray-200 bg-white shadow-lg">
                 <button
                   onClick={handleEdit}
-                  className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+                  className="block w-full px-4 py-2 text-center text-sm text-gray-700 hover:bg-gray-100"
                 >
                   수정하기
                 </button>
                 <button
                   onClick={handleDelete}
-                  className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+                  className="block w-full px-4 py-2 text-center text-sm text-gray-700 hover:bg-gray-100"
                 >
                   삭제하기
                 </button>
@@ -137,6 +153,13 @@ export default function ChallengeCard({
             </div>
           </div>
         </>
+      )}
+      {isDeclineModalOpen && (
+        <DeclineModal
+          text="삭제"
+          onClose={handleCloseDeclineModal}
+          onConfirm={handleConfirmDelete}
+        />
       )}
     </div>
   );
