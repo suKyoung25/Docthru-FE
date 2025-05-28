@@ -9,8 +9,10 @@ import { typeChipMap, categoryChipMap } from "../chip/chipMaps";
 import ChipCardStatus from "@/components/chip/chipComplete/ChipCardStatus"; // 좌상단 chip
 import { useEffect, useState, useRef } from "react"; // useRef 추가
 import { useAuth } from "@/providers/AuthProvider";
+import { useRouter } from "next/navigation";
 
 export default function ChallengeCard({
+  challengeId,
   title,
   type,
   category,
@@ -24,6 +26,8 @@ export default function ChallengeCard({
   const [status, setStatus] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+
+  const router = useRouter()
 
   useEffect(() => {
     const now = new Date();
@@ -60,12 +64,12 @@ export default function ChallengeCard({
   };
 
   const handleEdit = () => {
-    alert("수정하기 클릭!");
+    router.push(`/admin/challenges/${challengeId}/edit`)
     setIsDropdownOpen(false);
   };
 
   const handleDelete = () => {
-    alert("삭제하기 클릭!");
+    router.push(`/admin/challenges/${challengeId}/edit`)
     setIsDropdownOpen(false);
   };
 

@@ -124,6 +124,7 @@ function Page() {
           filteredChallenges.map((challenge) => (
             <div key={challenge.id}>
               <ChallengeCard
+                challengeId={challenge.id}
                 title={challenge.title}
                 type={challenge.docType}
                 category={challenge.category}
