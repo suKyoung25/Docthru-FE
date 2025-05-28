@@ -31,7 +31,7 @@ export default function ApplicationsPage() {
     setKeyword,
   } = useChallenges(myChallengeStatus);
 
-
+  console.log(challenges)
   return (
     <>
       <div className="flex justify-between mb-4 gap-2">
@@ -53,18 +53,15 @@ export default function ApplicationsPage() {
         ) : error ? (
           <div className="text-red-500">{error}</div>
         ) : challenges.length > 0 ? (
-          challenges.map((challenge) => (
             <AppliedChallenges
-             
               columnSetting={columnSetting}
-              result={challenges}
-              onClick={(id) => router.push(`/challenges/${id}`)}
+              resultData={challenges}
+              onClick={(id) => router.push(`)/challenges/${id}`)}
               totalCount={totalCount}
               page={page}
               pageSize={pageSize}
               onPageChange={(newPage) => setPage(newPage)}
             />
-          ))
         ) : (
           <div>챌린지가 존재하지 않습니다.</div>
         )}
