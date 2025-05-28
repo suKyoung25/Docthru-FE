@@ -36,7 +36,7 @@ export default function BtnText({ theme, icon, disabled, onClick, className = ""
       {/* 포기 버튼 */}
       {icon && theme === "tonal" ? (
         <>
-          <span className="hidden sm:inline">포기</span>
+          <span className="mr-[2.5px] hidden sm:inline">포기</span>
           <Image src={iconWithDraw} alt="포기하기" className="h-4 w-4 sm:h-5 sm:w-5" />
         </>
       ) : (
@@ -44,7 +44,7 @@ export default function BtnText({ theme, icon, disabled, onClick, className = ""
       )}
 
       {/* 링크 버튼 아이콘 */}
-      {theme === "link" && <Image src={iconLink} alt="링크" className="h-4 w-4 sm:h-5 sm:w-5" />}
+      {theme === "link" && <Image src={iconLink} alt="링크" width={24} height={24} />}
     </button>
   );
 }
