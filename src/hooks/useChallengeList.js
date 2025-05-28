@@ -49,7 +49,11 @@ const useChallenges = (myChallengeStatus) => {
         });
       }
       console.log(filteredResults)
-      setChallenges(filteredResults);
+      if (page === 1) {
+        setChallenges(filteredResults);
+      } else {
+        setChallenges((prev) => [...prev, ...filteredResults]);
+      }
     } catch (err) {
       console.error("챌린지 목록 불러오기 실패:", err);
       setError("챌린지 목록을 불러오는 데 실패했습니다.");
@@ -61,7 +65,7 @@ const useChallenges = (myChallengeStatus) => {
 
   useEffect(() => {
     getChallengesData();
-  }, [getChallengesData]);
+}, [getChallengesData, myChallengeStatus]);
 
   useEffect(() => {
     setPage(1);
