@@ -85,6 +85,9 @@ function Page() {
   // //띄어뜨시 잘못해도 검색 가능 하도록
   // const trimmedKeyword = () => (keyword ? keyword.trim() : "");
 
+  //디버깅
+  console.log("challenges", challenges);
+
   return (
     <div className="mx-[16px] mt-[16px] mb-[65px] [@media(min-width:1200px)]:mx-[462px]">
       <div className="font-pretendard flex flex-row items-center justify-between text-[20px] font-semibold">
