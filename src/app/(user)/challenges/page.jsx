@@ -57,17 +57,16 @@ function Page() {
     setIsModal(false);
   };
 
-  //초성으로 검색하기 위한 함수 (검색어의 초성만 추출하여 문자열로 반환)
+  //검색에서 초성만 문자열로 뽑아냄
   const getInitials = (text) => {
     if (!text) return "";
     return Hangul.d(text, true)
       .map(([initial]) => initial)
-      .join("");
+      .join(""); //>"ㅊㄹㄷ"
   };
 
-  //이미 검색어가 초성이라면 getInitials 함수 적용되면 오류남
+  //검색어가 이미 초성인지 확인 Boolean 리턴
   const isInitialsOnly = (text) => {
-    // 초성 범위 (ㄱ ~ ㅎ) 정규식
     return /^[ㄱ-ㅎ]+$/.test(text);
   };
 
@@ -75,11 +74,13 @@ function Page() {
   const filteredChallenges = useMemo(() => {
     if (!keyword) return challenges;
 
-    const keywordInitials = isInitialsOnly(keyword) ? keyword : getInitials(keyword);
+    const trimmedKeyword = keyword.trim();
+    const keywordInitials = isInitialsOnly(trimmedKeyword) ? trimmedKeyword : getInitials(trimmedKeyword);
 
     const includeKeywordChallenges = challenges.filter((challenge) => {
       const titleInitials = getInitials(challenge.title);
-      return titleInitials.includes(keywordInitials);
+      const result = titleInitials.includes(keywordInitials);
+      return result;
     });
 
     //디버깅

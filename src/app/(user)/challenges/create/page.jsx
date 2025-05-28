@@ -177,11 +177,9 @@ export default function page() {
         />
       </div>
 
-      <div className="h-[48px] w-full">
-        <BtnText theme="solidblack" disabled={!isFormValid} onClick={handlePost}>
-          신청하기
-        </BtnText>
-      </div>
+      <BtnText theme="solidblack" className="h-[48px] w-full" disabled={!isFormValid} onClick={handlePost}>
+        신청하기
+      </BtnText>
     </div>
   );
 }
