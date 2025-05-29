@@ -11,7 +11,15 @@ const useChallenges = (myChallengeStatus) => {
   const [keyword, setKeyword] = useState("");
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(4);
+
+  const getInitialPageSize = () => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth > 375 ? 5 : 4;
+    }
+    return 4;
+  };
+
+  const [pageSize, setPageSize] = useState(getInitialPageSize);
   const [filterCount, setFilterCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -34,68 +42,23 @@ const useChallenges = (myChallengeStatus) => {
       setTotalCount(challengesResults.totalCount);
       const results = challengesResults.data;
 
-      const currentDate = new Date();
-
-      let filteredResults = results;
-      if (filters.status === "progress") {
-        filteredResults = results.filter((result) => {
-          const deadlineDate = new Date(result.deadline);
-          return deadlineDate.getTime() > currentDate.getTime();
-        });
-      } else if (filters.status === "closed") {
-        filteredResults = results.filter((result) => {
-          const deadlineDate = new Date(result.deadline);
-          return deadlineDate.getTime() < currentDate.getTime();
-        });
-      }
-      console.log(filteredResults)
-      if (page === 1) {
-        setChallenges(filteredResults);
-      } else {
-        setChallenges((prev) => [...prev, ...filteredResults]);
-      }
+      setChallenges(results);
     } catch (err) {
       console.error("챌린지 목록 불러오기 실패:", err);
       setError("챌린지 목록을 불러오는 데 실패했습니다.");
-      setChallenges([]); 
+      setChallenges([]);
     } finally {
       setIsLoading(false);
     }
-  }, [
-      page,
-      pageSize,
-      keyword,
-      filters.categories,
-      filters.docType,
-      filters.status,
-      myChallengeStatus  
-  ]);
+  }, [page, pageSize, keyword, filters.categories, filters.docType, filters.status, myChallengeStatus]);
 
   useEffect(() => {
     getChallengesData();
-}, [getChallengesData, myChallengeStatus]);
+  }, [getChallengesData, myChallengeStatus]);
 
   useEffect(() => {
     setPage(1);
   }, [filters, keyword]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-      if (width > 375) {
-        setPageSize(5);
-      } else {
-        setPageSize(4);
-      }
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   const applyFilters = useCallback(({ fields, docType, status }) => {
     setFilters({
