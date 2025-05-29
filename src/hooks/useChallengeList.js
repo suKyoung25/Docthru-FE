@@ -15,7 +15,15 @@ const useChallenges = (myChallengeStatus="") => {
   const [keyword, setKeyword] = useState("");
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(4);
+
+  const getInitialPageSize = () => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth > 375 ? 5 : 4;
+    }
+    return 4;
+  };
+
+  const [pageSize, setPageSize] = useState(getInitialPageSize);
   const [filterCount, setFilterCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -41,6 +49,7 @@ const useChallenges = (myChallengeStatus="") => {
       setTotalCount(challengesResults.totalCount);
       const results = Array.isArray(challengesResults?.data) ? challengesResults.data : [];
 
+
       const currentDate = new Date();
 
       let filteredResults = results;
@@ -64,15 +73,19 @@ const useChallenges = (myChallengeStatus="") => {
     }
   }, [user, page, pageSize, keyword, categories, docType, status]);
 
+
   useEffect(() => {
     console.log("user or getChallengesData changed", user, getChallengesData);
      if (!user) return; // 로그인 안 되어 있으면 실행 X
     getChallengesData();
-  }, [getChallengesData]);
+
+  }, [getChallengesData, myChallengeStatus]);
+
 
   useEffect(() => {
     setPage(1);
   }, [filters, keyword]);
+
 
   useEffect(() => {
     const handleResize = () => {
@@ -93,6 +106,7 @@ const useChallenges = (myChallengeStatus="") => {
   }, []);
 
   const applyFilters = useCallback(({ fields = [], docType = "", status = "" }) => {
+
     setFilters({
       categories: fields,
       docType,
