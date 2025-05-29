@@ -1,6 +1,6 @@
 "use client";
 
-import AppliedChallenges from "@/app/(user)/challenges/[userId]/my/apply/_components/AppliedChallenges";
+import AppliedChallenges from "@/app/(user)/challenges/my/apply/_components/AppliedChallenges";
 import ApplyDropdown from "@/components/dropDown/list/ApplyDropdown";
 import SearchInput from "@/components/input/SearchInput";
 import Sort from "@/components/sort/Sort";
