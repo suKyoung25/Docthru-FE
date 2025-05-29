@@ -21,7 +21,7 @@ const getAuthHeaders = async () => {
 
 // 챌린지 목록 가져오기
 
-export async function getChallenges({ page = 1, pageSize = 4, category, docType, keyword, status, myChallengeStatus }) {
+export async function getChallenges({ page = 1, pageSize = 4, category, docType, keyword, status }, myChallengeStatus) {
 
   const headers = await getAuthHeaders();
 

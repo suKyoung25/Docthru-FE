@@ -1,7 +1,7 @@
 import { getChallenges } from "@/lib/api/challenge-api/searchChallenge";
 import { useState, useEffect, useCallback } from "react";
 
-const useChallenges = () => {
+const useChallenges = (myChallengeStatus) => {
 
   const [filters, setFilters] = useState({
     categories: [],
@@ -38,11 +38,27 @@ const useChallenges = () => {
         status: filters.status
       };
 
-      const challengesResults = await getChallenges(options) ?? { data: [], totalCount: 0 };
+      const challengesResults = await getChallenges(options, myChallengeStatus) ?? { data: [], totalCount: 0 };
       setTotalCount(challengesResults.totalCount);
-      const results = challengesResults.data;
-      
-      setChallenges(results);
+
+      const results = Array.isArray(challengesResults?.data) ? challengesResults.data : [];
+
+      const currentDate = new Date();
+
+      let filteredResults = results;
+      if (filters.status === "progress") {
+        filteredResults = results.filter((result) => {
+          const deadlineDate = new Date(result.deadline);
+          return deadlineDate.getTime() > currentDate.getTime();
+        });
+      } else if (filters.status === "closed") {
+        filteredResults = results.filter((result) => {
+          const deadlineDate = new Date(result.deadline);
+          return deadlineDate.getTime() < currentDate.getTime();
+        });
+      }
+      setChallenges(filteredResults);
+
     } catch (err) {
       console.error("챌린지 목록 불러오기 실패:", err);
       setError("챌린지 목록을 불러오는 데 실패했습니다.");
