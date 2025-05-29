@@ -16,8 +16,8 @@ export default function AppliedChallenges({ resultData, totalCount, page, pageSi
       <div>
         {resultData?.map((data) => (
           <Link
-            key={data.id}
-            href={pathname.startsWith("/admin") ? `/admin/management/${data.id}` : `/challenges/my/apply/${data.id}`}
+            key={data?.id}
+            href={pathname.startsWith("/admin") ? `/admin/management/${data?.id}` : `/challenges/my/apply/${data?.id}`}
           >
             <ListRow data={data} />
           </Link>

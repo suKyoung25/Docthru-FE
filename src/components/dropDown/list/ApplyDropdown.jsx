@@ -1,18 +1,17 @@
-import { APPLY_DROPDOWN_OPTIONS } from "@/constant/constant";
+import { SORT_OPTIONS } from "@/constant/constant";
 import React from "react";
 
-function ApplyDropdown() {
+function ApplyDropdown({ onSelect, className }) {
   return (
-    <div className="flex flex-col bg-white w-35 border border-gray-300 rounded-lg overflow-hidden">
-      {APPLY_DROPDOWN_OPTIONS.map((label, index) => (
-        <div
-          key={index}
-          className={`flex justify-start items-center bg-white h-[41px] md:h-[43px] px-4 border-b border-gray-300 last:border-b-0 ${
-            index === 0 ? "rounded-t-lg" : index === APPLY_DROPDOWN_OPTIONS.length - 1 ? "rounded-b-lg" : ""
-          }`}
+    <div className={`flex w-35 flex-col overflow-hidden rounded-lg border border-gray-300 bg-white ${className}`}>
+      {SORT_OPTIONS.map(({ label, value }) => (
+        <button
+          key={value}
+          onClick={() => onSelect({ label, value })}
+          className="flex h-[41px] items-center justify-start border-b border-gray-300 bg-white px-4 last:border-b-0 md:h-[43px]"
         >
-          <div className="text-gray-500 text-sm md:text-base">{label}</div>
-        </div>
+          <span className="text-sm text-gray-500 md:text-base">{label}</span>
+        </button>
       ))}
     </div>
   );

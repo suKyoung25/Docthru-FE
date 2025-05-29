@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 
-const BASE_URL = process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_API_URL : "http://localhost:8080";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // accessToken을 안전하게 추출
 const getAccessToken = async () => {

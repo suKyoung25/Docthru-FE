@@ -11,6 +11,8 @@ import OfficialDocChip from "@/components/chip/chipCategory/OfficialDocChip";
 import Menu from "./Menu";
 import { useAuth } from "@/providers/AuthProvider";
 import { getWorkDetailAction, deleteWorkAction } from "@/lib/actions/work";
+import DeclineModal from "@/components/modal/DeclineModal";
+import { deleteChallengeAction } from "@/lib/actions/admin";
 
 const categoryComponentMap = {
   "Next.js": NextjsChip,
@@ -29,10 +31,13 @@ export default function Header() {
   const { challengeId, workId } = useParams();
   const [challenge, setChallenge] = useState(null);
   const [work, setWork] = useState(null);
+  const [isDeclineModalOpen, setIsDeclineModalOpen] = useState(false);
   const { user } = useAuth();
   const router = useRouter();
 
-  // 챌린지 조회 (기존 fetch 유지)
+  const isAdmin = user?.role === "ADMIN";
+  const isAuthor = work?.author?.authorId === user?.id;
+
   useEffect(() => {
     const fetchChallenge = async () => {
       try {
@@ -64,9 +69,6 @@ export default function Header() {
     if (workId) fetchWork();
   }, [workId]);
 
-  // 작성자 여부 체크 (데이터 구조에 따라 수정 필요)
-  const isAuthor = work?.author?.authorId === user?.id; // 또는 work?.authorId === user?.id
-
   // 수정
   const handleEdit = () => {
     router.push(`/challenges/${challengeId}/work/${workId}/form`);
@@ -84,11 +86,31 @@ export default function Header() {
     }
   };
 
+  const handleAdminDelete = () => {
+    setIsDeclineModalOpen(true);
+  };
+
+  const handleCloseDeclineModal = () => {
+    setIsDeclineModalOpen(false);
+  };
+
+  const handleConfirmDelete = async (adminMessage) => {
+    try {
+      await deleteChallengeAction(challengeId, adminMessage);
+      // 삭제 성공 시, 해당 챌린지 페이지로 이동
+      router.push(`/challenges/${challengeId}`);
+    } catch (error) {
+      console.error("챌린지 삭제 실패:", error);
+      alert("챌린지 삭제에 실패했습니다: " + error.message);
+    }
+  };
+
   return (
     <div>
       <div className="mt-10 flex justify-between">
         <div className="mb-4 text-xl font-semibold text-gray-800 md:text-2xl">{challenge?.title || "Loading..."}</div>
         {isAuthor && <Menu onEdit={handleEdit} onDelete={handleDelete} />}
+        {isAdmin && <Menu onEdit={handleEdit} onDelete={handleAdminDelete} />}
       </div>
       <div className="flex items-center gap-2">
         {/* 카테고리 칩 */}
@@ -101,6 +123,9 @@ export default function Header() {
           docTypeComponentMap[challenge.docType] &&
           React.createElement(docTypeComponentMap[challenge.docType])}
       </div>
+      {isDeclineModalOpen && (
+        <DeclineModal text="삭제" onClose={handleCloseDeclineModal} onConfirm={handleConfirmDelete} />
+      )}
     </div>
   );
 }
