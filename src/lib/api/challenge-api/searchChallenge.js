@@ -21,12 +21,20 @@ const getAuthHeaders = async () => {
 };
 
 // 챌린지 목록 가져오기
-export async function getChallenges({ page = 1, pageSize = 4, category, docType, keyword, myChallengeStatus}) {
+export async function getChallenges({
+  page = 1,
+  pageSize = 4,
+  category,
+  docType,
+  keyword,
+  myChallengeStatus
+}) {
   const headers = await getAuthHeaders();
 
   const params = new URLSearchParams();
   params.set("page", page);
   params.set("pageSize", pageSize);
+
   if (category) params.set("category", category);
   if (docType) params.set("docType", docType);
   if (keyword) {
@@ -34,23 +42,42 @@ export async function getChallenges({ page = 1, pageSize = 4, category, docType,
     params.set("keyword", cleanedKeyword);
   }
 
+  const isMyChallenge = typeof myChallengeStatus === "string" && myChallengeStatus.trim() !== "";
 
-    try {
-    let url = myChallengeStatus
-      ? `${API_URL}/users/me/challenges?myChallengeStatus=${myChallengeStatus}&${params.toString()}`
-      : `${API_URL}/challenges?${params.toString()}`;
+  const path = isMyChallenge ? "/users/me/challenges" : "/challenges";
 
+  if (isMyChallenge) {
+    params.set("myChallengeStatus", myChallengeStatus);
+  }
+
+  const url = `${API_URL}${path}?${params.toString()}`;
+
+  try {
     const res = await fetch(url, {
       method: "GET",
-      headers, // ✅ headers 추가
-      credentials: "include" // 필요하다면
+      headers,
+      credentials: "include"
     });
 
     if (!res.ok) throw new Error("챌린지 목록을 가져올 수 없습니다.");
-    return res.json();
+
+    const json = await res.json();
+
+    // 문제: 응답 자체가 null이거나 json.data가 아예 없는 경우
+    if (!json || typeof json !== "object") {
+      console.warn("⚠️ 응답이 예상과 다름:", json);
+      return { data: [], totalCount: 0 };
+    }
+
+
+    return {
+      data: Array.isArray(json?.data) ? json.data : [],
+      totalCount: typeof json?.totalCount === "number" ? json.totalCount : 0
+    };
   } catch (error) {
     console.error("🚨 서버 액션 - 챌린지 목록 오류", error);
     throw error;
   }
 }
+
 

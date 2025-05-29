@@ -1,8 +1,11 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { getChallenges } from "@/lib/api/challenge-api/searchChallenge";
+import { useAuth } from "@/providers/AuthProvider";
 
-const useChallenges = () => {
+const useChallenges = (myChallengeStatus="") => {
+
+  const { user } = useAuth();
   const [filters, setFilters] = useState({
     categories: [],
     docType: "",
@@ -20,6 +23,7 @@ const useChallenges = () => {
   const { categories, docType, status } = filters;
 
   const getChallengesData = useCallback(async () => {
+
     setIsLoading(true);
     setError(null);
     try {
@@ -29,12 +33,13 @@ const useChallenges = () => {
         keyword,
         category: filters.categories[0] || "",
         docType: filters.docType,
-        status: filters.status
+        status: filters.status,
+        myChallengeStatus,
       };
 
-      const challengesResults = await getChallenges(options);
+      const challengesResults = await getChallenges(options) ?? { data: [], totalCount: 0 };
       setTotalCount(challengesResults.totalCount);
-      const results = challengesResults.data;
+      const results = Array.isArray(challengesResults?.data) ? challengesResults.data : [];
 
       const currentDate = new Date();
 
@@ -57,9 +62,11 @@ const useChallenges = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [page, pageSize, keyword, categories, docType, status]);
+  }, [user, page, pageSize, keyword, categories, docType, status]);
 
   useEffect(() => {
+    console.log("user or getChallengesData changed", user, getChallengesData);
+     if (!user) return; // 로그인 안 되어 있으면 실행 X
     getChallengesData();
   }, [getChallengesData]);
 
