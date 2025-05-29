@@ -121,7 +121,7 @@ function Page() {
           <div className="text-red-500">{error}</div>
         ) : challenges.length > 0 ? (
           challenges.map((challenge) => (
-            <div key={challenge.id} onClick={() => handleClickCard(challenge.id)}>
+            <div key={challenge.id}>
               <ChallengeCard
                 challengeId={challenge.id}
                 title={challenge.title}
