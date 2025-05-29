@@ -1,10 +1,8 @@
-
 import { useState, useEffect, useCallback } from "react";
 import { getChallenges } from "@/lib/api/challenge-api/searchChallenge";
 import { useAuth } from "@/providers/AuthProvider";
 
-const useChallenges = (myChallengeStatus="") => {
-
+const useChallenges = (myChallengeStatus = "") => {
   const { user } = useAuth();
   const [filters, setFilters] = useState({
     categories: [],
@@ -31,7 +29,6 @@ const useChallenges = (myChallengeStatus="") => {
   const { categories, docType, status } = filters;
 
   const getChallengesData = useCallback(async () => {
-
     setIsLoading(true);
     setError(null);
     try {
@@ -42,13 +39,12 @@ const useChallenges = (myChallengeStatus="") => {
         category: filters.categories[0] || "",
         docType: filters.docType,
         status: filters.status,
-        myChallengeStatus,
+        myChallengeStatus
       };
 
-      const challengesResults = await getChallenges(options) ?? { data: [], totalCount: 0 };
+      const challengesResults = (await getChallenges(options)) ?? { data: [], totalCount: 0 };
       setTotalCount(challengesResults.totalCount);
       const results = Array.isArray(challengesResults?.data) ? challengesResults.data : [];
-
 
       const currentDate = new Date();
 
@@ -73,19 +69,16 @@ const useChallenges = (myChallengeStatus="") => {
     }
   }, [user, page, pageSize, keyword, categories, docType, status]);
 
+  // useEffect(() => {
+  //   console.log("user or getChallengesData changed", user, getChallengesData);
+  //    if (!user) return; // 로그인 안 되어 있으면 실행 X
+  //   getChallengesData();
 
-  useEffect(() => {
-    console.log("user or getChallengesData changed", user, getChallengesData);
-     if (!user) return; // 로그인 안 되어 있으면 실행 X
-    getChallengesData();
-
-  }, [getChallengesData, myChallengeStatus]);
-
+  // }, [getChallengesData, myChallengeStatus]);
 
   useEffect(() => {
     setPage(1);
   }, [filters, keyword]);
-
 
   useEffect(() => {
     const handleResize = () => {
@@ -106,7 +99,6 @@ const useChallenges = (myChallengeStatus="") => {
   }, []);
 
   const applyFilters = useCallback(({ fields = [], docType = "", status = "" }) => {
-
     setFilters({
       categories: fields,
       docType,
@@ -114,11 +106,7 @@ const useChallenges = (myChallengeStatus="") => {
     });
 
     //const currentFilterCount = [fields.length > 0 ? 1 : 0, docType ? 1 : 0, status ? 1 : 0].filter(Boolean).length;
-    const currentFilterCount = [
-      (fields?.length ?? 0) > 0,
-      !!docType,
-      !!status
-    ].filter(Boolean).length;
+    const currentFilterCount = [(fields?.length ?? 0) > 0, !!docType, !!status].filter(Boolean).length;
 
     setFilterCount(currentFilterCount);
   }, []);

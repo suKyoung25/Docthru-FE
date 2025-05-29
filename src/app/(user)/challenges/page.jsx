@@ -17,7 +17,7 @@ function Page() {
 
   useEffect(() => {
     if (!authLoading && user) {
-      setShouldFetch(true); // 로그인 상태 확인 후에만 데이터 패칭
+      // setShouldFetch(true); // 로그인 상태 확인 후에만 데이터 패칭
     }
   }, [user, authLoading]);
 
