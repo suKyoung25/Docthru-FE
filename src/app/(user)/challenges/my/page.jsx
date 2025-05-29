@@ -3,7 +3,5 @@
 import Mychallenges from "./_components/MyChallenges";
 
 export default function ParticipatedChallengesPage() {
-  return (
-    <Mychallenges myChallengeStatus="participated" />
-  )
+  return <Mychallenges myChallengeStatus="participated" />;
 }

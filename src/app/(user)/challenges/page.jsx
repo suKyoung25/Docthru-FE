@@ -56,38 +56,6 @@ function Page() {
     setIsModal(false);
   };
 
-  // //검색에서 초성만 문자열로 뽑아냄
-  // const getInitials = (text) => {
-  //   if (!text) return "";
-  //   return Hangul.d(text, true)
-  //     .map(([initial]) => initial)
-  //     .join(""); //>"ㅊㄹㄷ"
-  // };
-
-  // //검색어가 이미 초성인지 확인 Boolean 리턴
-  // const isInitialsOnly = (text) => {
-  //   return /^[ㄱ-ㅎ]+$/.test(text);
-  // };
-
-  //띄어쓰기 잘못해도 검색 가능하도록
-  // const filteredChallenges = useMemo(() => {
-  //   if (!keyword) return challenges;
-
-  //   const trimmedKeyword = keyword.trim();
-
-  //   const includeKeywordChallenges = challenges.filter((challenge) => {
-  //     return challenge.title.includes(trimmedKeyword);
-  //   });
-
-  //   return includeKeywordChallenges;
-  // }, [challenges, keyword]);
-
-  // //띄어뜨시 잘못해도 검색 가능 하도록
-  // const trimmedKeyword = () => (keyword ? keyword.trim() : "");
-
-  //디버깅
-  console.log("challenges", challenges);
-
   return (
     <div className="mx-[16px] mt-[16px] mb-[65px] [@media(min-width:1200px)]:mx-[462px]">
       <div className="font-pretendard flex flex-row items-center justify-between text-[20px] font-semibold">
@@ -130,6 +98,7 @@ function Page() {
                 deadline={challenge.deadline}
                 participants={challenge.participants.length}
                 maxParticipant={challenge.maxParticipant}
+                // status={challenge.status}
                 isAdmin={isAdmin}
                 onClick={() => handleClickCard(challenge.id)}
               />
