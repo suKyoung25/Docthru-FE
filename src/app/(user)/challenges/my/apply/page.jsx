@@ -4,17 +4,23 @@ import SearchInput from "@/components/input/SearchInput";
 import AppliedChallenges from "./_components/AppliedChallenges";
 import Sort from "@/components/sort/Sort";
 import useChallenges from "@/hooks/useChallengeList";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import React, { useState } from "react";
 import { useAuth } from "@/providers/AuthProvider";
-import { userService } from "@/lib/service/userService";
 import ApplyDropdown from "@/components/dropDown/list/ApplyDropdown";
 
 export default function ApplicationsPage() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [applications, setApplications] = useState();
-  const { user } = useAuth();
+  // const [applications, setApplications] = useState();
+  const { user, loading } = useAuth();
   const router = useRouter();
+  const { userId } = useParams();
+
+  if (loading) return <div>로딩 중...</div>;
+
+  if (!user || user.Id !== userId) {
+    return <div>접근 권한이 없습니다.</div>;
+  }
 
   const myChallengeStatus = "applied";
 
@@ -43,7 +49,7 @@ export default function ApplicationsPage() {
       ) : challenges.length > 0 ? (
         <AppliedChallenges
           resultData={challenges}
-          onClick={(id) => router.push(`)/challenges/${id}`)}
+          onClick={(id) => router.push(`/challenges/${id}`)}
           totalCount={totalCount}
           page={page}
           pageSize={pageSize}

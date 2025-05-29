@@ -1,7 +1,11 @@
-import { getChallenges } from "@/lib/api/challenge-api/searchChallenge";
-import { useState, useEffect, useCallback } from "react";
 
-const useChallenges = (myChallengeStatus) => {
+import { useState, useEffect, useCallback } from "react";
+import { getChallenges } from "@/lib/api/challenge-api/searchChallenge";
+import { useAuth } from "@/providers/AuthProvider";
+
+const useChallenges = (myChallengeStatus="") => {
+
+  const { user } = useAuth();
   const [filters, setFilters] = useState({
     categories: [],
     docType: "",
@@ -16,7 +20,10 @@ const useChallenges = (myChallengeStatus) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const { categories, docType, status } = filters;
+
   const getChallengesData = useCallback(async () => {
+
     setIsLoading(true);
     setError(null);
     try {
@@ -27,12 +34,12 @@ const useChallenges = (myChallengeStatus) => {
         category: filters.categories[0] || "",
         docType: filters.docType,
         status: filters.status,
-        myChallengeStatus
+        myChallengeStatus,
       };
 
-      const challengesResults = await getChallenges(options);
+      const challengesResults = await getChallenges(options) ?? { data: [], totalCount: 0 };
       setTotalCount(challengesResults.totalCount);
-      const results = challengesResults.data;
+      const results = Array.isArray(challengesResults?.data) ? challengesResults.data : [];
 
       const currentDate = new Date();
 
@@ -48,32 +55,20 @@ const useChallenges = (myChallengeStatus) => {
           return deadlineDate.getTime() < currentDate.getTime();
         });
       }
-      console.log(filteredResults)
-      if (page === 1) {
-        setChallenges(filteredResults);
-      } else {
-        setChallenges((prev) => [...prev, ...filteredResults]);
-      }
+      setChallenges(filteredResults);
     } catch (err) {
       console.error("챌린지 목록 불러오기 실패:", err);
       setError("챌린지 목록을 불러오는 데 실패했습니다.");
-      setChallenges([]); 
     } finally {
       setIsLoading(false);
     }
-  }, [
-      page,
-      pageSize,
-      keyword,
-      filters.categories,
-      filters.docType,
-      filters.status,
-      myChallengeStatus  
-  ]);
+  }, [user, page, pageSize, keyword, categories, docType, status]);
 
   useEffect(() => {
+    console.log("user or getChallengesData changed", user, getChallengesData);
+     if (!user) return; // 로그인 안 되어 있으면 실행 X
     getChallengesData();
-}, [getChallengesData, myChallengeStatus]);
+  }, [getChallengesData]);
 
   useEffect(() => {
     setPage(1);
@@ -97,14 +92,19 @@ const useChallenges = (myChallengeStatus) => {
     };
   }, []);
 
-  const applyFilters = useCallback(({ fields, docType, status }) => {
+  const applyFilters = useCallback(({ fields = [], docType = "", status = "" }) => {
     setFilters({
       categories: fields,
       docType,
       status
     });
 
-    const currentFilterCount = [fields.length > 0 ? 1 : 0, docType ? 1 : 0, status ? 1 : 0].filter(Boolean).length;
+    //const currentFilterCount = [fields.length > 0 ? 1 : 0, docType ? 1 : 0, status ? 1 : 0].filter(Boolean).length;
+    const currentFilterCount = [
+      (fields?.length ?? 0) > 0,
+      !!docType,
+      !!status
+    ].filter(Boolean).length;
 
     setFilterCount(currentFilterCount);
   }, []);
@@ -121,9 +121,7 @@ const useChallenges = (myChallengeStatus) => {
     error,
     setPage,
     setKeyword,
-    applyFilters,
-    setChallenges,
-    setTotalCount
+    applyFilters
   };
 };
 

@@ -6,17 +6,27 @@ import SearchInput from "@/components/input/SearchInput";
 import ChallengeCard from "@/components/card/Card";
 import FilterModal from "@/components/modal/FilterModal";
 import Pagination from "@/components/pagination/Pagination";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useChallenges from "@/hooks/useChallengeList";
 import { useAuth } from "@/providers/AuthProvider";
 import { useRouter } from "next/navigation";
 
 function Page() {
+
+  const [shouldFetch, setShouldFetch] = useState(false);
+  const { user, isLoading: authLoading } = useAuth(); // authLoading 추가
+
+  useEffect(() => {
+    if (!authLoading && user) {
+      setShouldFetch(true); // 로그인 상태 확인 후에만 데이터 패칭
+    }
+  }, [user, authLoading]);
+
+
   const [isModal, setIsModal] = useState(false);
   const router = useRouter();
 
   //현재 사용자가 일반유저인지, 관리자인지 확인
-  const { user } = useAuth();
   const isAdmin = user?.role === "ADMIN";
 
   //디버깅
@@ -41,7 +51,7 @@ function Page() {
     setPage,
     setKeyword,
     applyFilters
-  } = useChallenges();
+  } = useChallenges({ enabled: shouldFetch }); // 훅 내부에서 enabled로 조건 제어
 
   const handleClickFilter = () => {
     setIsModal(true);
@@ -55,6 +65,8 @@ function Page() {
     applyFilters(newFilters);
     setIsModal(false);
   };
+
+  const isInitialLoading = isLoading && page === 1 && challenges.length === 0;
 
   // //검색에서 초성만 문자열로 뽑아냄
   // const getInitials = (text) => {
@@ -89,7 +101,7 @@ function Page() {
   console.log("challenges", challenges);
 
   return (
-    <div className="mx-[16px] mt-[16px] mb-[65px] [@media(min-width:1200px)]:mx-[462px]">
+    <div className="mx-[16px] [@media(min-width:1200px)]:mx-[462px] mt-[16px] mb-[65px]">
       <div className="font-pretendard flex flex-row items-center justify-between text-[20px] font-semibold">
         챌린지 목록 <ApplyChallenge />
       </div>
@@ -113,8 +125,8 @@ function Page() {
       </div>
 
       <div className="flex flex-col gap-[24px] py-[24px]">
-        {isLoading ? (
-          <div className="font-pretendard flex h-full w-full flex-col items-center justify-center text-[16px] font-medium text-[var(--color-gray-500)]">
+        {isInitialLoading ? (
+          <div className="flex text-[var(--color-gray-500)] flex-col w-full h-full justify-center items-center text-[16px] font-medium font-pretendard">
             챌린지 목록을 불러오는 중...
           </div>
         ) : error ? (
@@ -123,7 +135,6 @@ function Page() {
           challenges.map((challenge) => (
             <div key={challenge.id} onClick={() => handleClickCard(challenge.id)}>
               <ChallengeCard
-                challengeId={challenge.id}
                 title={challenge.title}
                 type={challenge.docType}
                 category={challenge.category}
@@ -131,12 +142,11 @@ function Page() {
                 participants={challenge.participants.length}
                 maxParticipant={challenge.maxParticipant}
                 isAdmin={isAdmin}
-                onClick={() => handleClickCard(challenge.id)}
               />
             </div>
           ))
         ) : (
-          <div className="font-pretendard flex h-full w-full flex-col items-center justify-center text-[16px] font-medium text-[var(--color-gray-500)]">
+          <div className="flex text-[var(--color-gray-500)] flex-col w-full h-full justify-center items-center text-[16px] font-medium font-pretendard">
             <div>아직 챌린지가 없어요.</div>
             <div>지금 바로 챌린지를 신청해보세요!</div>
           </div>
