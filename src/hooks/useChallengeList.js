@@ -36,7 +36,7 @@ const useChallenges = (myChallengeStatus = "") => {
         page,
         pageSize,
         keyword,
-        category: filters.categories[0] || "",
+        category: filters.categories,
         docType: filters.docType,
         status: filters.status,
         myChallengeStatus
@@ -69,12 +69,19 @@ const useChallenges = (myChallengeStatus = "") => {
     }
   }, [user, page, pageSize, keyword, categories, docType, status]);
 
+  //에러 해결해야함
   // useEffect(() => {
   //   console.log("user or getChallengesData changed", user, getChallengesData);
   //    if (!user) return; // 로그인 안 되어 있으면 실행 X
   //   getChallengesData();
 
   // }, [getChallengesData, myChallengeStatus]);
+
+  //에러 해결 전까진 임시로 챌린지 목록 불러오려고 사용중
+  //목록 정상적으로 불러와지면 지워도 됨
+  useEffect(() => {
+    getChallengesData();
+  }, [filters, keyword]);
 
   useEffect(() => {
     setPage(1);

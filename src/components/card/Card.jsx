@@ -90,9 +90,6 @@ export default function ChallengeCard({
     }
   };
 
-  //디버깅
-  console.log("status", status);
-
   return (
     <div
       className={`flex flex-col ${variant === "simple" ? "h-auto justify-start" : "h-[227px] justify-between sm:h-[262px] md:h-[225px]"} ${variant === "simple" ? "" : "rounded-[12px] border-2 border-[var(--color-gray-800)]"} bg-white p-4`}
