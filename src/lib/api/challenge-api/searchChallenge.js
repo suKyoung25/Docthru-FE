@@ -66,6 +66,10 @@ export async function getChallenges({ page = 1, pageSize = 4, category, docType,
       credentials: "include"
     });
 
+    console.log("📡 요청 URL:", url);
+    console.log("📡 요청 Headers:", headers);
+    console.log("📡 응답 Status:", res.status);
+
     if (!res.ok) throw new Error("챌린지 목록을 가져올 수 없습니다.");
 
     const json = await res.json();
@@ -76,6 +80,7 @@ export async function getChallenges({ page = 1, pageSize = 4, category, docType,
       return { data: [], totalCount: 0 };
     }
 
+    console.log("📦 응답 데이터:", json); 
 
     return {
       data: Array.isArray(json?.data) ? json.data : [],
