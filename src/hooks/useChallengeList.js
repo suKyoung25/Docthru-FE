@@ -1,6 +1,5 @@
 import { getChallenges } from "@/lib/api/challenge-api/searchChallenge";
 import { useState, useEffect, useCallback } from "react";
-import { useAuth } from "@/providers/AuthProvider";
 
 const useChallenges = () => {
 
