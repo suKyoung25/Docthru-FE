@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import dropdownIcon from "@/assets/icon/ic_menu.svg";
 import DeclineModal from "@/components/modal/DeclineModal";
-import { deleteChallengeAction } from "@/lib/actions/challenge";
+import { deleteChallengeAction } from "@/lib/actions/admin";
 
 const categoryComponentMap = {
   "Next.js": NextjsChip,
@@ -142,7 +142,7 @@ export default function Header() {
         <div className="mb-4 text-xl font-semibold text-gray-800 md:text-2xl">{challenge?.title || "Loading..."}</div>
         {isAuthor && <Menu onEdit={handleEdit} onDelete={handleDelete} />}
       </div>
-      <div className="flex items-center gap-2 justify-between">
+      <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           {/*카테고리 칩*/}
           {challenge?.category &&
@@ -162,7 +162,7 @@ export default function Header() {
               <Image src={dropdownIcon} alt="드롭다운" width={24} height={24} />
             </button>
             {isDropdownOpen && (
-              <div className="absolute right-0 top-full z-10 mt-2 w-28 rounded-md border border-gray-200 bg-white shadow-lg">
+              <div className="absolute top-full right-0 z-10 mt-2 w-28 rounded-md border border-gray-200 bg-white shadow-lg">
                 <button
                   onClick={handleAdminEdit}
                   className="block w-full px-4 py-2 text-center text-sm text-gray-700 hover:bg-gray-100"
@@ -181,11 +181,7 @@ export default function Header() {
         ) : null}
       </div>
       {isDeclineModalOpen && (
-        <DeclineModal
-          text="삭제"
-          onClose={handleCloseDeclineModal}
-          onConfirm={handleConfirmDelete}
-        />
+        <DeclineModal text="삭제" onClose={handleCloseDeclineModal} onConfirm={handleConfirmDelete} />
       )}
     </div>
   );

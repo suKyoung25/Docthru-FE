@@ -8,8 +8,8 @@ import { typeChipMap, categoryChipMap } from "../chip/chipMaps";
 import ChipCardStatus from "@/components/chip/chipComplete/ChipCardStatus";
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import DeclineModal from "@/components/modal/DeclineModal";
-import { deleteChallengeAction } from "@/lib/actions/challenge";
+import DeclineModal from "../modal/DeclineModal";
+import { deleteChallengeAction } from "@/lib/actions/admin";
 
 export default function ChallengeCard({
   challengeId,
@@ -28,7 +28,7 @@ export default function ChallengeCard({
   const [isDeclineModalOpen, setIsDeclineModalOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     const now = new Date();
@@ -60,12 +60,12 @@ export default function ChallengeCard({
     return new Intl.DateTimeFormat("ko-KR", {
       year: "numeric",
       month: "long",
-      day: "numeric",
+      day: "numeric"
     }).format(date);
   };
 
   const handleEdit = () => {
-    router.push(`/admin/challenges/${challengeId}/edit`)
+    router.push(`/admin/challenges/${challengeId}/edit`);
     setIsDropdownOpen(false);
   };
 
@@ -91,16 +91,15 @@ export default function ChallengeCard({
 
   return (
     <div
-      className={`flex flex-col 
-      ${variant === "simple" ? "h-auto justify-start" : "h-[227px] justify-between sm:h-[262px] md:h-[225px]"}
-      ${variant === "simple" ? "" : "rounded-[12px] border-2 border-[var(--color-gray-800)]"}
-      bg-white p-4`}
+      className={`flex flex-col ${variant === "simple" ? "h-auto justify-start" : "h-[227px] justify-between sm:h-[262px] md:h-[225px]"} ${variant === "simple" ? "" : "rounded-[12px] border-2 border-[var(--color-gray-800)]"} bg-white p-4`}
     >
       <div className="relative flex items-start justify-between">
         {status ? (
           <ChipCardStatus status={status} />
         ) : (
-          <div className="text-xl font-semibold text-gray-800" onClick={onClick}>{title}</div>
+          <div className="text-xl font-semibold text-gray-800" onClick={onClick}>
+            {title}
+          </div>
         )}
         {isAdmin ? (
           <div ref={dropdownRef}>
@@ -108,7 +107,7 @@ export default function ChallengeCard({
               <Image src={dropdownIcon} alt="드롭다운" width={24} height={24} />
             </button>
             {isDropdownOpen && (
-              <div className="absolute right-0 top-full z-10 mt-2 w-28 rounded-md border border-gray-200 bg-white shadow-lg">
+              <div className="absolute top-full right-0 z-10 mt-2 w-28 rounded-md border border-gray-200 bg-white shadow-lg">
                 <button
                   onClick={handleEdit}
                   className="block w-full px-4 py-2 text-center text-sm text-gray-700 hover:bg-gray-100"
@@ -127,7 +126,11 @@ export default function ChallengeCard({
         ) : null}
       </div>
 
-      {status && <div className="mt-2 text-xl font-semibold text-gray-800" onClick={onClick}>{title}</div>}
+      {status && (
+        <div className="mt-2 text-xl font-semibold text-gray-800" onClick={onClick}>
+          {title}
+        </div>
+      )}
 
       <div className="mt-2 flex flex-wrap gap-2">
         {categoryChipMap[category] ?? null}
@@ -155,11 +158,7 @@ export default function ChallengeCard({
         </>
       )}
       {isDeclineModalOpen && (
-        <DeclineModal
-          text="삭제"
-          onClose={handleCloseDeclineModal}
-          onConfirm={handleConfirmDelete}
-        />
+        <DeclineModal text="삭제" onClose={handleCloseDeclineModal} onConfirm={handleConfirmDelete} />
       )}
     </div>
   );
