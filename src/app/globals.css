@@ -45,7 +45,7 @@
   --container-md: 744px;
 
   /* 챌린지조회 외 페이지 기준 크기 */
-  --container-challenge: 890px;
+  --container-challenge-other: 890px;
 
   /* 챌린지 조회 페이지 기준 크기 */
   --container-challenge: 996px;
