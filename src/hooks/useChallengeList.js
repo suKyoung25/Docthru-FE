@@ -17,6 +17,7 @@ const useChallenges = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const { categories, docType, status } = filters;
 
   const getChallengesData = useCallback(async () => {
     setIsLoading(true);
@@ -56,7 +57,7 @@ const useChallenges = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [page, pageSize, keyword, filters]);
+  }, [page, pageSize, keyword, categories, docType, status]);
 
   useEffect(() => {
     getChallengesData();

@@ -1,4 +1,4 @@
-import AdminStatusChip from "../app/(user)/challenges/my/apply/_components/AdminStatuschip.jsx";
+import AdminStatusChip from "../app/(user)/challenges/my/apply/_components/AdminStatuschip";
 
 export const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 export const API_URL = process.env.API_URL;

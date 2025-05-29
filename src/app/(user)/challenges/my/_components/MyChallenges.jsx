@@ -4,7 +4,7 @@ import React, { useCallback, useEffect } from "react";
 import SearchInput from "@/components/input/SearchInput";
 import ChallengeCard from "@/components/card/Card";
 import useChallenges from "@/hooks/useChallengeList";
-export default function Mychallenges({children, myChallengeStatus}) {
+export default function Mychallenges({myChallengeStatus}) {
   
   const {
     challenges,
