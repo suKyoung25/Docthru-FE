@@ -11,20 +11,32 @@ import { usePathname } from "next/navigation";
 import Logo from "./_components/Logo";
 import Profile from "@/components/dropDown/Profile";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
+import NotificationModal from "@/components/modal/NotificationModal";
 
 export default function Gnb({ isNoti, userRole }) {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isNotiModalOpen, setIsNotiModalOpen] = useState(false);
   const pathname = usePathname();
   const profileRef = useRef(null);
+  const notiButtonRef = useRef(null);
 
   useOutsideClick(profileRef, () => setIsProfileOpen(false));
 
-  const handleClickProfile = () => setIsProfileOpen((prev) => !prev);
+  const handleClickProfile = () => {
+    setIsProfileOpen((prev) => !prev);
+    setIsNotiModalOpen(false);
+  };
+
+  const handleClickNoti = (e) => {
+    e.stopPropagation();
+    setIsNotiModalOpen((prev) => !prev);
+    setIsProfileOpen(false);
+  };
 
   return (
     <header className="flex h-14 items-center justify-between bg-[#FFFFFF] px-4 sm:px-6 md:h-15 lg:px-8">
       <div className="flex items-center gap-4">
-        <Logo className="md:w-30 md:h-[27px]" />
+        <Logo className="md:h-[27px] md:w-30" />
         {userRole === "admin" && (
           <>
             <Link
@@ -50,10 +62,10 @@ export default function Gnb({ isNoti, userRole }) {
           </>
         )}
       </div>
-      <div className="flex gap-4 relative" ref={profileRef}>
+      <div className="relative flex gap-4" ref={profileRef}>
         {userRole === "member" && (
           <>
-            <button aria-label="알림">
+            <button ref={notiButtonRef} aria-label="알림" onClick={handleClickNoti}>
               <Image
                 src={isNoti ? notiOn : notiOff}
                 alt={isNoti ? "알림 있음 아이콘" : "알림 없음 아이콘"}
@@ -81,8 +93,9 @@ export default function Gnb({ isNoti, userRole }) {
             </button>
           </Link>
         )}
+        {isNotiModalOpen && <NotificationModal onClose={() => setIsNotiModalOpen(false)} buttonRef={notiButtonRef} />}
         {isProfileOpen && (
-          <div className="absolute z-1 top-10 right-0">
+          <div className="absolute top-10 right-0 z-1">
             <Profile userRole={userRole} />
           </div>
         )}
