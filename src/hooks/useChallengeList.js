@@ -61,7 +61,15 @@ const useChallenges = (myChallengeStatus) => {
     } finally {
       setIsLoading(false);
     }
-  }, [page, pageSize, keyword, filters]);
+  }, [
+      page,
+      pageSize,
+      keyword,
+      filters.categories,
+      filters.docType,
+      filters.status,
+      myChallengeStatus  
+  ]);
 
   useEffect(() => {
     getChallengesData();
