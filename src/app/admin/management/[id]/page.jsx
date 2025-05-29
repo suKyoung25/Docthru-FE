@@ -9,7 +9,7 @@ import { useParams } from "next/navigation";
 import { userService } from "@/lib/service/userService";
 import BtnText from "@/components/btn/text/BtnText";
 import DeclineModal from "@/components/modal/DeclineModal";
-import { acceptChallengeAction, declineChallengeAction } from "@/lib/actions/challenge";
+import { acceptChallengeAction, declineChallengeAction } from "@/lib/actions/admin";
 import Image from "next/image";
 import arrorLeft from "@/assets/icon/ic_arrow_left.svg";
 import arrorRight from "@/assets/icon/ic_arrow_right.svg";
@@ -78,14 +78,14 @@ export default function AdminApplicationPage() {
       <OriginalUrlSection originalPageUrl={challenge?.originalUrl} />
       {(application?.adminStatus === "PENDING" || application?.adminStatus === "ACCEPTED") && <LineDivider />}
       {application?.adminStatus === "PENDING" && (
-        <div className="flex gap-3 md:justify-end">
+        <div className="flex h-10 gap-3 md:h-12 md:justify-end">
           <BtnText
             theme="tonal"
             children="거절하기"
-            className="w-[166px] md:w-[158px]"
+            className="w-full md:w-[158px]"
             onClick={() => setisModalOpen(true)}
           />
-          <BtnText theme="solidblack" children="승인하기" className="w-[166px] md:w-[158px]" onClick={handleAccept} />
+          <BtnText theme="solidblack" children="승인하기" className="w-full md:w-[158px]" onClick={handleAccept} />
         </div>
       )}
       {isModalOpen && <DeclineModal onClose={() => setisModalOpen(false)} onConfirm={handleConfirmDecline} />}

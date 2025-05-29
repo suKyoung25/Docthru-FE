@@ -9,9 +9,9 @@ import { useEffect, useState } from "react";
 import useChallenges from "@/hooks/useChallengeList";
 import ApplyChallenge from "@/app/(user)/challenges/_components/ApplyChallenge";
 import DeclineModal from "@/components/modal/DeclineModal";
-import { toast } from 'react-hot-toast';
+import { toast } from "react-hot-toast";
 import { useAuth } from "@/providers/AuthProvider";
-import { deleteChallengeAction } from "@/lib/actions/challenge";
+import { deleteChallengeAction } from "@/lib/actions/admin";
 
 function Page() {
   const [isModal, setIsModal] = useState(false);
@@ -22,7 +22,7 @@ function Page() {
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    if (user && user.role === 'ADMIN') {
+    if (user && user.role === "ADMIN") {
       setIsAdmin(true);
     } else {
       setIsAdmin(false);
@@ -43,7 +43,7 @@ function Page() {
     setKeyword,
     applyFilters,
     setChallenges,
-    setTotalCount,
+    setTotalCount
   } = useChallenges();
 
   const handleClickFilter = () => {
@@ -71,11 +71,8 @@ function Page() {
       await deleteChallengeAction(challengeToDeclineId, adminMessage);
       toast.success("챌린지가 성공적으로 삭제되었습니다.");
 
-      setChallenges((prevChallenges) =>
-        prevChallenges.filter((challenge) => challenge.id !== challengeToDeclineId)
-      );
+      setChallenges((prevChallenges) => prevChallenges.filter((challenge) => challenge.id !== challengeToDeclineId));
       setTotalCount((prevCount) => prevCount - 1);
-
     } catch (err) {
       toast.error(`챌린지 삭제에 실패했습니다: ${err.message}`);
       console.error("챌린지 삭제 에러:", err);
@@ -92,11 +89,7 @@ function Page() {
       </div>
       <div className="mt-[16px] flex flex-row gap-[8px]">
         <div className="flex-[1]">
-          <Sort
-            onClick={handleClickFilter}
-            isFiltered={filterCount > 0}
-            count={filterCount}
-          />
+          <Sort onClick={handleClickFilter} isFiltered={filterCount > 0} count={filterCount} />
           {isModal && (
             <FilterModal
               onApply={handleApplyFilters}
@@ -108,11 +101,7 @@ function Page() {
           )}
         </div>
         <div className="flex-[2.5]">
-          <SearchInput
-            text={"text-[14px]"}
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-          />
+          <SearchInput text={"text-[14px]"} value={keyword} onChange={(e) => setKeyword(e.target.value)} />
         </div>
       </div>
 
@@ -148,11 +137,7 @@ function Page() {
       />
 
       {isDeclineModalOpen && (
-        <DeclineModal
-          onClose={() => setIsDeclineModalOpen(false)}
-          onConfirm={handleConfirmDecline}
-          isLoggedIn={true}
-        />
+        <DeclineModal onClose={() => setIsDeclineModalOpen(false)} onConfirm={handleConfirmDecline} isLoggedIn={true} />
       )}
     </div>
   );
