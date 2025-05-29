@@ -5,6 +5,7 @@ import SearchInput from "@/components/input/SearchInput";
 import ChallengeCard from "@/components/card/Card";
 import useChallenges from "@/hooks/useChallengeList";
 export default function Mychallenges({myChallengeStatus}) {
+  console.log("🧩 Mychallenges 컴포넌트 렌더", myChallengeStatus);
   
   const {
     challenges,
