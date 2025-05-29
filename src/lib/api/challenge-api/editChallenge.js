@@ -1,4 +1,3 @@
-// const BASE_URL = "http://localhost:8080/challenges";
 import { BASE_URL } from "@/constant/constant";
 
 //챌린지 수정하기
