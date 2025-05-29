@@ -12,7 +12,6 @@ import { useAuth } from "@/providers/AuthProvider";
 import { useRouter } from "next/navigation";
 
 function Page() {
-
   const [shouldFetch, setShouldFetch] = useState(false);
   const { user, isLoading: authLoading } = useAuth(); // authLoading 추가
 
@@ -21,7 +20,6 @@ function Page() {
       setShouldFetch(true); // 로그인 상태 확인 후에만 데이터 패칭
     }
   }, [user, authLoading]);
-
 
   const [isModal, setIsModal] = useState(false);
   const router = useRouter();
@@ -66,9 +64,8 @@ function Page() {
     setIsModal(false);
   };
 
-
   return (
-    <div className="mx-[16px] [@media(min-width:1200px)]:mx-[462px] mt-[16px] mb-[65px]">
+    <div className="mx-[16px] mt-[16px] mb-[65px] [@media(min-width:1200px)]:mx-[462px]">
       <div className="font-pretendard flex flex-row items-center justify-between text-[20px] font-semibold">
         챌린지 목록 <ApplyChallenge />
       </div>
@@ -92,8 +89,8 @@ function Page() {
       </div>
 
       <div className="flex flex-col gap-[24px] py-[24px]">
-        {isInitialLoading ? (
-          <div className="flex text-[var(--color-gray-500)] flex-col w-full h-full justify-center items-center text-[16px] font-medium font-pretendard">
+        {isLoading ? (
+          <div className="font-pretendard flex h-full w-full flex-col items-center justify-center text-[16px] font-medium text-[var(--color-gray-500)]">
             챌린지 목록을 불러오는 중...
           </div>
         ) : error ? (
@@ -114,7 +111,7 @@ function Page() {
             </div>
           ))
         ) : (
-          <div className="flex text-[var(--color-gray-500)] flex-col w-full h-full justify-center items-center text-[16px] font-medium font-pretendard">
+          <div className="font-pretendard flex h-full w-full flex-col items-center justify-center text-[16px] font-medium text-[var(--color-gray-500)]">
             <div>아직 챌린지가 없어요.</div>
             <div>지금 바로 챌린지를 신청해보세요!</div>
           </div>
