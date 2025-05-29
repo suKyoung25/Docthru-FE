@@ -3,8 +3,8 @@
 import React from "react";
 import MyChallengesTab from "./_components/MyChallengesTab";
 import Container from "@/components/container/PageContainer";
-import ApplyChallenge from "../_components/ApplyChallenge";
 import { usePathname } from "next/navigation";
+import ApplyChallenge from "../_components/ApplyChallenge";
 
 function myChallengeLayout({ children }) {
   const pathname = usePathname();

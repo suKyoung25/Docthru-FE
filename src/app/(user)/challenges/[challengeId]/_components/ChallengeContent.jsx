@@ -13,12 +13,12 @@ export default function ChallengeContent({ title, description, category, docType
 
   return (
     <article className="flex w-full flex-col gap-4">
-      <div className="flex justify-between">
+      <div className="relative flex justify-between">
         <h2 className="text-xl font-semibold text-gray-800 md:text-2xl">{title}</h2>
-        <button className="relative" onClick={() => setIsModalOpen((prev) => !prev)}>
+        <button onClick={() => setIsModalOpen((prev) => !prev)}>
           {user?.role === "USER" && <Image src={dropdownIcon} alt="드롭다운" width={24} height={24} />}
+          {isModalOpen && <CancelDropdown className="absolute right-0 mt-3" />}
         </button>
-        {isModalOpen && <CancelDropdown className="absolute right-0 mt-3" />}
       </div>
       <div className="mt-2 flex flex-wrap gap-2">
         {categoryChipMap[category] ?? null}
