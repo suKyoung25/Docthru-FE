@@ -16,16 +16,18 @@ export default function ApplicationsPage() {
   const router = useRouter();
   const { userId } = useParams();
 
-  if (loading) return <div>로딩 중...</div>;
-
-  if (!user || user.Id !== userId) {
-    return <div>접근 권한이 없습니다.</div>;
-  }
+  
 
   const myChallengeStatus = "applied";
 
   const { challenges, totalCount, page, pageSize, keyword, isLoading, error, setPage, setKeyword } =
     useChallenges(myChallengeStatus);
+
+  if (loading) return <div>로딩 중...</div>;
+
+  if (!user || user.Id !== userId) {
+    return <div>접근 권한이 없습니다.</div>;
+  }
 
   console.log(challenges);
   return (
