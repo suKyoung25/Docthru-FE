@@ -15,6 +15,7 @@ import arrowLeft from "@/assets/icon/ic_arrow_left.svg";
 import TopRecommendedWork from "@/app/(user)/challenges/_components/TopRecommendedWork";
 import { createWorkAction } from "@/lib/actions/work";
 import { useRouter } from "next/navigation";
+import { assignRankingWithTies } from "@/lib/utils/assignRank";
 
 function useIsTablet() {
   const [isTablet, setIsTablet] = useState(false);
@@ -40,7 +41,9 @@ export default function ChallengeDetailPage() {
   const itemsPerPage = 5;
   const totalPages = Math.ceil(rankingData.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentItems = rankingData.slice(startIndex, startIndex + itemsPerPage);
+  const sortedData = [...rankingData].sort((a, b) => b.likeCount - a.likeCount);
+  const rankedData = assignRankingWithTies(sortedData);
+  const currentItems = rankedData.slice(startIndex, startIndex + itemsPerPage);
 
   const router = useRouter();
 
@@ -106,7 +109,7 @@ export default function ChallengeDetailPage() {
             currentCount={challenge.participants?.length || 0}
             maxCount={challenge.maxParticipant}
             originalUrl={challenge.originalUrl}
-            onChallenge={handleChallenge} // ✅ 전달
+            onChallenge={handleChallenge}
           />
         </div>
       </section>
@@ -148,20 +151,31 @@ export default function ChallengeDetailPage() {
 
         <div className="px-4">
           {currentItems.length > 0 ? (
-            currentItems.map((item, index) => (
-              <RankingListItem
-                key={item.workId}
-                item={{
-                  rank: startIndex + index + 1,
-                  userName: item.author.authorNickname,
-                  userRole:
-                    item.author.grade === "EXPERT" ? "전문가" : item.author.grade === "NORMAL" ? "일반" : "미정",
-                  likes: item.likeCount,
-                  isLiked: true,
-                  workId: item.workId
-                }}
-              />
-            ))
+            (() => {
+              const seenRanks = new Set();
+
+              return currentItems.map((item) => {
+                const isFirstOfRank = !seenRanks.has(item.rank);
+                seenRanks.add(item.rank);
+
+                return (
+                  <RankingListItem
+                    key={item.workId}
+                    item={{
+                      rank: item.rank,
+                      userName: item.author.authorNickname,
+                      userRole:
+                        item.author.grade === "EXPERT" ? "전문가" : item.author.grade === "NORMAL" ? "일반" : "미정",
+                      likes: item.likeCount,
+                      isLiked: true,
+                      workId: item.workId,
+                      challengeId: challenge.id
+                    }}
+                    highlight={isFirstOfRank}
+                  />
+                );
+              });
+            })()
           ) : (
             <p className="min-h-30 py-4 text-center text-gray-500">
               아직 참여한 도전자가 없어요,
