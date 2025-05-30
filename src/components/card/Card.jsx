@@ -98,7 +98,7 @@ export default function ChallengeCard({
         {status ? (
           <ChipCardStatus status={status} />
         ) : (
-          <div className="text-xl font-semibold text-gray-800" onClick={onClick}>
+          <div className="text-xl mt-1 mb-1 sm:text-[22px] font-semibold text-gray-800" onClick={onClick}>
             {title}
           </div>
         )}
@@ -108,7 +108,7 @@ export default function ChallengeCard({
               <Image src={dropdownIcon} alt="드롭다운" width={24} height={24} />
             </button>
             {isDropdownOpen && (
-              <div className="absolute top-full right-0 z-10 mt-2 w-28 rounded-md border border-gray-200 bg-white shadow-lg">
+              <div className="absolute top-4 right-0 z-10 mt-2 w-28 rounded-md border border-gray-200 bg-white shadow-lg">
                 <button
                   onClick={handleEdit}
                   className="block w-full px-4 py-2 text-center text-sm text-gray-700 hover:bg-gray-100"
@@ -128,7 +128,7 @@ export default function ChallengeCard({
       </div>
 
       {status && (
-        <div className="mt-2 text-xl font-semibold text-gray-800" onClick={onClick}>
+        <div className="mt-1 mb-1 text-xl  sm:text-[22px]  font-semibold text-gray-800" onClick={onClick}>
           {title}
         </div>
       )}
@@ -140,8 +140,7 @@ export default function ChallengeCard({
 
       {variant !== "simple" && (
         <>
-          <hr className="my-4 border-gray-200" />
-          <div className="flex justify-between items-center text-sm text-gray-500">
+          <div className="flex justify-between items-center text-sm text-gray-500 border-t border-gray-200 mt-4 pt-4 pb-2">
        
               <div className="flex flex-col sm:flex-row sm:gap-4">
                 <div className="flex items-center gap-1 ">
@@ -160,7 +159,7 @@ export default function ChallengeCard({
                 <BtnRoundedWithIcon 
                   theme="link" 
                   iconType = "continueChallenge" 
-                  onClick={()=>router.push(`/challenges/${challengeId}/`)}>
+                  onClick={()=>router.push(`/challenges/${challengeId}/works/${workId}`)}>
                     내 작업물 보기
                 </BtnRoundedWithIcon>
               </div> : ""
