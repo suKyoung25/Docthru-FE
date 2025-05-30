@@ -3,19 +3,14 @@
 import { cookies } from "next/headers";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
-// 액세스 토큰 추출
-const getAccessToken = async () => {
-  const cookieStore = cookies();
-  const token = cookieStore.get("accessToken")?.value;
-  return token;
-};
 
-// 인증 헤더 생성
+// 공통 헤더 생성 함수
 const getAuthHeaders = async () => {
-  const accessToken = await getAccessToken();
+  const cookieStore = await cookies();
+  const token = cookieStore.get("accessToken")?.value;
   return {
     "Content-Type": "application/json",
-    Cookie: `accessToken=${accessToken}`
+    Cookie: `accessToken=${token}`
   };
 };
 
