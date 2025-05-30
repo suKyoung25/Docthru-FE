@@ -14,7 +14,12 @@ function ChallengeSection({ challenge, adminStatus }) {
         docType={docType}
         adminStatus={adminStatus}
       />
-      <ChallengeInfo deadline={deadline} participants={participants} maxParticipant={maxParticipant} />
+      <ChallengeInfo
+        deadline={deadline}
+        participants={participants || ""}
+        maxParticipant={maxParticipant || ""}
+        adminStatus={adminStatus}
+      />
     </section>
   );
 }
