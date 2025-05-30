@@ -85,7 +85,7 @@ export default function AuthProvider({ children }) {
 
       // 토큰 갱신 로직을 주기적으로 실행
       // JWT 슬라이딩 세션 트리거 파트
-      startRefreshTokenTimer(1);
+      startRefreshTokenTimer(14);
 
       await getUser();
       router.push("/challenges");
@@ -108,7 +108,7 @@ export default function AuthProvider({ children }) {
       }
 
       // 토큰 갱신 성공 후 타이머 시작
-      startRefreshTokenTimer(1);
+      startRefreshTokenTimer(14);
 
       // 이제 유저 정보 조회
       await getUser();
