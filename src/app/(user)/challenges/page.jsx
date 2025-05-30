@@ -27,15 +27,6 @@ function Page() {
   //현재 사용자가 일반유저인지, 관리자인지 확인
   const isAdmin = user?.role === "ADMIN";
 
-  //디버깅
-  if (isAdmin) {
-    console.log("관리자");
-  } else if (user?.role === "USER") {
-    console.log("일반 유저");
-  } else {
-    console.log("로그인 필요");
-  }
-
   const {
     challenges,
     totalCount,
@@ -49,7 +40,7 @@ function Page() {
     setPage,
     setKeyword,
     applyFilters
-  } = useChallenges({ enabled: shouldFetch }); // 훅 내부에서 enabled로 조건 제어
+  } = useChallenges(); // 훅 내부에서 enabled로 조건 제어
 
   const handleClickFilter = () => {
     setIsModal(true);
@@ -97,7 +88,7 @@ function Page() {
           <div className="text-red-500">{error}</div>
         ) : challenges.length > 0 ? (
           challenges.map((challenge) => (
-            <div key={challenge.id} onClick={() => handleClickCard(challenge.id)}>
+            <div key={challenge.id}>
               <ChallengeCard
                 title={challenge.title}
                 type={challenge.docType}

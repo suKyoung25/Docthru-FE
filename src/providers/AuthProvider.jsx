@@ -69,25 +69,16 @@ export default function AuthProvider({ children }) {
       // JWT 슬라이딩 세션 트리거 파트
       const refreshTokenInterval = setInterval(
         async () => {
-          try {
-            const tokenData = await getRefreshToken();
-
-            if (tokenData) {
-              console.log("토큰 갱신 성공:", tokenData);
-            }
-          } catch (error) {
-            console.error("토큰 갱신 실패:", error);
-            // 갱신 실패 시 로그아웃 처리
-            clearInterval(refreshTokenInterval);
-            await logout();
-          }
+          await getRefreshToken();
+          clearInterval(refreshTokenInterval);
+          await logout();
         },
 
         // 14분마다 갱신 (서버 만료 시간인 15분보다 1분 짧게 설정함)
         // TODO : 추후 마무리 배포시 14분 주석 해제
         // 14 * 60 * 1000
         // test 코드 현재는 1분마다 갱신함
-        1 * 60 * 1000
+        14 * 60 * 1000
       );
 
       await getUser();
