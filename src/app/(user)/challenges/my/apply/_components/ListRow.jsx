@@ -15,9 +15,9 @@ export default function ListRow({ data }) {
         >
           {render
             ? render(challenge, rest)
-            : challenge && (key === "createdAt" || key === "deadline")
+            : key === "createdAt" || key === "deadline"
               ? formatDate(challenge[key])
-              : challenge?.[key] ?? "-"}
+              : (challenge?.[key] ?? "-")}
         </div>
       ))}
     </button>
