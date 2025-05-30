@@ -38,6 +38,10 @@ export async function getChallenges({ page = 1, pageSize = 4, category, docType,
   if (docType) params.set("docType", docType);
   if (keyword) {
     const cleanedKeyword = keyword.replace(/\s+/g, "");
+
+    //디버깅
+    console.log('cleanedKeyword', cleanedKeyword)
+    
     params.set("keyword", cleanedKeyword);
   }
   if (status) params.set("status", status);
