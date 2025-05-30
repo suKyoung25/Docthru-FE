@@ -115,6 +115,7 @@ export default function AuthProvider({ children }) {
       router.push("/challenges");
     } catch (error) {
       console.error("자동 로그인 실패:", error);
+      await logout();
       router.push("/signIn");
     } finally {
       setIsLoading(false);

@@ -7,11 +7,16 @@ import CancelDropdown from "@/components/dropDown/list/CancelDropdown";
 import { categoryChipMap, typeChipMap } from "@/components/chip/chipMaps";
 import { useAuth } from "@/providers/AuthProvider";
 import ConfirmActionModal from "@/components/modal/ConfirmActionModal";
+import { userService } from "@/lib/service/userService";
 
 export default function ChallengeContent({ title, description, category, docType, adminStatus }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isModalOpen, setisModalOpen] = useState(false);
   const { user } = useAuth();
+
+  const deleteChallenge = async () => {
+    await userService.deleteChallenge(challengeId);
+  };
 
   return (
     <article className="flex w-full flex-col gap-4">
@@ -27,7 +32,12 @@ export default function ChallengeContent({ title, description, category, docType
         )}
         {/* TODO: ConfirmActionModal - onConfirm 핸들러 추가 */}
         {isModalOpen && (
-          <ConfirmActionModal text="정말 취소하시겠어요?" onClose={() => setisModalOpen(false)} isLoggedIn={true} />
+          <ConfirmActionModal
+            text="정말 취소하시겠어요?"
+            onClose={() => setisModalOpen(false)}
+            isLoggedIn={true}
+            onConfirm={deleteChallenge}
+          />
         )}
       </div>
       <div className="mt-2 flex flex-wrap gap-2">
