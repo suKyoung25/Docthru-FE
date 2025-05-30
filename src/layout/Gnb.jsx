@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import notiOff from "@/assets/icon/ic_noti_off.svg";
 import notiOn from "@/assets/icon/ic_noti_on.svg";
 import member from "@/assets/img/profile_member.svg";
