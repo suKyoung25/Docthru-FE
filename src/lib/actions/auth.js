@@ -119,10 +119,8 @@ export async function logoutAction() {
 
   try {
     // 백엔드 로그아웃 API 호출
-    // TODO : 추후 마무리 배포시 주석 해제
     const response = await fetch(
       `${BASE_URL}/auth/sign-out`,
-      // const response = await fetch(`http://localhost:8080/auth/sign-out`,
 
       {
         method: "POST",
@@ -159,25 +157,18 @@ export async function getRefreshToken() {
   const refreshToken = cookieStore.get("refreshToken")?.value;
 
   if (!refreshToken) {
-    console.log("[getRefreshToken] No refresh token found");
     throw new Error("리프레시 토큰 만료됨!");
   }
 
   try {
-    // TODO : 추후 테스트 성공시 주석 해제
-    const response = await fetch(
-      `${BASE_URL}/auth/refresh-token`,
-      // const response = await fetch(`http://localhost:8080/auth/refresh-token`,
-
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Cookie: `refreshToken=${refreshToken}`
-        },
-        cache: "no-store"
-      }
-    );
+    const response = await fetch(`${BASE_URL}/auth/refresh-token`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: `refreshToken=${refreshToken}`
+      },
+      cache: "no-store"
+    });
 
     const data = await response.json();
 
@@ -227,6 +218,6 @@ export async function getRefreshToken() {
     return data;
   } catch (e) {
     console.error("[getRefreshToken] Error:", e);
-    throw new Error("리프레시 토큰 재발급 실패!");
+    throw new Error("토큰 재발급 실패!");
   }
 }

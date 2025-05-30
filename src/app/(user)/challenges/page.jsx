@@ -90,6 +90,7 @@ function Page() {
           challenges.map((challenge) => (
             <div key={challenge.id}>
               <ChallengeCard
+                onClick={() => handleClickCard(challenge.id)}
                 title={challenge.title}
                 type={challenge.docType}
                 category={challenge.category}

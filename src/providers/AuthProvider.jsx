@@ -2,7 +2,7 @@
 
 import { getRefreshToken, loginAction, logoutAction, registerAction } from "@/lib/actions/auth";
 import { userService } from "@/lib/service/userService";
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
 const AuthContext = createContext({
@@ -10,6 +10,7 @@ const AuthContext = createContext({
   logout: () => {},
   register: () => {},
   updateUser: () => {},
+  autoLogin: () => {},
   user: null,
   isLoading: true
 });
@@ -27,6 +28,23 @@ export default function AuthProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
+
+  const refreshTokenTimer = useRef(null);
+
+  const startRefreshTokenTimer = (minutes) => {
+    if (refreshTokenTimer.current) clearInterval(refreshTokenTimer.current);
+
+    refreshTokenTimer.current = setInterval(
+      async () => {
+        const data = await getRefreshToken();
+        console.log("🔄 자동 갱신:", data);
+        if (data?.error) {
+          await logout();
+        }
+      },
+      minutes * 60 * 1000
+    );
+  };
 
   const getUser = async () => {
     try {
@@ -67,19 +85,7 @@ export default function AuthProvider({ children }) {
 
       // 토큰 갱신 로직을 주기적으로 실행
       // JWT 슬라이딩 세션 트리거 파트
-      const refreshTokenInterval = setInterval(
-        async () => {
-          await getRefreshToken();
-          clearInterval(refreshTokenInterval);
-          await logout();
-        },
-
-        // 14분마다 갱신 (서버 만료 시간인 15분보다 1분 짧게 설정함)
-        // TODO : 추후 마무리 배포시 14분 주석 해제
-        // 14 * 60 * 1000
-        // test 코드 현재는 1분마다 갱신함
-        14 * 60 * 1000
-      );
+      startRefreshTokenTimer(14);
 
       await getUser();
       router.push("/challenges");
@@ -92,6 +98,28 @@ export default function AuthProvider({ children }) {
     }
   };
 
+  const autoLogin = async () => {
+    setIsLoading(true);
+    try {
+      // 먼저 토큰 갱신을 시도하고 성공하기를 기다림
+      const refreshResult = await getRefreshToken();
+      if (refreshResult?.error) {
+        throw new Error("토큰 갱신 실패");
+      }
+
+      // 토큰 갱신 성공 후 타이머 시작
+      startRefreshTokenTimer(14);
+
+      // 이제 유저 정보 조회
+      await getUser();
+      router.push("/challenges");
+    } catch (error) {
+      console.error("자동 로그인 실패:", error);
+      router.push("/signIn");
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const logout = async () => {
     try {
       await logoutAction();
@@ -105,7 +133,7 @@ export default function AuthProvider({ children }) {
   };
 
   useEffect(() => {
-    const excludeRoutes = ["/", "/signIn", "/signUp"];
+    const excludeRoutes = ["/", "/signIn", "/signUp", "/refreshLogin"];
 
     if (!excludeRoutes.includes(pathname)) {
       getUser();
@@ -114,5 +142,9 @@ export default function AuthProvider({ children }) {
     }
   }, [pathname]);
 
-  return <AuthContext.Provider value={{ user, login, logout, register, isLoading }}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ user, login, logout, autoLogin, register, isLoading }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
