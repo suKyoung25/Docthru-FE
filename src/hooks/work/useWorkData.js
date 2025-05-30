@@ -23,9 +23,7 @@ export const useWorkData = (challengeId, updateModalState) => {
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        // TODO: 테스트 ID는 실제 매개변수로 교체 필요
-        // const response = await getWorkDetailAction(challengeId, workMeta.workId);
-        const response = await getWorkDetailAction(15, 67);
+        const response = await getWorkDetailAction(challengeId, workMeta.workId);
         if (response?.data) {
           setWorkMeta({
             workId: response.data.workId,
@@ -52,8 +50,7 @@ export const useWorkData = (challengeId, updateModalState) => {
 
       setIsLoading(true);
       const payload = content === "<p></p>" ? "" : content;
-      // await updateWorkAction(workMeta.workId, payload);
-      await updateWorkAction(67, payload);
+      await updateWorkAction(workMeta.workId, payload);
       updateModalState("isSubmitConfirmOpen", false);
       router.refresh();
     } catch (error) {
@@ -71,8 +68,7 @@ export const useWorkData = (challengeId, updateModalState) => {
       }
 
       setIsLoading(true);
-      // const result = await deleteWorkAction(workMeta.workId);
-      const result = await deleteWorkAction(67);
+      const result = await deleteWorkAction(workMeta.workId);
       if (result.status === 204) {
         updateModalState("isDeleteConfirmOpen", false);
         router.push(`/challenges/${challengeId}`);

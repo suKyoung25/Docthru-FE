@@ -53,8 +53,8 @@ export default function Gnb({ isNoti, userRole }) {
   };
 
   return (
-    <header className="flex h-14 items-center justify-between bg-[#FFFFFF] px-4 sm:px-6 md:h-15 lg:px-8">
-      <div className="mx-auto flex w-full max-w-[var(--container-xl)] items-center justify-between">
+    <header className="flex h-14 items-center justify-center bg-[#FFFFFF] px-4 sm:px-6 md:h-15 lg:px-8">
+      <div className="flex w-full max-w-[var(--container-xl)] items-center justify-between">
         <div className="flex items-center gap-4">
           <Logo className="md:h-[27px] md:w-30" />
           {userRole === "admin" && (
