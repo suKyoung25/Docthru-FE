@@ -23,18 +23,9 @@ export default function SignInPage() {
     } catch (error) {
       console.error("로그인 실패", error);
       alert("로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.");
+    } finally {
     }
   };
-
-  // 임시 로딩 UI
-  if (isLoading) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <div className="h-12 w-12 animate-spin rounded-full border-t-2 border-b-2 border-blue-500"></div>
-        <p className="ml-4">인증 정보를 확인 중입니다...</p>
-      </div>
-    );
-  }
 
   return (
     <Container>
@@ -53,7 +44,11 @@ export default function SignInPage() {
               setPassword(e.target.value);
             }}
           />
-          <SubmitButton type="로그인" hasInputValue={true} />
+          <SubmitButton
+            type={isLoading ? "로그인 중" : "로그인"}
+            loading={isLoading}
+            hasInputValue={email.trim() !== "" && password.trim() !== ""}
+          />
         </form>
         <GoogleLoginButton />
         <div className="mt-6 space-x-2 text-[#262626]">
