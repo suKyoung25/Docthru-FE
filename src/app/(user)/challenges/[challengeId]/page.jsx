@@ -82,14 +82,23 @@ export default function ChallengeDetailPage() {
   if (error) return <main className="p-10 text-center text-red-500">{error}</main>;
   if (!challenge) return <main className="p-10 text-center">챌린지를 찾을 수 없습니다.</main>;
 
-  const isDeadlinePassed = dayjs().isAfter(dayjs(challenge.deadline));
-  const isRecruitmentFull = !isDeadlinePassed && (challenge.participants?.length || 0) >= challenge.maxParticipant;
+  const now = dayjs();
+  const deadline = dayjs(challenge.deadline);
+  const participantCount = challenge.participants?.length || 0;
+
+  let challengeStatus = undefined;
+  if (now.isAfter(deadline)) {
+    challengeStatus = "expired";
+  } else if (participantCount >= challenge.maxParticipant) {
+    challengeStatus = "closed";
+  }
 
   return (
     <main className="mb-40 flex flex-col items-center bg-white">
       <section className="flex w-full max-w-6xl flex-col gap-4 md:flex-row md:items-start md:justify-center md:gap-6">
         <div className="flex w-full flex-col gap-2 md:w-2/3">
-          <ChallengeCard {...challenge} variant="simple" status={isRecruitmentFull ? "모집완료" : undefined} />
+          {/* 🔥 status props 전달 */}
+          <ChallengeCard {...challenge} variant="simple" status={challengeStatus} />
 
           <section className="px-1 text-gray-800 sm:px-2 md:px-4">
             <p className="text-sm leading-[1.3] whitespace-pre-line md:text-base">{challenge.description}</p>
@@ -110,12 +119,13 @@ export default function ChallengeDetailPage() {
             maxCount={challenge.maxParticipant}
             originalUrl={challenge.originalUrl}
             onChallenge={handleChallenge}
+            status={challengeStatus}
           />
         </div>
       </section>
 
       <div className="mt-6" />
-      {isDeadlinePassed && <TopRecommendedWork rankingData={rankingData} />}
+      {challengeStatus === "expired" && <TopRecommendedWork rankingData={rankingData} />}
 
       <section className="mt-6 w-full max-w-6xl rounded-xl border-2 border-gray-800 bg-white">
         <div className="flex items-center justify-between px-4 py-3">

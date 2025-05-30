@@ -57,7 +57,9 @@ export default function TopRecommendedWork({ rankingData }) {
                 <div className="flex items-center gap-3 px-6">
                   <Image src={userIcon} alt="작성자" width={24} height={24} className="rounded-full" />
                   <span className="text-sm font-medium text-gray-800">{work.author.authorNickname}</span>
-                  <span className="text-xs text-gray-500">전문가</span>
+                  <span className="text-xs text-gray-500">
+                    {work.author.grade === "EXPERT" ? "전문가" : work.author.grade === "NORMAL" ? "일반" : "미정"}
+                  </span>
                   <div className="ml-2 flex items-center gap-1 text-sm text-gray-600">
                     <Image src={activeHeartIcon} alt="좋아요" width={16} height={16} />
                     {work.likeCount}
