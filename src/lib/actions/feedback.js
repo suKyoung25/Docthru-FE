@@ -2,11 +2,11 @@
 
 import { cookies } from "next/headers";
 
-const BASE_URL = process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_API_URL : "http://localhost:8080";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // 공통 헤더 생성 함수
 const getAuthHeaders = async () => {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const token = cookieStore.get("accessToken")?.value;
   return {
     "Content-Type": "application/json",

@@ -13,7 +13,7 @@ import { useOutsideClick } from "@/hooks/useOutsideClick";
 import NotificationModal from "@/components/modal/NotificationModal";
 import { getUnreadNotificationsAction } from "@/lib/actions/notification";
 
-export default function Gnb({ isNoti, userRole }) {
+export default function Gnb({ userRole }) {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isNotiModalOpen, setIsNotiModalOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
@@ -87,8 +87,8 @@ export default function Gnb({ isNoti, userRole }) {
             <>
               <button ref={notiButtonRef} aria-label="알림" onClick={handleClickNoti}>
                 <Image
-                  src={isNoti ? notiOn : notiOff}
-                  alt={isNoti ? "알림 있음 아이콘" : "알림 없음 아이콘"}
+                  src={notifications.length > 0 ? notiOn : notiOff}
+                  alt={notifications.length > 0 ? "알림 있음 아이콘" : "알림 없음 아이콘"}
                   width={24}
                   height={24}
                 />
