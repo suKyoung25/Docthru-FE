@@ -1,4 +1,3 @@
-// ChallengeDetailPage.jsx
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -14,6 +13,8 @@ import userIcon from "@/assets/img/profile_member.svg";
 import arrowRight from "@/assets/icon/ic_arrow_right.svg";
 import arrowLeft from "@/assets/icon/ic_arrow_left.svg";
 import TopRecommendedWork from "@/app/(user)/challenges/_components/TopRecommendedWork";
+import { createWorkAction } from "@/lib/actions/work";
+import { useRouter } from "next/navigation";
 
 function useIsTablet() {
   const [isTablet, setIsTablet] = useState(false);
@@ -41,18 +42,17 @@ export default function ChallengeDetailPage() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentItems = rankingData.slice(startIndex, startIndex + itemsPerPage);
 
-  const handleToggleLike = (workId) => {
-    setRankingData((prev) =>
-      prev.map((item) =>
-        item.workId === workId
-          ? {
-              ...item,
-              isLiked: !item.isLiked,
-              likeCount: item.isLiked ? item.likeCount - 1 : item.likeCount + 1
-            }
-          : item
-      )
-    );
+  const router = useRouter();
+
+  const handleChallenge = async () => {
+    try {
+      const data = await createWorkAction(challengeId);
+      const workId = data.data.id;
+      router.push(`/challenges/${challenge.id}/work/${workId}/form`);
+    } catch (err) {
+      console.error("작업 생성 실패:", err);
+      alert("작업 생성에 실패했습니다.");
+    }
   };
 
   useEffect(() => {
@@ -81,8 +81,9 @@ export default function ChallengeDetailPage() {
 
   const isDeadlinePassed = dayjs().isAfter(dayjs(challenge.deadline));
   const isRecruitmentFull = !isDeadlinePassed && (challenge.participants?.length || 0) >= challenge.maxParticipant;
+
   return (
-    <main className="flex flex-col items-center bg-white">
+    <main className="mb-40 flex flex-col items-center bg-white">
       <section className="flex w-full max-w-6xl flex-col gap-4 md:flex-row md:items-start md:justify-center md:gap-6">
         <div className="flex w-full flex-col gap-2 md:w-2/3">
           <ChallengeCard {...challenge} variant="simple" status={isRecruitmentFull ? "모집완료" : undefined} />
@@ -105,12 +106,13 @@ export default function ChallengeDetailPage() {
             currentCount={challenge.participants?.length || 0}
             maxCount={challenge.maxParticipant}
             originalUrl={challenge.originalUrl}
+            onChallenge={handleChallenge} // ✅ 전달
           />
         </div>
       </section>
 
       <div className="mt-6" />
-      {isDeadlinePassed && <TopRecommendedWork rankingData={rankingData} onToggleLike={handleToggleLike} />}
+      {isDeadlinePassed && <TopRecommendedWork rankingData={rankingData} />}
 
       <section className="mt-6 w-full max-w-6xl rounded-xl border-2 border-gray-800 bg-white">
         <div className="flex items-center justify-between px-4 py-3">
@@ -152,12 +154,12 @@ export default function ChallengeDetailPage() {
                 item={{
                   rank: startIndex + index + 1,
                   userName: item.author.authorNickname,
-                  userRole: "전문가",
+                  userRole:
+                    item.author.grade === "EXPERT" ? "전문가" : item.author.grade === "NORMAL" ? "일반" : "미정",
                   likes: item.likeCount,
-                  isLiked: item.isLiked,
+                  isLiked: true,
                   workId: item.workId
                 }}
-                toggleLike={() => handleToggleLike(item.workId)}
               />
             ))
           ) : (
