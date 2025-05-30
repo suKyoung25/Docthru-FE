@@ -17,7 +17,7 @@ function Page() {
 
   useEffect(() => {
     if (!authLoading && user) {
-      // setShouldFetch(true); // 로그인 상태 확인 후에만 데이터 패칭
+      setShouldFetch(true); // 로그인 상태 확인 후에만 데이터 패칭
     }
   }, [user, authLoading]);
 
@@ -40,7 +40,7 @@ function Page() {
     setPage,
     setKeyword,
     applyFilters
-  } = useChallenges({ enabled: shouldFetch }); // 훅 내부에서 enabled로 조건 제어
+  } = useChallenges(); // 훅 내부에서 enabled로 조건 제어
 
   const handleClickFilter = () => {
     setIsModal(true);
@@ -88,7 +88,7 @@ function Page() {
           <div className="text-red-500">{error}</div>
         ) : challenges.length > 0 ? (
           challenges.map((challenge) => (
-            <div key={challenge.id} onClick={() => handleClickCard(challenge.id)}>
+            <div key={challenge.id}>
               <ChallengeCard
                 title={challenge.title}
                 type={challenge.docType}

@@ -1,9 +1,7 @@
-import { useState, useEffect, useCallback } from "react";
 import { getChallenges } from "@/lib/api/challenge-api/searchChallenge";
-import { useAuth } from "@/providers/AuthProvider";
+import { useState, useEffect, useCallback } from "react";
 
-const useChallenges = (myChallengeStatus = "") => {
-  const { user } = useAuth();
+const useChallenges = (myChallengeStatus) => {
   const [filters, setFilters] = useState({
     categories: [],
     docType: "",
@@ -26,8 +24,6 @@ const useChallenges = (myChallengeStatus = "") => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const { categories, docType, status } = filters;
-
   const getChallengesData = useCallback(async () => {
     setIsLoading(true);
     setError(null);
@@ -38,12 +34,12 @@ const useChallenges = (myChallengeStatus = "") => {
         keyword,
         category: filters.categories,
         docType: filters.docType,
-        status: filters.status,
-        myChallengeStatus
+        status: filters.status
       };
 
-      const challengesResults = (await getChallenges(options)) ?? { data: [], totalCount: 0 };
+      const challengesResults = (await getChallenges(options, myChallengeStatus)) ?? { data: [], totalCount: 0 };
       setTotalCount(challengesResults.totalCount);
+
       const results = Array.isArray(challengesResults?.data) ? challengesResults.data : [];
 
       const currentDate = new Date();
@@ -64,18 +60,15 @@ const useChallenges = (myChallengeStatus = "") => {
     } catch (err) {
       console.error("챌린지 목록 불러오기 실패:", err);
       setError("챌린지 목록을 불러오는 데 실패했습니다.");
+      setChallenges([]);
     } finally {
       setIsLoading(false);
     }
-  }, [user, page, pageSize, keyword, categories, docType, status]);
+  }, [page, pageSize, keyword, filters.categories, filters.docType, filters.status]);
 
-  //에러 해결해야함
-  // useEffect(() => {
-  //   console.log("user or getChallengesData changed", user, getChallengesData);
-  //    if (!user) return; // 로그인 안 되어 있으면 실행 X
-  //   getChallengesData();
-
-  // }, [getChallengesData, myChallengeStatus]);
+  useEffect(() => {
+    getChallengesData();
+  }, [getChallengesData]);
 
   //에러 해결 전까진 임시로 챌린지 목록 불러오려고 사용중
   //목록 정상적으로 불러와지면 지워도 됨
@@ -87,33 +80,14 @@ const useChallenges = (myChallengeStatus = "") => {
     setPage(1);
   }, [filters, keyword]);
 
-  useEffect(() => {
-    const handleResize = () => {
-      const width = window.innerWidth;
-      if (width > 375) {
-        setPageSize(5);
-      } else {
-        setPageSize(4);
-      }
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  const applyFilters = useCallback(({ fields = [], docType = "", status = "" }) => {
+  const applyFilters = useCallback(({ fields, docType, status }) => {
     setFilters({
       categories: fields,
       docType,
       status
     });
 
-    //const currentFilterCount = [fields.length > 0 ? 1 : 0, docType ? 1 : 0, status ? 1 : 0].filter(Boolean).length;
-    const currentFilterCount = [(fields?.length ?? 0) > 0, !!docType, !!status].filter(Boolean).length;
+    const currentFilterCount = [fields.length > 0 ? 1 : 0, docType ? 1 : 0, status ? 1 : 0].filter(Boolean).length;
 
     setFilterCount(currentFilterCount);
   }, []);
@@ -130,7 +104,9 @@ const useChallenges = (myChallengeStatus = "") => {
     error,
     setPage,
     setKeyword,
-    applyFilters
+    applyFilters,
+    setChallenges,
+    setTotalCount
   };
 };
 
