@@ -7,9 +7,10 @@ import usersIcon from "@/assets/icon/ic_person.svg";
 import { typeChipMap, categoryChipMap } from "../chip/chipMaps";
 import ChipCardStatus from "@/components/chip/chipComplete/ChipCardStatus";
 import { useEffect, useState, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import DeclineModal from "../modal/DeclineModal";
 import { deleteChallengeAction } from "@/lib/actions/admin";
+import { BtnRoundedWithIcon } from "../btn/text/BtnText";
 
 export default function ChallengeCard({
   challengeId,
@@ -28,6 +29,7 @@ export default function ChallengeCard({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDeclineModalOpen, setIsDeclineModalOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const pathname = usePathname();
 
   const router = useRouter();
 
@@ -90,7 +92,7 @@ export default function ChallengeCard({
 
   return (
     <div
-      className={`flex flex-col ${variant === "simple" ? "h-auto justify-start" : "h-[227px] justify-between sm:h-[262px] md:h-[225px]"} ${variant === "simple" ? "" : "rounded-[12px] border-2 border-[var(--color-gray-800)]"} bg-white p-4`}
+      className={`flex flex-col ${variant === "simple" ? "h-auto justify-start" : "justify-between"} ${variant === "simple" ? "" : "rounded-[12px] border-2 border-[var(--color-gray-800)]"} bg-white p-4`}
     >
       <div className="relative flex items-start justify-between">
         {status ? (
@@ -139,20 +141,30 @@ export default function ChallengeCard({
       {variant !== "simple" && (
         <>
           <hr className="my-4 border-gray-200" />
-
-          <div className="flex justify-between text-sm text-gray-500">
-            <div className="flex gap-4">
-              <div className="flex items-center gap-1">
-                <Image src={clockIcon} alt="시계" width={16} height={16} />
-                <span>{formatDateToPretty(deadline)} 마감</span>
+          <div className="flex justify-between items-center text-sm text-gray-500">
+       
+              <div className="flex flex-col sm:flex-row sm:gap-4">
+                <div className="flex items-center gap-1 ">
+                  <Image src={clockIcon} alt="시계" width={16} height={16} />
+                  <span>{formatDateToPretty(deadline)} 마감</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Image src={usersIcon} alt="사람" width={16} height={16} />
+                  <span>
+                    {participants}/{maxParticipant}
+                  </span>
+                </div>
               </div>
-              <div className="flex items-center gap-1">
-                <Image src={usersIcon} alt="사람" width={16} height={16} />
-                <span>
-                  {participants}/{maxParticipant}
-                </span>
-              </div>
-            </div>
+              { pathname.includes("/my") ?
+              <div className="items-end">
+                <BtnRoundedWithIcon 
+                  theme="link" 
+                  iconType = "continueChallenge" 
+                  onClick={()=>router.push(`/challenges/${challengeId}/`)}>
+                    내 작업물 보기
+                </BtnRoundedWithIcon>
+              </div> : ""
+              }
           </div>
         </>
       )}
