@@ -25,15 +25,19 @@ import arrowRightIcon from "@/assets/icon/ic_arrow_right.svg";
  *   challengeId?: number,
  * }} props.item - 유저 정보를 담은 객체
  */
-export default function RankingListItem({ item }) {
-  const { rank = 1, userName = "홍길동", userRole = "프로그래머", likes = 0, workId = 0, challengeId = 0 } = item;
+export default function RankingListItem({ item, highlight = false }) {
+  const { rank, userName, userRole, likes, workId = 0, challengeId = 0 } = item;
 
   return (
     <div className="flex items-center justify-between border-b border-gray-200 bg-transparent py-4">
-      {/* 왼쪽: 랭킹, 유저 정보 */}
+      {/* 왼쪽: 순위 및 유저 정보 */}
       <div className="flex items-center gap-3">
-        <div className="flex w-[60px] items-center justify-center rounded-2xl bg-gray-800 px-3 py-1 text-[14px] font-[500] text-yellow-400">
-          {rank === 1 && <Image src={crownIcon} alt="crown" width={12} height={12} className="mr-1.5" />}
+        <div
+          className={`flex w-[60px] items-center justify-center rounded-2xl px-3 py-1 text-[14px] font-[500] ${
+            highlight ? "bg-gray-800 text-yellow-400" : "bg-gray-800 text-white"
+          }`}
+        >
+          {rank === 1 && highlight && <Image src={crownIcon} alt="crown" width={12} height={12} className="mr-1.5" />}
           {rank.toString().padStart(2, "0")}
         </div>
         <Image src={keyboardIcon} alt="profile" width={24} height={24} className="rounded-full" />
@@ -43,7 +47,7 @@ export default function RankingListItem({ item }) {
         </div>
       </div>
 
-      {/* 오른쪽: 좋아요 수, 작업물 보기 */}
+      {/* 오른쪽: 좋아요 수 + 작업물 보기 */}
       <div className="flex w-[210px] items-center justify-between gap-4">
         <div className="flex items-center text-lg font-medium text-gray-500">
           <Image src={activeHeartIcon} alt="like" width={20} height={20} className="mr-1" />
