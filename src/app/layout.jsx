@@ -25,25 +25,25 @@ const quanticoBold = localFont({
 });
 
 export const metadata = {
-  title: "Docthur - 독스루",
+  title: "Docthru - 독스루",
   description: "개발문서 번역 플랫폼",
-  keywords: ["번역", "개발 문서", "Docthur", "Docs", "번역 플랫폼", "개발 원서 번역", "개발 번역"],
-  authors: [{ name: "Docthur", url: "https://6-docthru-3team-fe-dev.vercel.app/" }],
-  creator: "Docthur",
+  keywords: ["번역", "개발 문서", "Docthru", "Docs", "번역 플랫폼", "개발 원서 번역", "개발 번역"],
+  authors: [{ name: "Docthru", url: "https://6-docthru-3team-fe-dev.vercel.app/" }],
+  creator: "Docthru",
   icons: {
     icon: "/favicon.svg",
   },
   openGraph: {
-    title: "Docthur - 개발문서 번역 플랫폼",
+    title: "Docthru - 개발문서 번역 플랫폼",
     description: "전 세계 개발 문서를 한국어로 쉽게 이해하세요.",
     url: "https://6-docthru-3team-fe-dev.vercel.app/",
-    siteName: "Docthur",
+    siteName: "Docthru",
     images: [
       {
         url: "https://6-docthru-3team-fe-dev.vercel.app/og-image.webp",
         width: 1488,
         height: 556,
-        alt: "Docthur 서비스 소개 이미지"
+        alt: "Docthru 서비스 소개 이미지"
       }
     ],
     locale: "ko_KR",
@@ -51,7 +51,7 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Docthur - 개발문서 번역 플랫폼",
+    title: "Docthru - 개발문서 번역 플랫폼",
     description: "전 세계 개발 문서를 한국어로 쉽게 이해하세요.",
     images: ["https://6-docthru-3team-fe-dev.vercel.app/og-image.webp"]
   },
@@ -69,11 +69,11 @@ export default async function RootLayout({ children }) {
         <meta name="description" content="전 세계 개발 문서를 한국어로 쉽게 이해하세요." />
         <meta property="og:url" content="https://6-docthru-3team-fe-dev.vercel.app/" />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="Docthur - 개발 문서 번역 플랫폼" />
+        <meta property="og:title" content="Docthru - 개발 문서 번역 플랫폼" />
         <meta property="og:description" content="전 세계 개발 문서를 한국어로 쉽게 이해하세요." />
         <meta property="og:image" content="https://6-docthru-3team-fe-dev.vercel.app/og-image.webp" />
         <meta name="twitter:card" content="summary" />
-        <meta name="twitter:title" content="Docthur - 개발 문서 번역 플랫폼" />
+        <meta name="twitter:title" content="Docthru - 개발 문서 번역 플랫폼" />
         <meta name="twitter:description" content="전 세계 개발 문서를 한국어로 쉽게 이해하세요." />
         <meta name="twitter:image" content="https://6-docthru-3team-fe-dev.vercel.app/og-image.webp" />
         <link rel="icon" href="/favicon.svg" />
