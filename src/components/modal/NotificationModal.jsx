@@ -3,8 +3,9 @@
 import React, { useEffect, useRef } from "react";
 import closeIcon from "@/assets/icon/ic_out.svg";
 import Image from "next/image";
+import { updateIsReadAction } from "@/lib/actions/notification"; // Server Action 추가
 
-export default function NotificationModal({ notifications = [], onClose, buttonRef }) {
+export default function NotificationModal({ notifications = [], onClose, buttonRef, onNotificationRead }) {
   const modalRef = useRef(null);
 
   useEffect(() => {
@@ -15,18 +16,34 @@ export default function NotificationModal({ notifications = [], onClose, buttonR
         buttonRef?.current &&
         !buttonRef.current.contains(e.target)
       ) {
-        onClose(); // 모달 내부, 알림 버튼의 경우 외부로 인식 방지
+        onClose();
       }
     };
     document.addEventListener("mousedown", handleOutsideClick);
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
 
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, "0")}.${String(date.getDate()).padStart(
+      2,
+      "0"
+    )}`;
+  };
+
+  // 알림 클릭 핸들러 추가
+  const handleNotificationClick = async (notificationId) => {
+    try {
+      await updateIsReadAction(notificationId);
+      onNotificationRead?.(); // 알림 목록 갱신
+    } catch (error) {
+      console.error("알림 읽음 처리 실패:", error);
+    }
+  };
+
   return (
-    <div
-      className="fixed inset-0 z-50 flex justify-end sm:top-[53px] sm:right-18" //위치는 사용하는 곳에서 조정해서 사용
-      onClick={onClose} //모달 바깥영역 눌렀을 때 모달창 닫힘
-    >
+    <div className="fixed inset-0 z-50 flex justify-end sm:top-[53px] sm:right-18" onClick={onClose}>
       <div
         ref={modalRef}
         className="h-[465px] w-[343px] rounded-lg border-2 border-gray-200 bg-white p-4 shadow-xl max-sm:h-full max-sm:w-full"
@@ -44,15 +61,21 @@ export default function NotificationModal({ notifications = [], onClose, buttonR
               <li className="py-8 text-center text-sm text-gray-400">알림이 없습니다.</li>
             ) : (
               notifications.map((item) => (
-                <li key={item.id} className="border-b border-gray-200 py-3 last:border-b-0">
+                <li
+                  key={item.id}
+                  className="cursor-pointer border-b border-gray-200 py-3 last:border-b-0 hover:bg-gray-50"
+                  onClick={() => handleNotificationClick(item.id)} // 클릭 이벤트 추가
+                >
                   <div className="mb-2 text-sm font-normal text-gray-800">{item.message}</div>
-                  <div className="text-sm font-normal text-gray-400">{item.date}</div>
+                  <div className="text-sm font-normal text-gray-400">
+                    {item.createdAt ? formatDate(item.createdAt) : "날짜"}
+                  </div>
                 </li>
               ))
             )}
           </ul>
         </div>
       </div>
-    </div>,
+    </div>
   );
 }
