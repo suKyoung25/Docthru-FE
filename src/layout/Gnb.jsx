@@ -11,9 +11,11 @@ import { usePathname } from "next/navigation";
 import Logo from "./_components/Logo";
 import Profile from "@/components/dropDown/Profile";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
+import NotificationModal from "@/components/modal/NotificationModal";
 
 export default function Gnb({ isNoti, userRole }) {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const pathname = usePathname();
   const profileRef = useRef(null);
 
@@ -24,7 +26,7 @@ export default function Gnb({ isNoti, userRole }) {
   return (
     <header className="flex h-14 items-center justify-between bg-[#FFFFFF] px-4 sm:px-6 md:h-15 lg:px-8">
       <div className="flex items-center gap-4">
-        <Logo className="md:w-30 md:h-[27px]" />
+        <Logo className="md:h-[27px] md:w-30" />
         {userRole === "admin" && (
           <>
             <Link
@@ -50,10 +52,15 @@ export default function Gnb({ isNoti, userRole }) {
           </>
         )}
       </div>
-      <div className="flex gap-4 relative" ref={profileRef}>
+      <div className="relative flex gap-4" ref={profileRef}>
         {userRole === "member" && (
           <>
-            <button aria-label="알림">
+            <button
+              aria-label="알림"
+              onClick={() => {
+                setIsNotificationOpen(!isNotificationOpen);
+              }}
+            >
               <Image
                 src={isNoti ? notiOn : notiOff}
                 alt={isNoti ? "알림 있음 아이콘" : "알림 없음 아이콘"}
@@ -61,6 +68,8 @@ export default function Gnb({ isNoti, userRole }) {
                 height={24}
               />
             </button>
+            {isNotificationOpen && <NotificationModal onClose={() => setIsNotificationOpen(false)} />}{" "}
+            {/**props로 notifications 값 줘야함 */}
             <button aria-label="유저 프로필" onClick={handleClickProfile}>
               <Image src={member} alt="유저 프로필" width={32} height={32} />
             </button>
@@ -82,7 +91,7 @@ export default function Gnb({ isNoti, userRole }) {
           </Link>
         )}
         {isProfileOpen && (
-          <div className="absolute z-1 top-10 right-0">
+          <div className="absolute top-10 right-0 z-1">
             <Profile userRole={userRole} />
           </div>
         )}
