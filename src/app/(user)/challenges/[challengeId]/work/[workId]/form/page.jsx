@@ -18,7 +18,7 @@ export default function page() {
   const { challengeId, workId } = useParams();
 
   const { modalState, updateModalState } = useModalControl();
-  const { content, setContent, isSubmitted, workMeta, handleUpdateWork, handleDeleteWork } = useWorkData(
+  const { content, setContent, isLoading, isSubmitted, workMeta, handleUpdateWork, handleDeleteWork } = useWorkData(
     challengeId,
     workId,
     updateModalState
@@ -46,7 +46,12 @@ export default function page() {
           onDiscardModal={() => updateModalState("isDeleteConfirmOpen", true)}
         />
 
-        {content ? (
+        {isLoading ? (
+          <div className="flex h-full flex-col items-center justify-center gap-2">
+            <div className="mx-auto h-[100px] w-full animate-pulse rounded-md bg-gray-100" />
+            <div className="mx-auto h-[700px] w-full animate-pulse rounded-md bg-gray-100" />
+          </div>
+        ) : (
           <EditorSection
             challengeTitle={workMeta.challengeTitle}
             content={content}
@@ -54,11 +59,6 @@ export default function page() {
             onDraft={saveDraft}
             isDrafting={draftState.isDrafting}
           />
-        ) : (
-          <div className="flex h-full flex-col items-center justify-center gap-2">
-            <div className="mx-auto h-[100px] w-full animate-pulse rounded-md bg-gray-100" />
-            <div className="mx-auto h-[700px] w-full animate-pulse rounded-md bg-gray-100" />
-          </div>
         )}
       </Container>
 

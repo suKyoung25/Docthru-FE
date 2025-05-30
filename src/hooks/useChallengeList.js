@@ -37,9 +37,6 @@ const useChallenges = (myChallengeStatus) => {
         status: filters.status
       };
 
-      //디버깅
-      console.log("keyword", keyword);
-
       const challengesResults = await getChallenges(options, myChallengeStatus);
       setTotalCount(challengesResults.totalCount);
 
