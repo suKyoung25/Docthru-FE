@@ -37,7 +37,10 @@ const useChallenges = (myChallengeStatus) => {
         status: filters.status
       };
 
-      const challengesResults = (await getChallenges(options, myChallengeStatus)) ?? { data: [], totalCount: 0 };
+      //디버깅
+      console.log("keyword", keyword);
+
+      const challengesResults = await getChallenges(options, myChallengeStatus);
       setTotalCount(challengesResults.totalCount);
 
       const results = Array.isArray(challengesResults?.data) ? challengesResults.data : [];
@@ -69,12 +72,6 @@ const useChallenges = (myChallengeStatus) => {
   useEffect(() => {
     getChallengesData();
   }, [getChallengesData]);
-
-  //에러 해결 전까진 임시로 챌린지 목록 불러오려고 사용중
-  //목록 정상적으로 불러와지면 지워도 됨
-  useEffect(() => {
-    getChallengesData();
-  }, [filters, keyword]);
 
   useEffect(() => {
     setPage(1);
