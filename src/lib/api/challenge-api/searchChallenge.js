@@ -20,7 +20,10 @@ const getAuthHeaders = async () => {
 };
 
 // 챌린지 목록 가져오기
-export async function getChallenges({ page = 1, pageSize = 4, category, docType, keyword, status }, myChallengeStatus) {
+export async function getChallenges(
+  { page = 1, pageSize = 4, category, docType, keyword, status, adminStatus },
+  myChallengeStatus
+) {
   const headers = await getAuthHeaders();
 
   const params = new URLSearchParams();
@@ -39,9 +42,6 @@ export async function getChallenges({ page = 1, pageSize = 4, category, docType,
   if (keyword) {
     const cleanedKeyword = keyword.replace(/\s+/g, "");
 
-    //디버깅
-    console.log('cleanedKeyword', cleanedKeyword)
-    
     params.set("keyword", cleanedKeyword);
   }
   if (status) params.set("status", status);
@@ -52,6 +52,10 @@ export async function getChallenges({ page = 1, pageSize = 4, category, docType,
 
   if (isMyChallenge) {
     params.set("myChallengeStatus", myChallengeStatus);
+  }
+
+  if (adminStatus) {
+    params.set("adminStatus", adminStatus);
   }
 
   const url = `${API_URL}${path}?${params.toString()}`;
@@ -77,7 +81,7 @@ export async function getChallenges({ page = 1, pageSize = 4, category, docType,
       return { data: [], totalCount: 0 };
     }
 
-    console.log("📦 응답 데이터:", json);
+    console.log("📦 응답 데이터요:", json);
 
     return {
       data: Array.isArray(json?.data) ? json.data : [],

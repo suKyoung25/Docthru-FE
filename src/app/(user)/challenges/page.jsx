@@ -42,6 +42,19 @@ function Page() {
     applyFilters
   } = useChallenges(); // 훅 내부에서 enabled로 조건 제어
 
+  //디버깅
+  console.log("isAdmin", isAdmin);
+
+  // useEffect(() => {
+  //   if (!authLoading && user) {
+  //     if (isAdmin) {
+  //       setAdminStatus(""); //어드민이면 adminStatus에 상관없이 모든 챌린지가 보임
+  //     } else {
+  //       setAdminStatus("ACCEPTED"); //일반 유저라면 asminStatus=accepted인 챌린지만 보임
+  //     }
+  //   }
+  // }, [user, authLoading, s]);
+
   const handleClickFilter = () => {
     setIsModal(true);
   };
@@ -89,6 +102,10 @@ function Page() {
         ) : challenges.length > 0 ? (
           challenges.map((challenge) => (
             <div key={challenge.id}>
+              {
+                //디버깅
+                console.log("challenge.application.adminStatus", challenge.application.adminStatus)
+              }
               <ChallengeCard
                 onClick={() => handleClickCard(challenge.id)}
                 title={challenge.title}
@@ -97,7 +114,6 @@ function Page() {
                 deadline={challenge.deadline}
                 participants={challenge.participants.length}
                 maxParticipant={challenge.maxParticipant}
-                // status={challenge.status}
                 isAdmin={isAdmin}
               />
             </div>
