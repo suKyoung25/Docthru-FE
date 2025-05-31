@@ -6,7 +6,7 @@ import Input from "@/app/(user)/challenges/create/_components/Input";
 import CategoryClosed from "@/components/dropDown/category/CategoryClosed";
 import CategoryItems from "@/components/dropDown/category/CategoryItems";
 import { useParams, useRouter } from "next/navigation";
-import { updateChallenge } from "@/lib/api/challenge-api/editChallenge";
+import { updateChallenge } from "@/lib/actions/editChallenge";
 import { getChallengeDetail } from "@/lib/api/challengeDetail";
 
 export default function editChallengePageAdmin() {
