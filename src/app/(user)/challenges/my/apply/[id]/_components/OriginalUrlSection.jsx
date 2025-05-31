@@ -17,15 +17,17 @@ export default function OriginalUrlSection({ originalPageUrl }) {
             링크 열기
           </BtnText>
         </div>
-        <iframe
-          src={originalPageUrl}
-          title="원문 페이지"
-          className="h-full w-full border-0"
-          style={{ height: "calc(100vh - 500px)" }}
-          loading="lazy"
-          allow="clipboard-read; clipboard-write"
-          sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-        />
+        {originalPageUrl && (
+          <iframe
+            src={originalPageUrl}
+            title="원문 페이지"
+            className="h-full w-full border-0"
+            style={{ height: "calc(100vh - 500px)" }}
+            loading="lazy"
+            allow="clipboard-read; clipboard-write"
+            sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+          />
+        )}
       </div>
     </section>
   );

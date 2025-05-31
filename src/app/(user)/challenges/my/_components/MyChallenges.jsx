@@ -21,7 +21,7 @@ export default function Mychallenges({ data, loadMoreRef, hasNextPage, isFetchin
               deadline={challenge.deadline}
               participants={challenge.participants.length}
               maxParticipant={challenge.maxParticipant}
-              workId={challenge.works?.[0]?.id}
+              workId={challenge.works?.[0]?.id} // TODO: 경로 연결은 잘되는데 Not Found가 뜸
             />
           ))
         ) : (
