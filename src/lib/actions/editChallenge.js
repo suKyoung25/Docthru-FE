@@ -1,7 +1,12 @@
+"use server";
+
 import { BASE_URL } from "@/constant/constant";
 
 //챌린지 수정하기
 export async function updateChallenge(data) {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("accessToken")?.value;
+
   const { challengeId, title, originalUrl, maxParticipant, description, deadline, category, docType } = data;
 
   const postData = {
@@ -17,7 +22,8 @@ export async function updateChallenge(data) {
   const res = await fetch(`${BASE_URL}/challenges/${challengeId}`, {
     method: "PUT",
     headers: {
-      "Content-type": "application/json"
+      "Content-type": "application/json",
+      Cookie: `accessToken=${accessToken}`
     },
     credentials: "include",
     body: JSON.stringify(postData)
