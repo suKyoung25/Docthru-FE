@@ -52,6 +52,13 @@
 
   /* 데스크탑 */
   --container-xl: 1200px;
+
+  /* ✅ 브레이크포인트 정의 (Tailwind screens 기준) */
+  --breakpoint-sm: var(--container-sm); /* 📱 모바일 기준 (iPhone SE ~ 일반 스마트폰) */
+  --breakpoint-md: var(--container-md); /* 📱 태블릿 (iPad Mini, 세로 기준) */
+  --breakpoint-lg: var(--container-challenge-other); /* 💻 중간 뷰 - 챌린지 기타 페이지 기준 */
+  --breakpoint-xl: var(--container-challenge); /* 💻 넓은 뷰 - 챌린지 조회 페이지 기준 */
+  --breakpoint-2xl: var(--container-xl); /* 🖥️ 데스크탑 기준 (컨테이너 최대 폭 기준) */
 }
 
 @layer components {
