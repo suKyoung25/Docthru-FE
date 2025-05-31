@@ -53,7 +53,7 @@ export default function FilterModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-      <div className="relative w-[343px] rounded-xl border-2 border-solid border-gray-200 bg-white py-6 shadow-xl">
+      <div className="relative h-screen max-w-[375px] overflow-y-auto rounded-none border-2 border-solid border-gray-200 bg-white py-6 shadow-xl">
         {/* 헤더 */}
         <div className="mb-4 flex items-center justify-between px-6">
           <span className="text-base font-semibold text-gray-800">필터</span>

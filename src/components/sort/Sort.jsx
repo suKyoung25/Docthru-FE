@@ -5,6 +5,9 @@ import filterIcon from "@/assets/icon/ic_filter.svg";
 import filterWhiteIcon from "@/assets/icon/ic_filter_white.svg";
 
 export default function Sort({ isAdminStatus, isFiltered, count, label, onClick }) {
+  //디버깅
+  console.log("isFiltered", isFiltered);
+
   const iconSrc = isAdminStatus ? toggleDownIcon : isFiltered ? filterWhiteIcon : filterIcon;
 
   const containerClass = [

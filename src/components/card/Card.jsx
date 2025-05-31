@@ -20,7 +20,6 @@ export default function ChallengeCard({
   deadline,
   participants,
   maxParticipant,
-  // status,
   variant = "default",
   isAdmin,
   workId
