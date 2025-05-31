@@ -50,10 +50,10 @@ export default function MyApplicationsPage() {
   return (
     <>
       <div className="mb-4 flex justify-between gap-2">
-        <div className="flex-7 sm:flex-8">
+        <div className="flex-1">
           <SearchInput value={keyword} onChange={(e) => setKeyword(e.target.value)} />
         </div>
-        <div className="relative flex-3 sm:flex-2">
+        <div className="flex-2.5 relative">
           <Sort isAdminStatus={true} onClick={() => setIsDropdownOpen((prev) => !prev)} label={selectedSortLabel} />
           <div className="absolute right-0 mt-2">{isDropdownOpen && <ApplyDropdown onSelect={handleSortSelect} />}</div>
         </div>

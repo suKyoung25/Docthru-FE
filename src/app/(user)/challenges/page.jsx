@@ -84,7 +84,7 @@ export default function ChallengesPage() {
                 <ChallengeCard
                   challengeId={challenge?.id}
                   title={challenge.title}
-                  type={challenge.docType}
+                  docType={challenge.docType}
                   category={challenge.category}
                   deadline={challenge.deadline}
                   participants={challenge.participants.length}

@@ -38,7 +38,7 @@ const useChallenges = (myChallengeStatus) => {
       };
 
       const challengesResults = await getChallenges(options, myChallengeStatus);
-      setTotalCount(challengesResults.totalCount);
+      setTotalCount(challengesResults?.totalCount);
 
       const results = Array.isArray(challengesResults?.data) ? challengesResults.data : [];
 

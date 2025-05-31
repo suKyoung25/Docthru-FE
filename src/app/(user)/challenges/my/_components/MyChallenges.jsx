@@ -21,12 +21,12 @@ export default function Mychallenges({ data, loadMoreRef, hasNextPage, isFetchin
               deadline={challenge.deadline}
               participants={challenge.participants.length}
               maxParticipant={challenge.maxParticipant}
-              workId={challenge.works?.[0]?.id} // TODO: 경로 연결은 잘되는데 Not Found가 뜸
+              workId={challenge.works?.[0]?.id}
             />
           ))
         ) : (
-          <div className="flex h-full w-full items-center justify-center text-sm text-gray-500">
-            챌린지가 존재하지 않습니다.
+          <div className="mt-[15rem] flex h-full w-full items-center justify-center text-sm text-gray-500">
+            아직 챌린지가 없어요.
           </div>
         )}
         <div className="flex h-full w-full items-center justify-center text-sm text-gray-500">
