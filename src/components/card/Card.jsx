@@ -22,7 +22,6 @@ export default function ChallengeCard({
   maxParticipant,
   variant = "default",
   isAdmin,
-  onClick,
   workId
 }) {
   const [status, setStatus] = useState("");
@@ -30,7 +29,6 @@ export default function ChallengeCard({
   const [isDeclineModalOpen, setIsDeclineModalOpen] = useState(false);
   const dropdownRef = useRef(null);
   const pathname = usePathname();
-
   const router = useRouter();
 
   useEffect(() => {
@@ -95,13 +93,16 @@ export default function ChallengeCard({
       className={`flex flex-col ${variant === "simple" ? "h-auto justify-start" : "justify-between"} ${variant === "simple" ? "" : "rounded-[12px] border-2 border-[var(--color-gray-800)]"} bg-white p-4`}
     >
       <div className="relative flex items-start justify-between">
-        {status ? (
-          <ChipCardStatus status={status} />
-        ) : (
-          <div className="mt-1 mb-1 text-xl font-semibold text-gray-800 sm:text-[22px]" onClick={onClick}>
+        <div className="flex flex-col gap-3">
+          {status && <ChipCardStatus status={status} />}
+          <button
+            className="mb-1 text-xl font-semibold text-gray-800 sm:text-[22px]"
+            onClick={() => router.push(`/challenges/${challengeId}`)}
+          >
             {title}
-          </div>
-        )}
+          </button>
+        </div>
+
         {isAdmin ? (
           <div ref={dropdownRef}>
             <button onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
@@ -126,12 +127,6 @@ export default function ChallengeCard({
           </div>
         ) : null}
       </div>
-
-      {status && (
-        <div className="mt-1 mb-1 text-xl font-semibold text-gray-800 sm:text-[22px]" onClick={onClick}>
-          {title}
-        </div>
-      )}
 
       <div className="mt-2 flex flex-wrap gap-2">
         {categoryChipMap[category] ?? null}
