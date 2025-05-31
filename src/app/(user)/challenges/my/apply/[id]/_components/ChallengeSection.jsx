@@ -3,11 +3,12 @@ import ChallengeInfo from "@/app/(user)/challenges/[challengeId]/_components/Cha
 import React from "react";
 
 function ChallengeSection({ challenge, adminStatus }) {
-  const { title, description, category, docType, deadline, participants, maxParticipant } = challenge || {};
+  const { title, description, category, docType, deadline, participants, maxParticipant, id } = challenge || {};
 
   return (
     <section className="space-y-4">
       <ChallengeContent
+        challengeId={id}
         title={title}
         description={description}
         category={category}
