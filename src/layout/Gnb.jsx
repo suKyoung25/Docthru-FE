@@ -70,7 +70,7 @@ export default function Gnb({ userRole }) {
                 챌린지 관리
               </Link>
               <Link
-                href="/admin/challenges"
+                href="/challenges"
                 className={
                   pathname.includes("/challenges")
                     ? "text-[13px] font-bold md:text-[15px]"

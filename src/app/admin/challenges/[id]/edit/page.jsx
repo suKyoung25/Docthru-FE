@@ -68,12 +68,13 @@ export default function editChallengePageAdmin() {
       docType: selectedDocType
     };
 
+    // TODO: 수정기능 서버액션으로
     try {
       const updatedChallenge = await updateChallenge(postData);
 
       if (!updatedChallenge) throw new Error("챌린지 수정 중 오류 발생");
 
-      router.push("/admin/challenges");
+      router.push(`/challenges/${challengeId}`);
     } catch (error) {
       console.log("챌린지 수정 실패");
     }
