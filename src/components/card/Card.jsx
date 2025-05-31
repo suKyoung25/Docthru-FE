@@ -12,6 +12,7 @@ import DeclineModal from "../modal/DeclineModal";
 import { deleteChallengeAction } from "@/lib/actions/admin";
 import { BtnRoundedWithIcon } from "../btn/text/BtnText";
 
+
 export default function ChallengeCard({
   challengeId,
   title,
@@ -32,6 +33,7 @@ export default function ChallengeCard({
   const router = useRouter();
 
   useEffect(() => {
+
     const now = new Date();
     const deadlineDate = new Date(deadline);
     if (participants >= maxParticipant) {
@@ -88,6 +90,23 @@ export default function ChallengeCard({
     }
   };
 
+  const isComplete = pathname.includes("/my/complte");
+  const isMy = pathname.includes("/my")
+
+  const btnProps = isComplete 
+    ? {
+      theme: "solidwhite",
+      iconType: "goToMyWork",
+      text: "내 작업물 보기",
+    }
+    : isMy
+    ? {
+      theme: "outline",
+      iconType: "continueChallenge",
+      text: "도전 계속하기",
+    }
+    : null;
+
   return (
     <div
       className={`flex flex-col ${variant === "simple" ? "h-auto justify-start" : "justify-between"} ${variant === "simple" ? "" : "rounded-[12px] border-2 border-[var(--color-gray-800)]"} bg-white p-4`}
@@ -96,7 +115,7 @@ export default function ChallengeCard({
         <div className="flex flex-col gap-3">
           {status && <ChipCardStatus status={status} />}
           <button
-            className="mb-1 text-xl font-semibold text-gray-800 sm:text-[22px]"
+            className="mb-1 text-xl font-semibold text-left text-gray-800 sm:text-[22px]"
             onClick={() => router.push(`/challenges/${challengeId}`)}
           >
             {title}
@@ -148,19 +167,17 @@ export default function ChallengeCard({
                 </span>
               </div>
             </div>
-            {pathname.includes("/my") ? (
-              <div className="items-end">
-                <BtnRoundedWithIcon
-                  theme="link"
-                  iconType="continueChallenge"
-                  onClick={() => router.push(`/challenges/${challengeId}/works/${workId}`)}
-                >
-                  내 작업물 보기
-                </BtnRoundedWithIcon>
-              </div>
-            ) : (
-              ""
-            )}
+             <div className="items-end">
+            { btnProps && (
+              <BtnRoundedWithIcon
+                themes={btnProps.theme}
+                iconType={btnProps.iconType}
+                onClick={() => router.push(`/challenges/${challengeId}/work/${workId}`)}
+              >
+                {btnProps.text}
+              </BtnRoundedWithIcon>
+            ) }
+            </div>
           </div>
         </>
       )}
