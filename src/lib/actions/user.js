@@ -28,6 +28,40 @@ export async function getUserAction() {
   }
 }
 
+// 나의 챌린지 목록 조회 (참여중, 완료한)
+export async function getMyChallengesAction({ params = {} }) {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("accessToken")?.value;
+
+  const query = new URLSearchParams();
+
+  if (params.pageSize) query.append("pageSize", params.pageSize);
+  if (params.cursor) query.append("cursor", params.cursor);
+  if (params.category) query.append("category", params.category);
+  if (params.docType) query.append("docType", params.docType);
+  if (params.keyword) query.append("keyword", params.keyword);
+  if (params.status) query.append("status", params.status);
+
+  try {
+    const res = await fetch(`${BASE_URL}/users/me/challenges?${query}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: `accessToken=${accessToken}`
+      }
+    });
+
+    if (!res.ok) {
+      throw new Error("챌린지 목록을 불러오는데 실패했습니다.");
+    }
+
+    return await res.json();
+  } catch (err) {
+    console.error("getMyChallengesAction 에러:", err);
+    throw err;
+  }
+}
+
 // 나의 챌린지 신청 목록 조회
 export async function getMyApplicationsAction({ params = {} }) {
   const cookieStore = await cookies();
@@ -44,7 +78,7 @@ export async function getMyApplicationsAction({ params = {} }) {
     });
 
     if (!res.ok) {
-      throw new Error("챌린지 신청 목록를 불러오는데 실패했습니다.");
+      throw new Error("챌린지 신청 목록을 불러오는데 실패했습니다.");
     }
 
     return await res.json();

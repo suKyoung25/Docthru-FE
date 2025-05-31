@@ -1,17 +1,45 @@
 "use client";
 
+import { useMyChallenges } from "@/hooks/useMyChallenges";
 import Mychallenges from "./_components/MyChallenges";
-import { useAuth } from "@/providers/AuthProvider";
+import { useEffect, useRef, useState } from "react";
 
 export default function ParticipatedChallengesPage() {
+  const [keyword, setKeyword] = useState("");
+  const { challenges, fetchNextPage, hasNextPage, isFetchingNextPage } = useMyChallenges({
+    status: "open,full",
+    keyword: keyword
+  });
+  const loadMoreRef = useRef(null);
 
+  useEffect(() => {
+    const target = loadMoreRef.current;
+    if (!target || !hasNextPage) return;
 
-  const { loading } = useAuth();
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !isFetchingNextPage) {
+        fetchNextPage();
+      }
+    });
 
-  if (loading) return <div>로딩 중...</div>;
-    
+    observer.observe(target);
+
+    return () => {
+      if (target) observer.unobserve(target);
+      observer.disconnect();
+    };
+  }, [hasNextPage, isFetchingNextPage]);
+
+  console.log(challenges);
+
   return (
-    <Mychallenges myChallengeStatus="participated" />
-  )
-
+    <Mychallenges
+      data={challenges}
+      loadMoreRef={loadMoreRef}
+      hasNextPage={hasNextPage}
+      isFetchingNextPage={isFetchingNextPage}
+      keyword={keyword}
+      setKeyword={setKeyword}
+    />
+  );
 }

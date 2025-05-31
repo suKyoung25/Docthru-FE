@@ -16,7 +16,6 @@ export default function MyApplicationDetailPage() {
   const fetchDetail = async () => {
     try {
       const data = await userService.getApplication(id);
-
       setApplication(data.application);
       setChallenge(data.challenge);
     } catch (error) {

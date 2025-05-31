@@ -1,6 +1,5 @@
 import ChallengeContent from "@/app/(user)/challenges/[challengeId]/_components/ChallengeContent";
 import ChallengeInfo from "@/app/(user)/challenges/[challengeId]/_components/ChallengeInfo";
-import React from "react";
 
 function ChallengeSection({ challenge, adminStatus }) {
   const { title, description, category, docType, deadline, participants, maxParticipant, id } = challenge || {};
@@ -17,7 +16,7 @@ function ChallengeSection({ challenge, adminStatus }) {
       />
       <ChallengeInfo
         deadline={deadline}
-        participants={participants || ""}
+        participants={participants || 0}
         maxParticipant={maxParticipant || ""}
         adminStatus={adminStatus}
       />

@@ -14,7 +14,7 @@ export default function AdminManagementPage() {
   const [totalCount, setTotalCount] = useState(null);
   const [page, setPage] = useState(1);
   const [selectedSortLabel, setSelectedSortLabel] = useState("신청 시간 느린순");
-  const [sort, setSort] = useState(null);
+  const [sort, setSort] = useState("appliedAt_desc");
   const [keyword, setKeyword] = useState("");
   const pageSize = ITEM_COUNT.APPLICATION;
 
