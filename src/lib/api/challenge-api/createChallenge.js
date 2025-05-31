@@ -1,5 +1,6 @@
 //챌린지 생성 페이지에서 사용되는 fetch 입니다.
-const BASE_URL = "http://localhost:8080/challenges";
+// const BASE_URL = "http://localhost:8080/challenges";
+import { BASE_URL } from "@/constant/constant";
 
 //챌린지 신청하기
 export async function postChallenges(data) {
@@ -15,7 +16,7 @@ export async function postChallenges(data) {
     docType
   };
 
-  const res = await fetch(BASE_URL, {
+  const res = await fetch(`${BASE_URL}/challenges`, {
     method: "post",
     headers: {
       "Content-type": "application/json"
