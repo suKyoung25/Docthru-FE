@@ -1,4 +1,4 @@
-import { getApplicationAction, getMyApplicationsAction, getUserAction } from "../actions/user";
+import { deleteChallengeAction, getApplicationAction, getMyApplicationsAction, getUserAction } from "../actions/user";
 
 export const userService = {
   // 사용자 정보 조회
@@ -17,7 +17,7 @@ export const userService = {
   },
 
   // 챌린지 신청 취소 (삭제)
-  deleteApplication: async (challengeId) => {
+  deleteChallenge: async (challengeId) => {
     return await deleteChallengeAction(challengeId);
   }
 };

@@ -8,14 +8,28 @@ import { categoryChipMap, typeChipMap } from "@/components/chip/chipMaps";
 import { useAuth } from "@/providers/AuthProvider";
 import ConfirmActionModal from "@/components/modal/ConfirmActionModal";
 import { userService } from "@/lib/service/userService";
+import { useRouter } from "next/navigation";
 
-export default function ChallengeContent({ title, description, category, docType, adminStatus }) {
+export default function ChallengeContent({ challengeId, title, description, category, docType, adminStatus }) {
+  const router = useRouter();
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isModalOpen, setisModalOpen] = useState(false);
   const { user } = useAuth();
 
   const deleteChallenge = async () => {
-    await userService.deleteChallenge(challengeId);
+    try {
+      await userService.deleteChallenge(challengeId);
+      router.push("/challenges/my/apply");
+      setisModalOpen(false);
+    } catch (error) {
+      console.error("챌린지 삭제 실패: ", error);
+      setisModalOpen(false);
+
+      // TODO : 이건 모달창으로 바꿔주면 좋을듯
+      alert("챌린지 삭제 실패");
+      router.push("/challenges/my/apply");
+    }
   };
 
   return (
@@ -23,12 +37,14 @@ export default function ChallengeContent({ title, description, category, docType
       <div className="relative flex justify-between">
         <h2 className="text-xl font-semibold text-gray-800 md:text-2xl">{title}</h2>
         {adminStatus === "PENDING" && user?.role === "USER" && (
-          <button onClick={() => setIsDropdownOpen((prev) => !prev)}>
-            <Image src={dropdownIcon} alt="드롭다운" width={24} height={24} />
+          <div className="relative">
+            <button onClick={() => setIsDropdownOpen((prev) => !prev)}>
+              <Image src={dropdownIcon} alt="드롭다운" width={24} height={24} />
+            </button>
             {isDropdownOpen && (
               <CancelDropdown onClick={() => setisModalOpen(true)} className="absolute right-0 mt-3" />
             )}
-          </button>
+          </div>
         )}
         {/* TODO: ConfirmActionModal - onConfirm 핸들러 추가 */}
         {isModalOpen && (
