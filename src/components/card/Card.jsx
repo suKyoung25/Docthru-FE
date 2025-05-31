@@ -20,7 +20,6 @@ export default function ChallengeCard({
   deadline,
   participants,
   maxParticipant,
-  // status,
   variant = "default",
   isAdmin,
   onClick
@@ -98,7 +97,7 @@ export default function ChallengeCard({
         {status ? (
           <ChipCardStatus status={status} />
         ) : (
-          <div className="text-xl mt-1 mb-1 sm:text-[22px] font-semibold text-gray-800" onClick={onClick}>
+          <div className="mt-1 mb-1 text-xl font-semibold text-gray-800 sm:text-[22px]" onClick={onClick}>
             {title}
           </div>
         )}
@@ -128,7 +127,7 @@ export default function ChallengeCard({
       </div>
 
       {status && (
-        <div className="mt-1 mb-1 text-xl  sm:text-[22px]  font-semibold text-gray-800" onClick={onClick}>
+        <div className="mt-1 mb-1 text-xl font-semibold text-gray-800 sm:text-[22px]" onClick={onClick}>
           {title}
         </div>
       )}
@@ -140,37 +139,43 @@ export default function ChallengeCard({
 
       {variant !== "simple" && (
         <>
-          <div className="flex justify-between items-center text-sm text-gray-500 border-t border-gray-200 mt-4 pt-4 pb-2">
-       
-              <div className="flex flex-col sm:flex-row sm:gap-4">
-                <div className="flex items-center gap-1 ">
-                  <Image src={clockIcon} alt="시계" width={16} height={16} />
-                  <span>{formatDateToPretty(deadline)} 마감</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Image src={usersIcon} alt="사람" width={16} height={16} />
-                  <span>
-                    {participants}/{maxParticipant}
-                  </span>
-                </div>
+          <div className="mt-4 flex items-center justify-between border-t border-gray-200 pt-4 pb-2 text-sm text-gray-500">
+            <div className="flex flex-col sm:flex-row sm:gap-4">
+              <div className="flex items-center gap-1">
+                <Image src={clockIcon} alt="시계" width={16} height={16} />
+                <span>{formatDateToPretty(deadline)} 마감</span>
               </div>
-              { pathname.includes("/my") ?
+              <div className="flex items-center gap-1">
+                <Image src={usersIcon} alt="사람" width={16} height={16} />
+                <span>
+                  {participants}/{maxParticipant}
+                </span>
+              </div>
+            </div>
+            {pathname.includes("/my") ? (
               <div className="items-end">
-                <BtnRoundedWithIcon 
-                  theme="link" 
-                  iconType = "continueChallenge" 
-                  onClick={()=>router.push(`/challenges/${challengeId}/works/${workId}`)}>
-                    내 작업물 보기
+                <BtnRoundedWithIcon
+                  theme="link"
+                  iconType="continueChallenge"
+                  onClick={() => router.push(`/challenges/${challengeId}/works/${workId}`)}
+                >
+                  내 작업물 보기
                 </BtnRoundedWithIcon>
-              </div> : ""
-              }
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         </>
       )}
       {isDeclineModalOpen && (
-        <DeclineModal text="삭제" onClose={() => {
-          setIsDeclineModalOpen(false)
-        }} onConfirm={handleConfirmDelete} />
+        <DeclineModal
+          text="삭제"
+          onClose={() => {
+            setIsDeclineModalOpen(false);
+          }}
+          onConfirm={handleConfirmDelete}
+        />
       )}
     </div>
   );
