@@ -42,19 +42,6 @@ function Page() {
     applyFilters
   } = useChallenges(); // 훅 내부에서 enabled로 조건 제어
 
-  //디버깅
-  console.log("isAdmin", isAdmin);
-
-  // useEffect(() => {
-  //   if (!authLoading && user) {
-  //     if (isAdmin) {
-  //       setAdminStatus(""); //어드민이면 adminStatus에 상관없이 모든 챌린지가 보임
-  //     } else {
-  //       setAdminStatus("ACCEPTED"); //일반 유저라면 asminStatus=accepted인 챌린지만 보임
-  //     }
-  //   }
-  // }, [user, authLoading, s]);
-
   const handleClickFilter = () => {
     setIsModal(true);
   };

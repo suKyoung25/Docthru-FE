@@ -81,7 +81,10 @@ const useChallenges = (myChallengeStatus) => {
       status
     });
 
-    const currentFilterCount = [fields.length > 0 ? 1 : 0, docType ? 1 : 0, status ? 1 : 0].filter(Boolean).length;
+    const currentFilterCount = fields.length + Number(!!docType) + Number(!!status);
+
+    //디버깅
+    console.log("currentFilterCount", currentFilterCount);
 
     setFilterCount(currentFilterCount);
   }, []);
