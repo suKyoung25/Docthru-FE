@@ -142,3 +142,28 @@ export async function getRankingAction(challengeId) {
     throw err;
   }
 }
+
+// 챌린지 삭제
+export async function deleteChallengeAction(challengeId) {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("accessToken")?.value;
+
+  try {
+    const res = await fetch(`${BASE_URL}/challenges/${challengeId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: `accessToken=${accessToken}`
+      }
+    });
+
+    if (!res.ok) {
+      throw new Error("챌린지 삭제에 실패했습니다.");
+    }
+
+    return await res.json();
+  } catch (err) {
+    console.error("deleteApplicationAction 에러:", err);
+    throw err;
+  }
+}

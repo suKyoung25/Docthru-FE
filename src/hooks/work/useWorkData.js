@@ -50,7 +50,6 @@ export const useWorkData = (challengeId, workId, updateModalState) => {
       setIsLoading(true);
       const payload = content === "<p></p>" ? "" : content;
 
-      console.log(workId, payload);
       await updateWorkAction(workId, payload);
       updateModalState("isSubmitConfirmOpen", false);
       router.refresh();
