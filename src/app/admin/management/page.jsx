@@ -43,7 +43,7 @@ export default function AdminManagementPage() {
   return (
     <>
       <h1 className="mt-[26px] mb-[13px] text-xl font-semibold md:mt-[34px] md:mb-6">챌린지 신청 관리</h1>
-      <div className="mb-4 grid grid-cols-[2.5fr_1fr] gap-3 md:mb-6 md:grid-cols-[4fr_1fr] lg:grid-cols-[6fr_1fr]">
+      <div className="mb-4 grid grid-cols-[2.5fr_1fr] gap-3 md:mb-6 md:grid-cols-[3.5fr_1fr] xl:grid-cols-[5fr_1fr]">
         <SearchInput value={keyword} onChange={(e) => setKeyword(e.target.value)} />
         <div className="relative">
           <Sort isAdminStatus={true} onClick={() => setIsDropdownOpen((prev) => !prev)} label={selectedSortLabel} />

@@ -115,7 +115,7 @@ export async function getApplicationAction(applicationId) {
 
 // 챌린지 작업물(랭킹) 조회
 export async function getRankingAction(challengeId) {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const accessToken = cookieStore.get("accessToken")?.value;
 
   try {
@@ -133,7 +133,6 @@ export async function getRankingAction(challengeId) {
     }
 
     const result = await res.json();
-    console.log("랭킹 응답 데이터:", result); // 확인용
 
     // 구조가 { data: [...] } 형태라면 아래처럼 수정
     return result.data;

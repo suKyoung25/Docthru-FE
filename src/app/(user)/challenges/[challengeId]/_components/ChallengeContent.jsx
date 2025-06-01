@@ -56,7 +56,7 @@ export default function ChallengeContent({ challengeId, title, description, cate
           />
         )}
       </div>
-      <div className="mt-2 flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2">
         {categoryChipMap[category] ?? null}
         {typeChipMap[docType] ?? null}
       </div>

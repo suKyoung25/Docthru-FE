@@ -25,7 +25,6 @@ const useChallenges = (myChallengeStatus) => {
   const [error, setError] = useState(null);
 
   const getChallengesData = useCallback(async () => {
-
     setIsLoading(true);
     setError(null);
     try {
@@ -39,9 +38,7 @@ const useChallenges = (myChallengeStatus) => {
       };
 
       const challengesResults = await getChallenges(options, myChallengeStatus);
-      
-      setTotalCount(challengesResults.totalCount);
-      
+      setTotalCount(challengesResults?.totalCount);
 
       const results = Array.isArray(challengesResults?.data) ? challengesResults.data : [];
       console.log("result", results);

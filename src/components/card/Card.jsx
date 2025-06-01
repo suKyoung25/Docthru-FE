@@ -12,11 +12,10 @@ import DeclineModal from "../modal/DeclineModal";
 import { deleteChallengeAction } from "@/lib/actions/admin";
 import { BtnRoundedWithIcon } from "../btn/text/BtnText";
 
-
 export default function ChallengeCard({
   challengeId,
   title,
-  type,
+  docType,
   category,
   deadline,
   participants,
@@ -33,7 +32,6 @@ export default function ChallengeCard({
   const router = useRouter();
 
   useEffect(() => {
-
     const now = new Date();
     const deadlineDate = new Date(deadline);
     if (participants >= maxParticipant) {
@@ -91,31 +89,31 @@ export default function ChallengeCard({
   };
 
   const isComplete = pathname.includes("/complete");
-  const isMy = pathname.includes("/my")
+  const isMy = pathname.includes("/my");
 
-  const btnProps = isComplete 
+  const btnProps = isComplete
     ? {
-      theme: "solidwhite",
-      iconType: "goToMyWork",
-      text: "내 작업물 보기",
-    }
+        theme: "solidwhite",
+        iconType: "goToMyWork",
+        text: "내 작업물 보기"
+      }
     : isMy
-    ? {
-      theme: "outline",
-      iconType: "continueChallenge",
-      text: "도전 계속하기",
-    }
-    : null;
+      ? {
+          theme: "outline",
+          iconType: "continueChallenge",
+          text: "도전 계속하기"
+        }
+      : null;
 
   return (
     <div
-      className={`flex flex-col ${variant === "simple" ? "h-auto justify-start" : "justify-between"} ${variant === "simple" ? "" : "rounded-[12px] border-2 border-[var(--color-gray-800)]"} bg-white p-4`}
+      className={`flex flex-col ${variant === "simple" ? "h-auto justify-start" : "justify-between"} ${variant === "simple" ? "mt-4 px-4 md:mt-6 md:px-6" : "rounded-[12px] border-2 border-[var(--color-gray-800)] p-4"} bg-white`}
     >
       <div className="relative flex items-start justify-between">
         <div className="flex flex-col gap-3">
           {status && <ChipCardStatus status={status} />}
           <button
-            className="mb-1 text-xl font-semibold text-left text-gray-800 sm:text-[22px]"
+            className="mb-1 text-left text-xl font-semibold text-gray-800 sm:text-[22px]"
             onClick={() => router.push(`/challenges/${challengeId}`)}
           >
             {title}
@@ -149,13 +147,13 @@ export default function ChallengeCard({
 
       <div className="mt-2 flex flex-wrap gap-2">
         {categoryChipMap[category] ?? null}
-        {typeChipMap[type] ?? null}
+        {typeChipMap[docType] ?? null}
       </div>
 
       {variant !== "simple" && (
         <>
           <div className="mt-4 flex items-center justify-between border-t border-gray-200 pt-4 pb-2 text-sm text-gray-500">
-            <div className="flex flex-col sm:flex-row sm:gap-4">
+            <div className="flex flex-col gap-1 md:flex-row md:gap-2 lg:gap-3">
               <div className="flex items-center gap-1">
                 <Image src={clockIcon} alt="시계" width={16} height={16} />
                 <span>{formatDateToPretty(deadline)} 마감</span>
@@ -167,16 +165,16 @@ export default function ChallengeCard({
                 </span>
               </div>
             </div>
-             <div className="items-end">
-            { btnProps && (
-              <BtnRoundedWithIcon
-                themes={btnProps.theme}
-                iconType={btnProps.iconType}
-                onClick={() => router.push(`/challenges/${challengeId}/work/${workId}`)}
-              >
-                {btnProps.text}
-              </BtnRoundedWithIcon>
-            ) }
+            <div className="items-end">
+              {btnProps && (
+                <BtnRoundedWithIcon
+                  themes={btnProps.theme}
+                  iconType={btnProps.iconType}
+                  onClick={() => router.push(`/challenges/${challengeId}/work/${workId}`)}
+                >
+                  {btnProps.text}
+                </BtnRoundedWithIcon>
+              )}
             </div>
           </div>
         </>
