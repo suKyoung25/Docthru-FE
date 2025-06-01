@@ -11,6 +11,7 @@ export const useWorkData = (challengeId, workId, updateModalState) => {
   const [content, setContent] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
 
   // 작업물 메타 정보
   const [workMeta, setWorkMeta] = useState({
@@ -33,6 +34,7 @@ export const useWorkData = (challengeId, workId, updateModalState) => {
         }
       } catch (error) {
         console.error("작업물 상세 조회 실패:", error.message);
+        setIsError(true);
       }
     };
     setIsLoading(false);
@@ -87,6 +89,7 @@ export const useWorkData = (challengeId, workId, updateModalState) => {
     workMeta,
     handleUpdateWork,
     handleDeleteWork,
-    isLoading
+    isLoading,
+    isError
   };
 };
