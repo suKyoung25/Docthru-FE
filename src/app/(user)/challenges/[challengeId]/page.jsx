@@ -6,7 +6,6 @@ import { useParams } from "next/navigation";
 import { getChallengeDetail } from "@/lib/api/challengeDetail";
 import { getRankingAction } from "@/lib/actions/user";
 import dayjs from "dayjs";
-import ChallengeCard from "@/components/card/Card";
 import ChallengeContainer from "../_components/ChallengeContainer";
 import RankingListItem from "@/components/list/RankingListItem";
 import userIcon from "@/assets/img/profile_member.svg";
@@ -17,6 +16,10 @@ import { createWorkAction } from "@/lib/actions/work";
 import { useRouter } from "next/navigation";
 import { assignRankingWithTies } from "@/lib/utils/assignRank";
 import LineDivider from "../my/apply/[id]/_components/LineDivider";
+import { useChallengeStatus } from "@/hooks/useChallengeStatus";
+import ChipCardStatus from "@/components/chip/chipComplete/ChipCardStatus";
+import ChallengeContent from "./_components/ChallengeContent";
+import Container from "@/components/container/PageContainer";
 
 function useIsTablet() {
   const [isTablet, setIsTablet] = useState(false);
@@ -47,8 +50,7 @@ export default function ChallengeDetailPage() {
   const currentItems = rankedData.slice(startIndex, startIndex + itemsPerPage);
 
   const router = useRouter();
-
-  const defaultStyle = "mx-4 md:mx-6";
+  const challengeStatus = useChallengeStatus(challenge);
 
   const handleChallenge = async () => {
     try {
@@ -85,35 +87,19 @@ export default function ChallengeDetailPage() {
   if (error) return <main className="p-10 text-center text-red-500">{error}</main>;
   if (!challenge) return <main className="p-10 text-center">챌린지를 찾을 수 없습니다.</main>;
 
-  const now = dayjs();
-  const deadline = dayjs(challenge.deadline);
-  const participantCount = challenge.participants?.length || 0;
-
-  let challengeStatus = undefined;
-  if (now.isAfter(deadline)) {
-    challengeStatus = "expired";
-  } else if (participantCount >= challenge.maxParticipant) {
-    challengeStatus = "closed";
-  }
-
   return (
-    <div className="mb-40 flex flex-col items-center bg-white">
+    <Container className="mb-40 flex flex-col items-center bg-white">
       <div className="w-full max-w-[var(--container-challenge)]">
         <section className="flex w-full max-w-6xl flex-col gap-4 md:flex-row md:items-start md:justify-center md:gap-6">
-          <div className="flex w-full flex-col md:w-2/3">
-            {/* 🔥 status props 전달 */}
-            <ChallengeCard {...challenge} variant="simple" />
-
-            <section className={`pt-4 pb-3 text-gray-800 ${defaultStyle}`}>
-              <p className="text-sm leading-[1.3] whitespace-pre-line md:text-base">{challenge.description}</p>
-            </section>
-
-            <section className={`flex items-center gap-2 ${defaultStyle}`}>
+          <div className="flex w-full flex-col gap-3 pt-4 md:w-2/3 md:pt-6">
+            {challengeStatus && <ChipCardStatus status={challengeStatus} />}
+            <ChallengeContent {...challenge} />
+            <div className="flex items-center gap-2">
               <Image src={userIcon} alt="작성자 프로필" width={32} height={32} className="rounded-full" />
               <span className="text-sm font-medium text-gray-700">{challenge.user?.nickname || "작성자 없음"}</span>
-            </section>
+            </div>
           </div>
-          <div className={`md:mt-6 md:w-1/3 ${defaultStyle}`}>
+          <div className="md:mt-6 md:w-1/3">
             <ChallengeContainer
               height="h-auto"
               type={isTablet ? "" : "slim"}
@@ -126,15 +112,15 @@ export default function ChallengeDetailPage() {
             />
           </div>
         </section>
-        <LineDivider className={`my-4 text-[#f5f5f5] md:my-6 ${defaultStyle}`} />
+        <LineDivider className="my-4 text-[#f5f5f5] md:my-6" />
 
         {challengeStatus === "expired" && (
-          <div className={`mb-4 md:mb-6 ${defaultStyle}`}>
+          <div className="mb-4 md:mb-6">
             <TopRecommendedWork rankingData={rankingData} />
           </div>
         )}
 
-        <section className={`max-w-6xl rounded-xl border-2 border-gray-800 bg-white ${defaultStyle}`}>
+        <section className="max-w-6xl rounded-xl border-2 border-gray-800 bg-white">
           <div className="flex items-center justify-between px-4 py-3">
             <h3 className="text-base font-semibold text-gray-800 md:text-lg">참여현황</h3>
             {rankingData.length > 0 && (
@@ -203,6 +189,6 @@ export default function ChallengeDetailPage() {
           </div>
         </section>
       </div>
-    </div>
+    </Container>
   );
 }
