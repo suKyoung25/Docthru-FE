@@ -19,7 +19,7 @@ export default function page() {
   const { challengeId, workId } = useParams();
 
   const { modalState, updateModalState } = useModalControl();
-  const { content, setContent, isLoading, isError, isSubmitted, workMeta, handleUpdateWork, handleDeleteWork } =
+  const { content, setContent, workMeta, isLoading, isError, isSubmitted, handleUpdateWork, handleDeleteWork } =
     useWorkData(challengeId, workId, updateModalState);
   const { draftState, updateDraftState, toggleDraftModal, saveDraft, loadDraft } = useDraft(workId, setContent);
 
