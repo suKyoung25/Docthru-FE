@@ -4,7 +4,7 @@ import React from "react";
 import Image from "next/image";
 import iconWithDraw from "@/assets/icon/ic_withdraw.svg";
 import iconLink from "@/assets/icon/ic_arrow_right_up.svg";
-import continueChallenge from "@/assets/icon/ic_arrow_right.svg";
+import continueChallenge from "@/assets/icon/ic_goto.svg";
 import goToMyWork from "@/assets/icon/ic_document.svg";
 
 const themes = {
