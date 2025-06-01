@@ -1,5 +1,5 @@
 import { getChallenges } from "@/lib/api/challenge-api/searchChallenge";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 
 const useChallenges = (myChallengeStatus) => {
   const [filters, setFilters] = useState({
@@ -25,6 +25,7 @@ const useChallenges = (myChallengeStatus) => {
   const [error, setError] = useState(null);
 
   const getChallengesData = useCallback(async () => {
+
     setIsLoading(true);
     setError(null);
     try {
@@ -38,13 +39,17 @@ const useChallenges = (myChallengeStatus) => {
       };
 
       const challengesResults = await getChallenges(options, myChallengeStatus);
+      
       setTotalCount(challengesResults.totalCount);
+      
 
       const results = Array.isArray(challengesResults?.data) ? challengesResults.data : [];
+      console.log("result", results);
 
       const currentDate = new Date();
 
       let filteredResults = results;
+
       if (filters.status === "progress") {
         filteredResults = results.filter((result) => {
           const deadlineDate = new Date(result.deadline);
