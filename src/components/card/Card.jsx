@@ -88,6 +88,23 @@ export default function ChallengeCard({
     }
   };
 
+  const isComplete = pathname.includes("/complete");
+  const isMy = pathname.includes("/my");
+
+  const btnProps = isComplete
+    ? {
+        theme: "solidwhite",
+        iconType: "goToMyWork",
+        text: "내 작업물 보기"
+      }
+    : isMy
+      ? {
+          theme: "outline",
+          iconType: "continueChallenge",
+          text: "도전 계속하기"
+        }
+      : null;
+
   return (
     <div
       className={`flex flex-col ${variant === "simple" ? "h-auto justify-start" : "justify-between"} ${variant === "simple" ? "mt-4 px-4 md:mt-6 md:px-6" : "rounded-[12px] border-2 border-[var(--color-gray-800)] p-4"} bg-white`}
@@ -148,19 +165,17 @@ export default function ChallengeCard({
                 </span>
               </div>
             </div>
-            {pathname.includes("/my") ? (
-              <div className="items-end">
+            <div className="items-end">
+              {btnProps && (
                 <BtnRoundedWithIcon
-                  theme="link"
-                  iconType="continueChallenge"
+                  themes={btnProps.theme}
+                  iconType={btnProps.iconType}
                   onClick={() => router.push(`/challenges/${challengeId}/work/${workId}`)}
                 >
-                  내 작업물 보기
+                  {btnProps.text}
                 </BtnRoundedWithIcon>
-              </div>
-            ) : (
-              ""
-            )}
+              )}
+            </div>
           </div>
         </>
       )}
