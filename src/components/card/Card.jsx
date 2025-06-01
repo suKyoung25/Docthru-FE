@@ -90,7 +90,7 @@ export default function ChallengeCard({
     }
   };
 
-  const isComplete = pathname.includes("/my/complte");
+  const isComplete = pathname.includes("/complete");
   const isMy = pathname.includes("/my")
 
   const btnProps = isComplete 
