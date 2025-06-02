@@ -9,13 +9,15 @@ import OriginalPageModalBtn from "./_components/OriginalPageModalBtn";
 import ConfirmActionModal from "@/components/modal/ConfirmActionModal";
 import EditorHeader from "./_components/EditorHeader";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useDraft } from "@/hooks/work/useDraft";
 import { useModalControl } from "@/hooks/work/useModalControl";
 import { useWorkData } from "@/hooks/work/useWorkData";
 import RedirectNoticeModal from "@/components/modal/RedirectNoticeModal";
 
 export default function page() {
+  const router = useRouter();
+
   const { challengeId, workId } = useParams();
 
   const { modalState, updateModalState } = useModalControl();
@@ -25,7 +27,6 @@ export default function page() {
     workMeta,
     isClosed,
     isLoading,
-    isAuthor,
     isError,
     isSubmitted,
     handleUpdateWork,
@@ -102,7 +103,19 @@ export default function page() {
         <ConfirmActionModal
           text={`${isSubmitted ? "제출" : "수정"}하시겠습니까?`}
           onClose={() => updateModalState("isSubmitConfirmOpen", false)}
-          onConfirm={handleUpdateWork}
+          onConfirm={() => {
+            handleUpdateWork();
+            updateModalState("isContinue", true);
+          }}
+          isLoggedIn={true}
+        />
+      )}
+
+      {modalState.isContinue && (
+        <ConfirmActionModal
+          text="작업물 수정이 완료되었습니다. 계속 수정하시겠습니까?"
+          onClose={() => router.push(`/challenges/${challengeId}`)}
+          onConfirm={() => updateModalState("isContinue", false)}
           isLoggedIn={true}
         />
       )}
