@@ -5,8 +5,8 @@ import BtnText from "@/components/btn/text/BtnText";
 
 export default function OriginalPageModal({ originalPageUrl, onClose, modalState }) {
   const containerClass = modalState
-    ? "fixed top-0 right-0 z-1 flex h-[350px] w-full flex-col transition-all duration-300 sm:h-full sm:w-[300px] xl:w-[640px]"
-    : "fixed top-[-350px] right-0 z-1 flex h-[350px] w-full flex-col sm:top-0 sm:right-[-300px] sm:h-full sm:w-[300px] xl:right-[-640px] xl:w-[640px]";
+    ? "fixed top-0 right-0 z-1 flex h-[350px] w-full flex-col transition-all duration-300 md:h-full md:w-[300px] 2xl:w-[640px]"
+    : "fixed top-[-350px] right-0 z-1 flex h-[350px] w-full flex-col md:top-0 md:right-[-300px] md:h-full md:w-[300px] 2xl:right-[-640px] 2xl:w-[640px]";
 
   const isValidUrl = originalPageUrl?.trim();
 

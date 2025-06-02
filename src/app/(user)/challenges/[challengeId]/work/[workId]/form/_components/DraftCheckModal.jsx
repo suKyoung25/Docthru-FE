@@ -1,6 +1,6 @@
-import BtnText from '@/components/btn/text/BtnText';
-import outCircle from '@/assets/icon/ic_out_circle.svg';
-import Image from 'next/image';
+import BtnText from "@/components/btn/text/BtnText";
+import outCircle from "@/assets/icon/ic_out_circle.svg";
+import Image from "next/image";
 
 export default function DraftCheckModal({ setHasDraft, onDraftModal }) {
   return (
@@ -10,12 +10,13 @@ export default function DraftCheckModal({ setHasDraft, onDraftModal }) {
           <button onClick={() => setHasDraft(false)}>
             <Image src={outCircle} alt="모달닫기" className="h-6 w-6" />
           </button>
-          <span className="text-[14px] font-semibold">
-            임시 저장된 작업물이 있어요. 저장된 작업물을 불러오시겠어요?
+          <span className="flex flex-col text-[14px] font-semibold md:flex-row md:gap-1.5">
+            <span>임시 저장된 작업물이 있어요.</span>
+            <span>저장된 작업물을 불러오시겠어요?</span>
           </span>
         </div>
 
-        <BtnText theme="solidblack" className="h-[32px] max-w-[90px] rounded-xl py-2" onClick={onDraftModal}>
+        <BtnText theme="solidblack" className="h-[32px] w-full max-w-[90px] rounded-xl" onClick={onDraftModal}>
           불러오기
         </BtnText>
       </div>
