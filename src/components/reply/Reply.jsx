@@ -71,8 +71,8 @@ export default function Reply({
           </div>
         </div>
 
-        {/* isAuthor가 true일 때만 메뉴/수정 버튼 표시 */}
-        {isAuthor && !isEditMode ? (
+        {/* isAdmin이 false이면서 isAuthor가 true일때만 메뉴/수정 버튼 표시 */}
+        {!isAdmin && isAuthor && !isEditMode ? (
           <div className="relative" ref={menuRef}>
             <button
               onClick={handleMoreClick}
@@ -111,7 +111,7 @@ export default function Reply({
             </button>
           </div>
         ) : null}
-        {/* isAuthor가 true일 때만 메뉴/수정 버튼 표시 */}
+        {/* isAdmin가 true일 때만 메뉴/수정 버튼 표시 */}
         {isAdmin && !isEditMode ? (
           <div className="relative" ref={menuRef}>
             <button

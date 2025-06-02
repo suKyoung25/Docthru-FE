@@ -68,7 +68,7 @@ export default function ChallengeCard({
   };
 
   const handleEdit = () => {
-    router.push(`/admin/challenges/${challengeId}/edit`);
+    router.push(`/challenges/${challengeId}/edit`); // 챌린지수정 라우터에 adminValidator 존재, 어드민-유저가 동일한 엔드포인트 사용 가능
     setIsDropdownOpen(false);
   };
 
@@ -93,16 +93,16 @@ export default function ChallengeCard({
 
   const btnProps = isComplete
     ? {
-        theme: "solidwhite",
-        iconType: "goToMyWork",
-        text: "내 작업물 보기"
-      }
+      theme: "solidwhite",
+      iconType: "goToMyWork",
+      text: "내 작업물 보기"
+    }
     : isMy
       ? {
-          theme: "outline",
-          iconType: "continueChallenge",
-          text: "도전 계속하기"
-        }
+        theme: "outline",
+        iconType: "continueChallenge",
+        text: "도전 계속하기"
+      }
       : null;
 
   return (
@@ -120,6 +120,7 @@ export default function ChallengeCard({
           </button>
         </div>
 
+        {/* 어드민 드롭다운(수정,삭제) */}
         {isAdmin ? (
           <div ref={dropdownRef}>
             <button onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
