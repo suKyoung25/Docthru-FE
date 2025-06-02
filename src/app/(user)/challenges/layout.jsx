@@ -15,7 +15,7 @@ export default function ChallengesLayout({ children }) {
   const pathname = usePathname();
   const { user } = useAuth();
 
-  const userRole = user?.nickname === "관리자" ? "admin" : "member";
+  const userRole = user?.role === "ADMIN" ? "admin" : "member";
 
   // 현재 경로가 excludeGnbPaths 배열에 있는 패턴과 일치하는지 확인
   const shouldExcludeGnb = excludeGnbPaths.some((path) => {
