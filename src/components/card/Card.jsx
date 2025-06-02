@@ -34,10 +34,11 @@ export default function ChallengeCard({
   useEffect(() => {
     const now = new Date();
     const deadlineDate = new Date(deadline);
-    if (participants >= maxParticipant) {
-      setStatus("closed");
-    } else if (now > deadlineDate) {
+
+    if (now > deadlineDate) {
       setStatus("expired");
+    } else if (participants >= maxParticipant) {
+      setStatus("closed");
     } else {
       setStatus("");
     }
