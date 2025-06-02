@@ -98,7 +98,7 @@ export default function Reply({
               </div>
             )}
           </div>
-        ) : isAuthor && isEditMode ? (
+        ) : !isAdmin && isAuthor && isEditMode ? (
           <div className="mt-2 flex justify-end gap-2 text-sm">
             <button onClick={handleCancelEdit} className="px-5 py-2 font-bold text-gray-500">
               취소
@@ -111,6 +111,7 @@ export default function Reply({
             </button>
           </div>
         ) : null}
+
         {/* isAdmin가 true일 때만 메뉴/수정 버튼 표시 */}
         {isAdmin && !isEditMode ? (
           <div className="relative" ref={menuRef}>
@@ -153,7 +154,7 @@ export default function Reply({
         ) : null}
       </div>
 
-      {/* 내용 or 수정창 */}
+      {/* 피드백내용 & 수정창 */}
       {isEditMode ? (
         <TextBox value={editedContent} onChange={(e) => setEditedContent(e.target.value)} onSubmit={handleSubmitEdit} />
       ) : (
