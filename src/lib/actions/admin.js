@@ -136,3 +136,22 @@ export async function getApplicationsAction({ params = {} }) {
     throw err;
   }
 }
+
+// 관리자 - 챌린지 수정
+export async function updateChallengeAction(challengeId, updatedData) {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("accessToken")?.value;
+
+  const res = await fetch(`${BASE_URL}/challenges/${challengeId}`, {
+    method: "PUT",
+    headers: {
+      "Content-type": "application/json",
+      Cookie: `accessToken=${accessToken}`
+    },
+    body: JSON.stringify(updatedData)
+  });
+
+  if (!res.ok) throw new Error("챌린지를 수정할 수 없습니다.");
+
+  return res.json();
+}

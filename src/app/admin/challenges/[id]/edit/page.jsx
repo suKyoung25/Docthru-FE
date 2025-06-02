@@ -6,8 +6,9 @@ import Input from "@/app/(user)/challenges/create/_components/Input";
 import CategoryClosed from "@/components/dropDown/category/CategoryClosed";
 import CategoryItems from "@/components/dropDown/category/CategoryItems";
 import { useParams, useRouter } from "next/navigation";
-import { updateChallenge } from "@/lib/actions/editChallenge";
 import { getChallengeDetail } from "@/lib/api/challengeDetail";
+import { adminService } from "@/lib/service/adminService";
+import SuccessModal from "@/components/modal/SuccessModal";
 
 export default function editChallengePageAdmin() {
   const [title, setTitle] = useState("");
@@ -19,6 +20,7 @@ export default function editChallengePageAdmin() {
   const [isDocType, setIsDocType] = useState(false);
   const [selectedDocType, setSelectedDocType] = useState("카테고리");
   const [deadline, setDeadline] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   const router = useRouter();
   const params = useParams();
@@ -43,7 +45,7 @@ export default function editChallengePageAdmin() {
       } catch (error) {
         console.log("기존 챌린지 불러오기 실패");
         alert("존재하지 않는 챌린지입니다.");
-        router.push("/admin/challenges");
+        router.push("/challenges");
       }
     };
 
@@ -58,7 +60,6 @@ export default function editChallengePageAdmin() {
     const formatDeadline = new Date(deadline).toISOString();
 
     const postData = {
-      challengeId,
       title,
       originalUrl,
       maxParticipant,
@@ -68,13 +69,12 @@ export default function editChallengePageAdmin() {
       docType: selectedDocType
     };
 
-    // TODO: 수정기능 서버액션으로
     try {
-      const updatedChallenge = await updateChallenge(postData);
+      const updatedChallenge = await adminService.editChallenge(challengeId, postData);
 
       if (!updatedChallenge) throw new Error("챌린지 수정 중 오류 발생");
 
-      router.push(`/challenges/${challengeId}`);
+      setShowModal(true);
     } catch (error) {
       console.log("챌린지 수정 실패");
     }
@@ -195,6 +195,16 @@ export default function editChallengePageAdmin() {
       <BtnText theme="solidblack" className="h-[48px] w-full" disabled={!isFormValid} onClick={handleChallengeEdit}>
         수정하기
       </BtnText>
+
+      {showModal && (
+        <SuccessModal
+          text="수정이 완료되었습니다!"
+          onClose={() => {
+            setShowModal(false);
+            router.push(`/challenges/${challengeId}`);
+          }}
+        />
+      )}
     </div>
   );
 }

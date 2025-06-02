@@ -6,7 +6,6 @@ import SearchInput from "@/components/input/SearchInput";
 import Sort from "@/components/sort/Sort";
 import { ITEM_COUNT } from "@/constant/constant";
 import React, { useEffect, useState } from "react";
-import { useAuth } from "@/providers/AuthProvider";
 import { userService } from "@/lib/service/userService";
 
 export default function MyApplicationsPage() {
@@ -20,12 +19,10 @@ export default function MyApplicationsPage() {
   const [loading, setLoading] = useState(false);
   const pageSize = ITEM_COUNT.APPLICATION;
 
-  const { user } = useAuth();
-
   const fetchApplications = async () => {
     try {
       setLoading(true);
-      const { totalCount, applications } = await userService.getMyApplications(page, pageSize, sort, keyword, user?.id);
+      const { totalCount, applications } = await userService.getMyApplications(page, pageSize, sort, keyword);
       setApplications(applications);
       setTotalCount(totalCount);
     } catch (err) {

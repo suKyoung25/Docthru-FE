@@ -18,8 +18,8 @@ export const userService = {
   },
 
   // 니의 챌린지 신청 목록 조회
-  getMyApplications: async (page, pageSize, sort, keyword, userId) => {
-    return await getMyApplicationsAction({ params: { page, pageSize, sort, keyword, userId } });
+  getMyApplications: async (page, pageSize, sort, keyword) => {
+    return await getMyApplicationsAction({ params: { page, pageSize, sort, keyword } });
   },
 
   // 나의 챌린지 신청 상세 조회

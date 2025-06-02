@@ -93,16 +93,20 @@ export default function ChallengeCard({
 
   const btnProps = isComplete
     ? {
-      theme: "solidwhite",
-      iconType: "goToMyWork",
-      text: "내 작업물 보기"
-    }
+        theme: "solidwhite",
+        iconType: "goToMyWork",
+        text: "내 작업물 보기",
+        className: "w-6 h-6",
+        onClick: () => router.push(`/challenges/${challengeId}/work/${workId}`)
+      }
     : isMy
       ? {
-        theme: "outline",
-        iconType: "continueChallenge",
-        text: "도전 계속하기"
-      }
+          theme: "outline",
+          iconType: "continueChallenge",
+          text: "도전 계속하기",
+          className: "w-[14px] h-[13px]",
+          onClick: () => router.push(`/challenges/${challengeId}/work/${workId}/form`)
+        }
       : null;
 
   return (
@@ -168,11 +172,7 @@ export default function ChallengeCard({
             </div>
             <div className="items-end">
               {btnProps && (
-                <BtnRoundedWithIcon
-                  themes={btnProps.theme}
-                  iconType={btnProps.iconType}
-                  onClick={() => router.push(`/challenges/${challengeId}/work/${workId}`)}
-                >
+                <BtnRoundedWithIcon themes={btnProps.theme} iconType={btnProps.iconType} onClick={btnProps.onClick}>
                   {btnProps.text}
                 </BtnRoundedWithIcon>
               )}
