@@ -51,7 +51,7 @@ const useChallenges = (myChallengeStatus) => {
     };
   }, []);
 
-  const getChallengesData = useCallback(async () => {
+  const getChallengesData = async () => {
     setIsLoading(true);
     setError(null);
     try {
@@ -67,12 +67,12 @@ const useChallenges = (myChallengeStatus) => {
       const challengesResults = await getChallenges(options, myChallengeStatus);
       setTotalCount(challengesResults?.totalCount);
 
-      const results = Array.isArray(challengesResults?.data) ? challengesResults.data : [];
-      console.log("result", results);
-
       const currentDate = new Date();
 
-      let filteredResults = results;
+      let filteredResults = challengesResults.data;
+
+      //디버깅
+      console.log("filteredResult", filteredResults);
 
       if (filters.status === "progress") {
         filteredResults = results.filter((result) => {
@@ -93,11 +93,11 @@ const useChallenges = (myChallengeStatus) => {
     } finally {
       setIsLoading(false);
     }
-  }, [page, pageSize, keyword, filters.categories, filters.docType, filters.status]);
+  };
 
   useEffect(() => {
     getChallengesData();
-  }, [getChallengesData]);
+  }, [page, pageSize, keyword, filters.categories, filters.docType, filters.status]);
 
   useEffect(() => {
     setPage(1);
