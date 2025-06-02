@@ -50,7 +50,7 @@ export default function Gnb({ userRole }) {
   }, []);
 
   return (
-    <header className="flex h-14 items-center justify-center bg-[#FFFFFF] px-4 sm:px-6 md:h-15 lg:px-8">
+    <header className="flex h-14 items-center justify-center border-b-1 border-gray-100 bg-white px-4 sm:px-6 md:h-15 lg:px-8">
       <div className="flex w-full max-w-[var(--container-xl)] items-center justify-between">
         <div className="flex items-center gap-4">
           <Logo className="md:h-[27px] md:w-30" />
@@ -67,7 +67,7 @@ export default function Gnb({ userRole }) {
                 챌린지 관리
               </Link>
               <Link
-                href="/admin/challenges"
+                href="/challenges"
                 className={
                   pathname.includes("/challenges")
                     ? "text-[13px] font-bold md:text-[15px]"

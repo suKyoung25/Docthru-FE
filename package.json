@@ -2,6 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -9,6 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tailwindcss/typography": "^0.5.16",
     "@tanstack/react-query": "^5.76.1",
     "@tanstack/react-query-devtools": "^5.76.1",
     "@tiptap/extension-bullet-list": "^2.12.0",
@@ -25,6 +27,7 @@
     "axios": "^1.9.0",
     "cookie-parser": "^1.4.7",
     "dayjs": "^1.11.13",
+    "dompurify": "^3.2.6",
     "hangul-js": "^0.2.6",
     "jose": "^6.0.11",
     "next": "15.3.2",
@@ -33,12 +36,14 @@
     "react-dom": "^19.0.0",
     "react-hot-toast": "^2.5.2",
     "react-icons": "^5.5.0",
+    "react-intersection-observer": "^9.16.0",
     "react-spinners": "^0.17.0",
     "react-textarea-autosize": "^8.5.9"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@types/react": "^19.1.6",
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
     "prettier": "^3.5.3",

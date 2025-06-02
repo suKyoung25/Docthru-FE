@@ -1,5 +1,5 @@
 import { getChallenges } from "@/lib/api/challenge-api/searchChallenge";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 
 const useChallenges = (myChallengeStatus) => {
   const [filters, setFilters] = useState({
@@ -37,17 +37,16 @@ const useChallenges = (myChallengeStatus) => {
         status: filters.status
       };
 
-      //디버깅
-      console.log("keyword", keyword);
-
       const challengesResults = await getChallenges(options, myChallengeStatus);
-      setTotalCount(challengesResults.totalCount);
+      setTotalCount(challengesResults?.totalCount);
 
       const results = Array.isArray(challengesResults?.data) ? challengesResults.data : [];
+      console.log("result", results);
 
       const currentDate = new Date();
 
       let filteredResults = results;
+
       if (filters.status === "progress") {
         filteredResults = results.filter((result) => {
           const deadlineDate = new Date(result.deadline);
@@ -84,7 +83,10 @@ const useChallenges = (myChallengeStatus) => {
       status
     });
 
-    const currentFilterCount = [fields.length > 0 ? 1 : 0, docType ? 1 : 0, status ? 1 : 0].filter(Boolean).length;
+    const currentFilterCount = fields.length + Number(!!docType) + Number(!!status);
+
+    //디버깅
+    console.log("currentFilterCount", currentFilterCount);
 
     setFilterCount(currentFilterCount);
   }, []);

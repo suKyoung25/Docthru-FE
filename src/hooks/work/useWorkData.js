@@ -10,7 +10,8 @@ export const useWorkData = (challengeId, workId, updateModalState) => {
   // 에디터 핵심 상태
   const [content, setContent] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
 
   // 작업물 메타 정보
   const [workMeta, setWorkMeta] = useState({
@@ -33,8 +34,10 @@ export const useWorkData = (challengeId, workId, updateModalState) => {
         }
       } catch (error) {
         console.error("작업물 상세 조회 실패:", error.message);
+        setIsError(true);
       }
     };
+    setIsLoading(false);
 
     fetchInitialData();
   }, []);
@@ -49,7 +52,6 @@ export const useWorkData = (challengeId, workId, updateModalState) => {
       setIsLoading(true);
       const payload = content === "<p></p>" ? "" : content;
 
-      console.log(workId, payload);
       await updateWorkAction(workId, payload);
       updateModalState("isSubmitConfirmOpen", false);
       router.refresh();
@@ -86,6 +88,8 @@ export const useWorkData = (challengeId, workId, updateModalState) => {
     isSubmitted,
     workMeta,
     handleUpdateWork,
-    handleDeleteWork
+    handleDeleteWork,
+    isLoading,
+    isError
   };
 };

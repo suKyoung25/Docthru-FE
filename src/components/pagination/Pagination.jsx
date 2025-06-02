@@ -59,7 +59,7 @@ function Pagination({ totalCount, currentPage, pageSize, onPageChange }) {
 
   return (
     <div className="mb-12 flex justify-center gap-[6px]">
-      <button type="button" className="page-btn mr-[6px]" onClick={handlePrev} disabled={!paginationData.hasPrev}>
+      <button type="button" className={`page-btn mr-[6px]  ${!paginationData.hasPrev ? "opacity-35 cursor-not-allowed" : ""}`} onClick={handlePrev} disabled={!paginationData.hasPrev}>
         <Image src={leftArrow} alt="왼쪽 화살표" width={40} height={40} />
       </button>
       {paginationData?.pages.map((page) => (
@@ -72,7 +72,7 @@ function Pagination({ totalCount, currentPage, pageSize, onPageChange }) {
           {page}
         </button>
       ))}
-      <button type="button" className="page-btn ml-[6px]" onClick={handleNext} disabled={!paginationData.hasNext}>
+      <button type="button" className={`page-btn ml-[6px] ${!paginationData.hasNext ? "opacity-35 cursor-not-allowed" : ""}`} onClick={handleNext} disabled={!paginationData.hasNext}>
         <Image src={rightArrow} alt="오른쪽 화살표" width={40} height={40} />
       </button>
     </div>

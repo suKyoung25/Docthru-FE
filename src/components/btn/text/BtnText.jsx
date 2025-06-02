@@ -4,8 +4,8 @@ import React from "react";
 import Image from "next/image";
 import iconWithDraw from "@/assets/icon/ic_withdraw.svg";
 import iconLink from "@/assets/icon/ic_arrow_right_up.svg";
-import goToMyWork from "@/assets/icon/ic_arrow_right.svg";
-import continueChallenge from "@/assets/icon/ic_document.svg";
+import continueChallenge from "@/assets/icon/ic_goto.svg";
+import goToMyWork from "@/assets/icon/ic_document.svg";
 
 const themes = {
   tonal: "bg-[#FFE7E7] text-[#fe4744]",
@@ -49,11 +49,13 @@ export default function BtnText({ theme, icon, disabled, onClick, className = ""
   );
 }
 
-export function BtnRoundedWithIcon({ children, iconType = "continueChallenge" }) {
+export function BtnRoundedWithIcon({ themes ="outline", children, iconType = "continueChallenge" , onClick}) {
   return (
-    <button className="box-border flex items-center justify-center gap-2 rounded-full border border-gray-800 bg-[var(--color-gray-50)] px-4 py-2 text-sm font-semibold">
+    <button 
+      onClick={onClick} 
+      className={`flex items-center justify-center gap-1 rounded-full bg-gray-50 px-4 h-8 text-sm font-semibold ${themes} text-gray-800`}>
       <span>{children}</span>
-      <Image src={iconMap[iconType].src} alt={iconMap[iconType].alt} className="h-4 w-4 sm:h-5 sm:w-5" />
+      <Image src={iconMap[iconType].src} alt={iconMap[iconType].alt} className="h-4 w-4 sm:h-6 sm:w-6" />
     </button>
   );
 }

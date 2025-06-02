@@ -7,28 +7,28 @@ import usersIcon from "@/assets/icon/ic_person.svg";
 import { typeChipMap, categoryChipMap } from "../chip/chipMaps";
 import ChipCardStatus from "@/components/chip/chipComplete/ChipCardStatus";
 import { useEffect, useState, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import DeclineModal from "../modal/DeclineModal";
 import { deleteChallengeAction } from "@/lib/actions/admin";
+import { BtnRoundedWithIcon } from "../btn/text/BtnText";
 
 export default function ChallengeCard({
   challengeId,
   title,
-  type,
+  docType,
   category,
   deadline,
   participants,
   maxParticipant,
-  // status,
   variant = "default",
   isAdmin,
-  onClick
+  workId
 }) {
   const [status, setStatus] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDeclineModalOpen, setIsDeclineModalOpen] = useState(false);
   const dropdownRef = useRef(null);
-
+  const pathname = usePathname();
   const router = useRouter();
 
   useEffect(() => {
@@ -88,25 +88,45 @@ export default function ChallengeCard({
     }
   };
 
+  const isComplete = pathname.includes("/complete");
+  const isMy = pathname.includes("/my");
+
+  const btnProps = isComplete
+    ? {
+        theme: "solidwhite",
+        iconType: "goToMyWork",
+        text: "내 작업물 보기"
+      }
+    : isMy
+      ? {
+          theme: "outline",
+          iconType: "continueChallenge",
+          text: "도전 계속하기"
+        }
+      : null;
+
   return (
     <div
-      className={`flex flex-col ${variant === "simple" ? "h-auto justify-start" : "h-[227px] justify-between sm:h-[262px] md:h-[225px]"} ${variant === "simple" ? "" : "rounded-[12px] border-2 border-[var(--color-gray-800)]"} bg-white p-4`}
+      className={`flex flex-col ${variant === "simple" ? "h-auto justify-start" : "justify-between"} ${variant === "simple" ? "mt-4 px-4 md:mt-6 md:px-6" : "rounded-[12px] border-2 border-[var(--color-gray-800)] p-4"} bg-white`}
     >
       <div className="relative flex items-start justify-between">
-        {status ? (
-          <ChipCardStatus status={status} />
-        ) : (
-          <div className="text-xl font-semibold text-gray-800" onClick={onClick}>
+        <div className="flex flex-col gap-3">
+          {status && <ChipCardStatus status={status} />}
+          <button
+            className="mb-1 text-left text-xl font-semibold text-gray-800 sm:text-[22px]"
+            onClick={() => router.push(`/challenges/${challengeId}`)}
+          >
             {title}
-          </div>
-        )}
+          </button>
+        </div>
+
         {isAdmin ? (
           <div ref={dropdownRef}>
             <button onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
               <Image src={dropdownIcon} alt="드롭다운" width={24} height={24} />
             </button>
             {isDropdownOpen && (
-              <div className="absolute top-full right-0 z-10 mt-2 w-28 rounded-md border border-gray-200 bg-white shadow-lg">
+              <div className="absolute top-4 right-0 z-10 mt-2 w-28 rounded-md border border-gray-200 bg-white shadow-lg">
                 <button
                   onClick={handleEdit}
                   className="block w-full px-4 py-2 text-center text-sm text-gray-700 hover:bg-gray-100"
@@ -125,23 +145,15 @@ export default function ChallengeCard({
         ) : null}
       </div>
 
-      {status && (
-        <div className="mt-2 text-xl font-semibold text-gray-800" onClick={onClick}>
-          {title}
-        </div>
-      )}
-
       <div className="mt-2 flex flex-wrap gap-2">
         {categoryChipMap[category] ?? null}
-        {typeChipMap[type] ?? null}
+        {typeChipMap[docType] ?? null}
       </div>
 
       {variant !== "simple" && (
         <>
-          <hr className="my-4 border-gray-200" />
-
-          <div className="flex justify-between text-sm text-gray-500">
-            <div className="flex gap-4">
+          <div className="mt-4 flex items-center justify-between border-t border-gray-200 pt-4 pb-2 text-sm text-gray-500">
+            <div className="flex flex-col gap-1 md:flex-row md:gap-2 lg:gap-3">
               <div className="flex items-center gap-1">
                 <Image src={clockIcon} alt="시계" width={16} height={16} />
                 <span>{formatDateToPretty(deadline)} 마감</span>
@@ -153,13 +165,28 @@ export default function ChallengeCard({
                 </span>
               </div>
             </div>
+            <div className="items-end">
+              {btnProps && (
+                <BtnRoundedWithIcon
+                  themes={btnProps.theme}
+                  iconType={btnProps.iconType}
+                  onClick={() => router.push(`/challenges/${challengeId}/work/${workId}`)}
+                >
+                  {btnProps.text}
+                </BtnRoundedWithIcon>
+              )}
+            </div>
           </div>
         </>
       )}
       {isDeclineModalOpen && (
-        <DeclineModal text="삭제" onClose={() => {
-          setIsDeclineModalOpen(false)
-        }} onConfirm={handleConfirmDelete} />
+        <DeclineModal
+          text="삭제"
+          onClose={() => {
+            setIsDeclineModalOpen(false);
+          }}
+          onConfirm={handleConfirmDelete}
+        />
       )}
     </div>
   );

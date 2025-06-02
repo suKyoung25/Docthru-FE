@@ -1,4 +1,5 @@
 "use client";
+
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
@@ -8,13 +9,13 @@ import profile from "@/assets/img/profile_member.svg";
 import adminProfile from "@/assets/img/profile_admin.svg";
 import empty from "@/assets/img/empty.svg";
 import { getWorkDetailAction, createWorkLikeAction, deleteWorkLikeAction } from "@/lib/actions/work";
+import DOMPurify from "dompurify"; // ✅ 추가
 
 export default function Content() {
   const { challengeId, workId } = useParams();
   const [work, setWork] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // 작업물 조회
   const fetchWork = async () => {
     setIsLoading(true);
     try {
@@ -32,7 +33,6 @@ export default function Content() {
     }
   };
 
-  // 좋아요 토글 핸들러
   const handleLikeToggle = async () => {
     try {
       if (work?.isLiked) {
@@ -40,21 +40,17 @@ export default function Content() {
       } else {
         await createWorkLikeAction(workId);
       }
-      await fetchWork(); // 상태 갱신
+      await fetchWork();
     } catch (error) {
       console.error("좋아요 처리 실패:", error);
       alert(error.message || "좋아요 처리 중 오류가 발생했습니다.");
     }
   };
 
-  // 날짜 포맷팅
   const formatDate = (dateString) => {
     if (!dateString) return "";
     const date = new Date(dateString);
-    return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, "0")}.${String(date.getDate()).padStart(
-      2,
-      "0"
-    )}`;
+    return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, "0")}.${String(date.getDate()).padStart(2, "0")}`;
   };
 
   useEffect(() => {
@@ -96,8 +92,14 @@ export default function Content() {
         </div>
         <div className="text-sm font-medium text-gray-500">{work?.createdAt ? formatDate(work.createdAt) : "날짜"}</div>
       </div>
+
       <div className="mb-6 border-b border-gray-200 pb-10">
-        {work?.content || (
+        {work?.content?.trim() ? (
+          <div
+            className="prose prose-sm max-w-none text-gray-900"
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(work.content) }}
+          />
+        ) : (
           <div className="flex flex-col items-center justify-center gap-4 py-30 text-base text-gray-900">
             <Image src={empty} width={320} height={168} alt="empty" />
             아직 아무런 번역을 진행하지 않았어요!

@@ -15,7 +15,7 @@ export default function MyApplicationsPage() {
   const [totalCount, setTotalCount] = useState(null);
   const [page, setPage] = useState(1);
   const [selectedSortLabel, setSelectedSortLabel] = useState("신청 시간 느린순");
-  const [sort, setSort] = useState(null);
+  const [sort, setSort] = useState("appliedAt_desc");
   const [keyword, setKeyword] = useState("");
   const [loading, setLoading] = useState(false);
   const pageSize = ITEM_COUNT.APPLICATION;
@@ -50,10 +50,10 @@ export default function MyApplicationsPage() {
   return (
     <>
       <div className="mb-4 flex justify-between gap-2">
-        <div className="flex-7 sm:flex-8">
+        <div className="flex-1">
           <SearchInput value={keyword} onChange={(e) => setKeyword(e.target.value)} />
         </div>
-        <div className="relative flex-3 sm:flex-2">
+        <div className="flex-2.5 relative">
           <Sort isAdminStatus={true} onClick={() => setIsDropdownOpen((prev) => !prev)} label={selectedSortLabel} />
           <div className="absolute right-0 mt-2">{isDropdownOpen && <ApplyDropdown onSelect={handleSortSelect} />}</div>
         </div>

@@ -127,5 +127,5 @@ export async function deleteWorkLikeAction(workId) {
     throw new Error(`좋아요 취소 실패 (${res.status}): ${text}`);
   }
 
-  return await res.json();
+  return { status: res.status };
 }

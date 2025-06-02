@@ -5,7 +5,7 @@ import Logo from "@/layout/_components/Logo";
 export default function EditorHeader({ challengeTitle, content, onDraft, isSubmitted, isSubmitModal, onDiscardModal }) {
   return (
     <header className="flex items-center justify-between py-4">
-      <Logo className="sm:h-[27px] sm:w-30" />
+      <Logo className="h-[18px] w-[80px] md:h-[31px] md:w-[120px]" />
 
       <div className="flex gap-2">
         <BtnText

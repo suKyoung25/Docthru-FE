@@ -24,12 +24,7 @@ import TextareaAutosize from "react-textarea-autosize";
  *
  * @returns {JSX.Element} 자동 크기 조절 textarea JSX
  */
-export default function TextBox({
-  value = "",
-  onChange,
-  onSubmit = () => {},
-  placeholder = "피드백을 남겨주세요",
-}) {
+export default function TextBox({ value = "", onChange, onSubmit = () => {}, placeholder = "피드백을 남겨주세요" }) {
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -43,7 +38,7 @@ export default function TextBox({
     <TextareaAutosize
       minRows={3}
       maxRows={6}
-      className="w-full rounded-xl border border-gray-200 p-4"
+      className="w-full resize-none rounded-xl border border-gray-200 p-4"
       placeholder={placeholder}
       value={value}
       onChange={onChange}

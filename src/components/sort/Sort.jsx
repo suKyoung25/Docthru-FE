@@ -21,8 +21,18 @@ export default function Sort({ isAdminStatus, isFiltered, count, label, onClick 
 
   return (
     <button className={containerClass} onClick={onClick}>
-      <div className={`${textClass} flex w-full flex-row max-sm:text-sm`}>
-        <div>{isAdminStatus ? label : "필터"}</div>
+      <div className={`${textClass} flex w-full flex-row text-sm md:text-base`}>
+        <div>
+          {isAdminStatus ? (
+            <>
+              <div className="block md:hidden">정렬</div>
+              <div className="hidden md:block">{label}</div>
+            </>
+          ) : (
+            "필터"
+          )}
+        </div>
+        {/* <div>{isAdminStatus ? label : "필터"}</div> */}
         <div>{count ? `(${count})` : ""}</div>
       </div>
       <Image src={iconSrc} width={16} height={16} alt="아이콘" className={imageClass} />
