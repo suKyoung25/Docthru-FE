@@ -41,7 +41,7 @@ export default function page() {
         maxWidth="max-w-4xl"
         className={
           modalState.isOriginalPageOpen
-            ? "mt-[350px] transition-all duration-300 sm:mt-0 sm:mr-[300px] xl:mr-[640px]"
+            ? "mt-[350px] transition-all duration-300 md:mt-0 md:mr-[300px] 2xl:mr-[640px]"
             : ""
         }
       >

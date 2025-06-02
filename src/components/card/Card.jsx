@@ -68,7 +68,7 @@ export default function ChallengeCard({
   };
 
   const handleEdit = () => {
-    router.push(`/challenges/${challengeId}/edit`); // 챌린지수정 라우터에 adminValidator 존재, 어드민-유저가 동일한 엔드포인트 사용 가능
+    router.push(`/admin/challenges/${challengeId}/edit`);
     setIsDropdownOpen(false);
   };
 

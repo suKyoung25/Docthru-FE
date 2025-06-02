@@ -8,25 +8,20 @@ export default function EditorHeader({ challengeTitle, content, onDraft, isSubmi
       <Logo className="h-[18px] w-[80px] md:h-[31px] md:w-[120px]" />
 
       <div className="flex gap-2">
-        <BtnText
-          theme="tonal"
-          icon
-          className="min-w-[36px] px-4 py-2 sm:min-w-[90px] sm:px-0"
-          onClick={onDiscardModal}
-        />
+        <BtnText theme="tonal" icon className="min-w-[36px] px-2 md:min-w-[90px]" onClick={onDiscardModal} />
 
-        <BtnText theme="outline" className="min-w-[90px] px-4 py-2" onClick={() => onDraft(challengeTitle, content)}>
+        <BtnText theme="outline" className="min-w-[90px]" onClick={() => onDraft(challengeTitle, content)}>
           임시저장
         </BtnText>
 
         {isSubmitted && (
-          <BtnText theme="solidblack" className="min-w-[90px] px-4 py-2" onClick={isSubmitModal}>
+          <BtnText theme="solidblack" className="min-w-[90px]" onClick={isSubmitModal}>
             제출하기
           </BtnText>
         )}
 
         {!isSubmitted && (
-          <BtnText theme="solidblack" className="min-w-[90px] px-4 py-2" onClick={isSubmitModal}>
+          <BtnText theme="solidblack" className="min-w-[90px]" onClick={isSubmitModal}>
             수정하기
           </BtnText>
         )}
