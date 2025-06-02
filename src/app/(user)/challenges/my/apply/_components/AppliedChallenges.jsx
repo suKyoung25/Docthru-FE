@@ -12,7 +12,7 @@ export default function AppliedChallenges({ resultData, totalCount, page, pageSi
 
   return (
     <>
-      <div className="overflow-scroll">
+      <div className="overflow-auto">
         <ListHead />
         <div>
           {resultData?.map((data) => (
