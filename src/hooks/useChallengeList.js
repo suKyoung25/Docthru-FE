@@ -1,5 +1,6 @@
 import { getChallenges } from "@/lib/api/challenge-api/searchChallenge";
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useState, useEffect, useRef, useMemo } from "react";
 
 const useChallenges = (myChallengeStatus) => {
   const [filters, setFilters] = useState({
@@ -7,9 +8,7 @@ const useChallenges = (myChallengeStatus) => {
     docType: "",
     status: ""
   });
-  const [challenges, setChallenges] = useState([]);
   const [keyword, setKeyword] = useState("");
-  const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState(1);
 
   const getInitialPageSize = () => {
@@ -21,8 +20,6 @@ const useChallenges = (myChallengeStatus) => {
 
   const [pageSize, setPageSize] = useState(getInitialPageSize);
   const [filterCount, setFilterCount] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   // 디바운스를 위한 ref
   const resizeTimeout = useRef(null);
@@ -51,59 +48,57 @@ const useChallenges = (myChallengeStatus) => {
     };
   }, []);
 
-  const getChallengesData = async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const options = {
-        page,
-        pageSize,
-        keyword,
-        category: filters.categories,
-        docType: filters.docType,
-        status: filters.status
-      };
-
-      const challengesResults = await getChallenges(options, myChallengeStatus);
-      setTotalCount(challengesResults?.totalCount);
-
-      const currentDate = new Date();
-
-      let filteredResults = challengesResults.data;
-
-      //디버깅
-      console.log("filteredResult", filteredResults);
-
-      if (filters.status === "progress") {
-        filteredResults = results.filter((result) => {
-          const deadlineDate = new Date(result.deadline);
-          return deadlineDate.getTime() > currentDate.getTime();
-        });
-      } else if (filters.status === "closed") {
-        filteredResults = results.filter((result) => {
-          const deadlineDate = new Date(result.deadline);
-          return deadlineDate.getTime() < currentDate.getTime();
-        });
-      }
-      setChallenges(filteredResults);
-    } catch (err) {
-      console.error("챌린지 목록 불러오기 실패:", err);
-      setError("챌린지 목록을 불러오는 데 실패했습니다.");
-      setChallenges([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getChallengesData();
-  }, [page, pageSize, keyword, filters.categories, filters.docType, filters.status]);
-
   useEffect(() => {
     setPage(1);
   }, [filters, keyword]);
 
-  const applyFilters = useCallback(({ fields, docType, status }) => {
+  //쿼리로 보낼 options 구성
+  const queryOptions = useMemo(
+    () => ({
+      page,
+      pageSize,
+      keyword,
+      category: filters.categories,
+      docType: filters.docType,
+      status: filters.status
+    }),
+    [page, pageSize, keyword, filters]
+  );
+
+  const {
+    data: challengesResults,
+    isLoading,
+    error
+  } = useQuery({
+    queryKey: ["challenges", queryOptions, myChallengeStatus],
+    queryFn: () => getChallenges(queryOptions, myChallengeStatus),
+    keepPreviousData: true, //데이터 변경 시 이전 데이터를 유지해줌으로써 UX 최적화
+    staleTime: 1000 * 60 // 1분. 이 시간 동안은 재요청 없이 캐시된 데이터 사용
+  });
+
+  const challenges = useMemo(() => {
+    if (!challengesResults?.data) return [];
+
+    const currentDate = new Date();
+
+    //필터에서 마감/진행중 선택 시
+    if (filters.status === "progress") {
+      return challengesResults.data.filter((result) => {
+        const deadlineDate = new Date(result.deadline);
+        return deadlineDate.getTime() > currentDate.getTime();
+      });
+    }
+    if (filters.status === "closed") {
+      return challengesResults.data.filter((result) => {
+        const deadlineDate = new Date(result.deadline);
+        return deadlineDate.getTime() < currentDate.getTime();
+      });
+    }
+
+    return challengesResults.data;
+  }, [challengesResults, filters.status]);
+
+  const applyFilters = ({ fields, docType, status }) => {
     setFilters({
       categories: fields,
       docType,
@@ -113,11 +108,14 @@ const useChallenges = (myChallengeStatus) => {
     const currentFilterCount = fields.length + Number(!!docType) + Number(!!status);
 
     setFilterCount(currentFilterCount);
-  }, []);
+  };
+
+  //디버깅
+  console.log("challengesResults", challengesResults);
 
   return {
     challenges,
-    totalCount,
+    totalCount: challengesResults?.totalCount || 0,
     page,
     pageSize,
     keyword,
@@ -127,9 +125,7 @@ const useChallenges = (myChallengeStatus) => {
     error,
     setPage,
     setKeyword,
-    applyFilters,
-    setChallenges,
-    setTotalCount
+    applyFilters
   };
 };
 
