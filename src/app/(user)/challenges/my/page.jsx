@@ -8,7 +8,7 @@ export default function ParticipatedChallengesPage() {
   const [keyword, setKeyword] = useState("");
   const { challenges, fetchNextPage, hasNextPage, isFetchingNextPage } = useMyChallenges({
     status: "open,full",
-    keyword: keyword
+    keyword
   });
   const loadMoreRef = useRef(null);
 

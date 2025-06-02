@@ -53,10 +53,10 @@ export function BtnRoundedWithIcon({ themes = "outline", children, iconType = "c
   return (
     <button
       onClick={onClick}
-      className={`flex h-8 items-center justify-center gap-1 rounded-full bg-gray-50 px-4 text-sm font-semibold ${themes} text-gray-800`}
+      className={`flex h-8 items-center justify-center gap-[6px] rounded-full bg-gray-50 px-4 text-sm font-semibold ${themes} text-gray-800`}
     >
       <span>{children}</span>
-      <Image src={iconMap[iconType].src} alt={iconMap[iconType].alt} className="h-4 w-4 sm:h-6 sm:w-6" />
+      <Image src={iconMap[iconType].src} alt={iconMap[iconType].alt} className={iconMap[iconType].className} />
     </button>
   );
 }
