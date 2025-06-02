@@ -39,6 +39,24 @@ export async function getWorkDetailAction(challengeId, workId) {
   return await res.json();
 }
 
+// ✅ 작업물 폼 페이지 상세 조회
+export async function getWorkFormAction(challengeId, workId) {
+  const headers = await getAuthHeaders();
+
+  const res = await fetch(`${BASE_URL}/challenges/${challengeId}/works/${workId}/form`, {
+    method: "GET",
+    headers,
+    credentials: "include",
+    cache: "no-store"
+  });
+
+  if (!res.ok) {
+    throw new Error("작업물 폼 페이지 조회 실패");
+  }
+
+  return await res.json();
+}
+
 // ✅ 작업물 생성
 export async function createWorkAction(challengeId) {
   const headers = await getAuthHeaders();

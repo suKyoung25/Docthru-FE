@@ -28,6 +28,7 @@ export default function page() {
     isClosed,
     isLoading,
     isError,
+    isAuthError,
     isSubmitted,
     handleUpdateWork,
     handleDeleteWork
@@ -120,6 +121,14 @@ export default function page() {
         />
       )}
 
+      {isAuthError && (
+        <RedirectNoticeModal
+          text="작업물 수정 권한이 없습니다. 오류가 지속될 경우 관리자에게 문의해주세요."
+          buttonText="돌아가기"
+          redirectUrl={`/challenges/${challengeId}`}
+        />
+      )}
+
       {isClosed && (
         <RedirectNoticeModal
           text="이미 종료된 챌린지 입니다."
@@ -130,7 +139,7 @@ export default function page() {
 
       {isError && (
         <RedirectNoticeModal
-          text="존재하지 않는 작업물 이거나 작업물 수정 권한이 없습니다. 오류가 지속될 경우 관리자에게 문의해주세요."
+          text="존재하지 않는 작업물입니다. 오류가 지속될 경우 관리자에게 문의해주세요."
           buttonText="돌아가기"
           redirectUrl={`/challenges/${challengeId}`}
         />
