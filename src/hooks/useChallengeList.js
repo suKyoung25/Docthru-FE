@@ -24,7 +24,34 @@ const useChallenges = (myChallengeStatus) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const getChallengesData = useCallback(async () => {
+  // 디바운스를 위한 ref
+  const resizeTimeout = useRef(null);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (resizeTimeout.current) clearTimeout(resizeTimeout.current); //이전 타이머 취소
+
+      resizeTimeout.current = setTimeout(() => {
+        const newPageSize = getInitialPageSize();
+        setPageSize((prevPageSize) => {
+          if (prevPageSize !== newPageSize) {
+            return newPageSize;
+          }
+          return prevPageSize;
+        });
+      }, 200);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // 언마운트 시 정리
+    return () => {
+      if (resizeTimeout.current) clearTimeout(resizeTimeout.current); //컴포넌트가 사라지면 이벤트도 같이 사라져야함
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const getChallengesData = async () => {
     setIsLoading(true);
     setError(null);
     try {
@@ -40,12 +67,12 @@ const useChallenges = (myChallengeStatus) => {
       const challengesResults = await getChallenges(options, myChallengeStatus);
       setTotalCount(challengesResults?.totalCount);
 
-      const results = Array.isArray(challengesResults?.data) ? challengesResults.data : [];
-      console.log("result", results);
-
       const currentDate = new Date();
 
-      let filteredResults = results;
+      let filteredResults = challengesResults.data;
+
+      //디버깅
+      console.log("filteredResult", filteredResults);
 
       if (filters.status === "progress") {
         filteredResults = results.filter((result) => {
@@ -66,11 +93,11 @@ const useChallenges = (myChallengeStatus) => {
     } finally {
       setIsLoading(false);
     }
-  }, [page, pageSize, keyword, filters.categories, filters.docType, filters.status]);
+  };
 
   useEffect(() => {
     getChallengesData();
-  }, [getChallengesData]);
+  }, [page, pageSize, keyword, filters.categories, filters.docType, filters.status]);
 
   useEffect(() => {
     setPage(1);
@@ -84,9 +111,6 @@ const useChallenges = (myChallengeStatus) => {
     });
 
     const currentFilterCount = fields.length + Number(!!docType) + Number(!!status);
-
-    //디버깅
-    console.log("currentFilterCount", currentFilterCount);
 
     setFilterCount(currentFilterCount);
   }, []);
