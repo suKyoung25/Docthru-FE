@@ -24,6 +24,33 @@ const useChallenges = (myChallengeStatus) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // 디바운스를 위한 ref
+  const resizeTimeout = useRef(null);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (resizeTimeout.current) clearTimeout(resizeTimeout.current); //이전 타이머 취소
+
+      resizeTimeout.current = setTimeout(() => {
+        const newPageSize = getInitialPageSize();
+        setPageSize((prevPageSize) => {
+          if (prevPageSize !== newPageSize) {
+            return newPageSize;
+          }
+          return prevPageSize;
+        });
+      }, 200);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // 언마운트 시 정리
+    return () => {
+      if (resizeTimeout.current) clearTimeout(resizeTimeout.current); //컴포넌트가 사라지면 이벤트도 같이 사라져야함
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const getChallengesData = useCallback(async () => {
     setIsLoading(true);
     setError(null);

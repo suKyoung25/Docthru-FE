@@ -16,7 +16,7 @@ export default function ChallengesPage() {
   const [shouldFetch, setShouldFetch] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [keywordInput, setKeywordInput] = useState("");
-  const { user, isLoading: authLoading } = useAuth(); // authLoading 추가
+  const { user, isLoading: authLoading } = useAuth();
 
   //현재 사용자가 일반유저인지, 관리자인지 확인
   const isAdmin = user?.role === "ADMIN";
@@ -40,11 +40,9 @@ export default function ChallengesPage() {
     setPage,
     setKeyword,
     applyFilters
-  } = useChallenges(); // 훅 내부에서 enabled로 조건 제어
+  } = useChallenges();
 
-  const handleSearch = () => {
-    setKeyword(keywordInput);
-  };
+  const handleSearch = () => setKeyword(keywordInput);
 
   const handleApplyFilters = (newFilters) => {
     applyFilters(newFilters);
@@ -70,6 +68,7 @@ export default function ChallengesPage() {
             />
           )}
         </div>
+
         <div className="flex-1">
           <SearchInput
             text={"text-[14px]"}
