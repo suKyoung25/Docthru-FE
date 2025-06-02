@@ -15,6 +15,7 @@ import LoadingSpinner from "@/components/loading/LoadingSpinner";
 export default function ChallengesPage() {
   const [shouldFetch, setShouldFetch] = useState(false);
   const [isModal, setIsModal] = useState(false);
+  const [keywordInput, setKeywordInput] = useState("");
   const { user, isLoading: authLoading } = useAuth(); // authLoading 추가
 
   //현재 사용자가 일반유저인지, 관리자인지 확인
@@ -41,6 +42,10 @@ export default function ChallengesPage() {
     applyFilters
   } = useChallenges(); // 훅 내부에서 enabled로 조건 제어
 
+  const handleSearch = () => {
+    setKeyword(keywordInput);
+  };
+
   const handleApplyFilters = (newFilters) => {
     applyFilters(newFilters);
     setIsModal(false);
@@ -66,7 +71,12 @@ export default function ChallengesPage() {
           )}
         </div>
         <div className="flex-1">
-          <SearchInput text={"text-[14px]"} value={keyword} onChange={(e) => setKeyword(e.target.value)} />
+          <SearchInput
+            text={"text-[14px]"}
+            value={keywordInput}
+            onChange={(e) => setKeywordInput(e.target.value)}
+            onEnter={handleSearch}
+          />
         </div>
       </div>
 

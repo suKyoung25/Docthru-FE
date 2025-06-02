@@ -85,9 +85,6 @@ const useChallenges = (myChallengeStatus) => {
 
     const currentFilterCount = fields.length + Number(!!docType) + Number(!!status);
 
-    //디버깅
-    console.log("currentFilterCount", currentFilterCount);
-
     setFilterCount(currentFilterCount);
   }, []);
 
