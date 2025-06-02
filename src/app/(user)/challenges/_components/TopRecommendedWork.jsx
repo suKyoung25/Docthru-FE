@@ -9,6 +9,7 @@ import nextBtn from "@/assets/btn/btn_right.svg";
 import arrowDown from "@/assets/icon/ic_arrow_down.svg";
 import arrowUp from "@/assets/icon/ic_arrow_up.svg";
 import dayjs from "dayjs";
+import DOMPurify from "dompurify"; // ✅ 추가
 
 export default function TopRecommendedWork({ rankingData }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -70,13 +71,12 @@ export default function TopRecommendedWork({ rankingData }) {
 
               <div className="px-6">
                 <hr className="mb-2 border-t border-gray-300" />
-                <p
-                  className={`pb-2 text-sm leading-relaxed whitespace-pre-line text-gray-700 ${
+                <div
+                  className={`prose prose-sm max-w-none pb-2 text-sm leading-relaxed whitespace-pre-line text-gray-700 ${
                     !isExpanded ? "line-clamp-5" : ""
                   }`}
-                >
-                  {work.content}
-                </p>
+                  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(work.content) }}
+                />
 
                 {work.content.length > 100 && isCurrent && (
                   <div className="mt-4 flex justify-center bg-transparent pb-6">
