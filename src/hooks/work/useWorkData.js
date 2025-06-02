@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { deleteWorkAction, getWorkDetailAction, updateWorkAction } from "@/lib/actions/work";
+import { deleteWorkAction, getWorkFormAction, updateWorkAction } from "@/lib/actions/work";
 
 export const useWorkData = (challengeId, workId, updateModalState) => {
   const router = useRouter();
@@ -13,6 +13,7 @@ export const useWorkData = (challengeId, workId, updateModalState) => {
   const [isClosed, setIsClosed] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
+  const [isAuthError, setIsAuthError] = useState(false);
 
   // 작업물 메타 정보
   const [workMeta, setWorkMeta] = useState({
@@ -24,7 +25,7 @@ export const useWorkData = (challengeId, workId, updateModalState) => {
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        const response = await getWorkDetailAction(challengeId, workId);
+        const response = await getWorkFormAction(challengeId, workId);
         if (response?.data) {
           setWorkMeta({
             challengeTitle: response.data.challengeTitle,
@@ -35,7 +36,12 @@ export const useWorkData = (challengeId, workId, updateModalState) => {
           setIsClosed(response.data.isClosed);
         }
       } catch (error) {
-        console.error("작업물 상세 조회 실패:", error.message);
+        if (error.message === "작업물 폼 페이지 조회 실패") {
+          console.log("작업물 폼 페이지 조회 실패");
+          setIsAuthError(true);
+          return;
+        }
+        console.error("에러 메시지:", error.message);
         setIsError(true);
       }
     };
@@ -93,6 +99,7 @@ export const useWorkData = (challengeId, workId, updateModalState) => {
     handleDeleteWork,
     isLoading,
     isError,
-    isClosed
+    isClosed,
+    isAuthError
   };
 };
