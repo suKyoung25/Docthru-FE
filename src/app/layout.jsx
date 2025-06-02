@@ -31,7 +31,7 @@ export const metadata = {
   authors: [{ name: "Docthru", url: "https://6-docthru-3team-fe-dev.vercel.app/" }],
   creator: "Docthru",
   icons: {
-    icon: "/favicon.svg",
+    icon: "/favicon.svg"
   },
   openGraph: {
     title: "Docthru - 개발문서 번역 플랫폼",
@@ -84,7 +84,8 @@ export default async function RootLayout({ children }) {
         <Providers>
           <main className="flex-grow">{children}</main>
         </Providers>
-        <DevNavigation />
+        {/* 개발 버전 네비게이션 주석 처리 */}
+        {/* <DevNavigation /> */}
       </body>
     </html>
   );
