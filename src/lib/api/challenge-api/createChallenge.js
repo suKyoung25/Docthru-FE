@@ -1,7 +1,5 @@
 "use server";
 
-//챌린지 생성 페이지에서 사용되는 fetch 입니다.
-// const BASE_URL = "http://localhost:8080/challenges";
 import { BASE_URL } from "@/constant/constant";
 import { cookies } from "next/headers";
 

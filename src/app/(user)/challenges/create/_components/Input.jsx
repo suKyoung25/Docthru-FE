@@ -1,17 +1,30 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { forwardRef, useRef } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Image from "next/image";
 import calender from "@/assets/icon/calendar_48px.svg";
 
-//챌린지, 어드민 페이지에서 사용됨
-function Input({ type, title, placeholder, onChange, value, height, deadline, setDeadline }) {
+// Input 컴포넌트
+const Input = forwardRef(function Input(
+  {
+    type,
+    title,
+    placeholder,
+    onChange,
+    value,
+    height,
+    deadline,
+    setDeadline,
+    ...rest // register가 전달하는 props (ref, onChange 등)
+  },
+  ref
+) {
   const isHeight = Boolean(height);
   const datePickerRef = useRef(null);
 
-  if (type === "date")
+  if (type === "date") {
     return (
       <div className="flex w-full flex-col">
         <label className="mb-2 text-sm font-medium text-[var(--color-gray-900)]">마감일</label>
@@ -30,6 +43,7 @@ function Input({ type, title, placeholder, onChange, value, height, deadline, se
         />
       </div>
     );
+  }
 
   return (
     <div className="font-pretendard">
@@ -40,6 +54,8 @@ function Input({ type, title, placeholder, onChange, value, height, deadline, se
           placeholder={placeholder}
           onChange={onChange}
           value={value}
+          ref={ref}
+          {...rest}
         />
       ) : (
         <input
@@ -47,10 +63,12 @@ function Input({ type, title, placeholder, onChange, value, height, deadline, se
           placeholder={placeholder}
           onChange={onChange}
           value={value}
+          ref={ref}
+          {...rest}
         />
       )}
     </div>
   );
-}
+});
 
 export default Input;

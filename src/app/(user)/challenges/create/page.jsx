@@ -9,101 +9,115 @@ import { postChallenges } from "@/lib/api/challenge-api/createChallenge";
 import { useRouter } from "next/navigation";
 import { getServerSideToken } from "@/lib/actions/auth";
 import { isValidURL } from "@/lib/utils/verifyUrlForm";
+import { useMutation } from "@tanstack/react-query";
+import { ClipLoader } from "react-spinners";
+import { useForm } from "react-hook-form";
 
-export default function page() {
-  const [title, setTitle] = useState("");
-  const [originalUrl, setOriginalUrl] = useState("");
-  const [maxParticipant, setMaxParticipant] = useState(null);
-  const [description, setDescription] = useState("");
-  const [isCategory, setIsCategory] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("카테고리");
-  const [isDocType, setIsDocType] = useState(false);
-  const [selectedDocType, setSelectedDocType] = useState("카테고리");
-  const [deadline, setDeadline] = useState(null);
+const useCreateChallenge = () => {
   const router = useRouter();
 
-  //챌린지 신청하기
-  const handlePost = async () => {
-    if (maxParticipantErrorMessage && isValidURL(originalUrl)) return alert("신청 형식을 확인해주세요");
+  return useMutation({
+    mutationFn: async (formData) => {
+      const accessToken = getServerSideToken("accessToken");
+      const formatDeadline = new Date(formData.deadline).toISOString();
 
-    //액세스 토큰 받아오기 (서버액션으로)
-    const accessToken = getServerSideToken("accessToken");
+      const postData = {
+        accessToken,
+        title: formData.title,
+        originalUrl: formData.originalUrl,
+        maxParticipant: formData.maxParticipant,
+        description: formData.description,
+        deadline: formatDeadline,
+        category: formData.selectedCategory,
+        docType: formData.selectedDocType
+      };
 
-    //ISO 8601 문자열로 변환
-    const formatDeadline = new Date(deadline).toISOString();
+      return await postChallenges(postData);
+    },
 
-    const postData = {
-      accessToken,
-      title,
-      originalUrl,
-      maxParticipant,
-      description,
-      deadline: formatDeadline,
-      category: selectedCategory,
-      docType: selectedDocType
-    };
+    onSuccess: (data) => {
+      const challengeId = data?.createdChallenge?.id;
+      if (challengeId) {
+        router.push(`/challenges/my/apply`);
+      }
+    },
 
-    try {
-      const createdChallenge = await postChallenges(postData);
-
-      if (!createdChallenge) throw new Error("챌린지 생성 중 오류 발생");
-
-      const challengeId = createdChallenge.createdChallenge.id;
-
-      router.push(`/challenges/${challengeId}`);
-    } catch (error) {
-      console.log("챌린지 생성 실패");
+    onError: (error) => {
+      console.log("챌린지 생성 실패", error);
     }
+  });
+};
+
+export default function page() {
+  const [isCategory, setIsCategory] = useState(false);
+  const [isDocType, setIsDocType] = useState(false);
+  const { mutate: createChallenge, isPending } = useCreateChallenge();
+
+  const router = useRouter();
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    trigger,
+    formState: { errors, isValid }
+  } = useForm({
+    mode: "onChange", // 입력값이 바뀔 때마다 유효성 검사
+    defaultValues: {
+      title: "",
+      originalUrl: "",
+      maxParticipant: "",
+      description: "",
+      deadline: "",
+      selectedCategory: "카테고리",
+      selectedDocType: "카테고리"
+    }
+  });
+
+  const onSubmit = (postData) => {
+    if (!isValidURL(postData.originalUrl)) {
+      alert("원문 링크 형식이 올바르지 않습니다.");
+      return;
+    }
+
+    if (postData.selectedCategory === "카테고리" || postData.selectedDocType === "카테고리") {
+      alert("카테고리를 선택해주세요.");
+      return;
+    }
+
+    createChallenge(postData);
   };
 
-  //최대 참여자 인원 수 제한
-  let maxParticipantErrorMessage;
-  if (maxParticipant > 99) {
-    maxParticipantErrorMessage = "참여자는 최대 99명입니다.";
-  } else if (maxParticipant === "") {
-    maxParticipantErrorMessage = "숫자로만 입력해주세요";
-  } else {
-    maxParticipantErrorMessage = null;
-  }
-
-  //원문 링크 형식 검사
-  let originalUrlErrorMessage = null;
-  if (originalUrl !== "" && !isValidURL(originalUrl)) {
-    originalUrlErrorMessage = "원문 링크를 올바른 형식으로 작성해주세요.";
-  }
-
-  //신청하기 버튼 비활성화
-  const isFormValid =
-    title.trim() !== "" &&
-    originalUrl.trim() !== "" &&
-    selectedCategory !== "카테고리" &&
-    selectedDocType !== "카테고리" &&
-    deadline !== null &&
-    maxParticipant !== null &&
-    maxParticipant !== "" &&
-    description.trim() !== "" &&
-    !maxParticipantErrorMessage;
-
   return (
-    <div className="font-pretendard px-[16px] pt-[16px] pb-[87px] text-[18px] text-[var(--color-gray-900)] lg:mx-[20rem] [@media(min-width:376px)]:px-[77px]">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="font-pretendard px-[16px] pt-[16px] pb-[87px] text-[18px] text-[var(--color-gray-900)] [@media(min-width:376px)]:px-[77px]"
+    >
       <div className="font-bold">신규 챌린지 신청</div>
 
       <div className="flex flex-col gap-[24px] pt-[16px] pb-[24px] text-[14px]">
-        <Input
-          title={"제목"}
-          placeholder={"제목을 입력해주세요"}
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
+        <div>
+          <Input
+            title={"제목"}
+            placeholder={"제목을 입력해주세요"}
+            {...register("title", { required: "제목은 필수 항목입니다." })}
+          />
+          {errors.title && <p className="pl-[15px] text-red-500">{errors.title.message}</p>}
+        </div>
+
         <div>
           <Input
             title={"원문 링크"}
             placeholder={"원문 링크를 입력해주세요"}
-            value={originalUrl}
-            onChange={(e) => setOriginalUrl(e.target.value)}
+            {...register("originalUrl", {
+              required: "원문 링크는 필수입니다.",
+              validate: (value) => isValidURL(value) || "올바른 URL을 입력해주세요."
+            })}
           />
-          {originalUrlErrorMessage ? <div className="pl-[15px] text-red-500">{originalUrlErrorMessage}</div> : null}
+          {errors.originalUrl && <p className="pl-[15px] text-red-500">{errors.originalUrl.message}</p>}
         </div>
+
         <div className="flex h-full flex-col gap-[8px]">
           <div className="flex flex-col gap-[24px] text-sm font-medium text-[var(--color-gray-900)]">
             <div>
@@ -113,17 +127,25 @@ export default function page() {
                 onClick={() => {
                   setIsCategory((prev) => !prev);
                 }}
-                label={selectedCategory}
+                label={watch("selectedCategory")}
               />
               {isCategory ? (
                 <CategoryItems
                   toggleType={"fields"}
                   onSelect={(selected) => {
-                    setSelectedCategory(selected);
+                    setValue("selectedCategory", selected);
+                    trigger("selectedCategory");
                     setIsCategory(false);
                   }}
                 />
               ) : null}
+              <input
+                type="hidden"
+                {...register("selectedCategory", {
+                  validate: (value) => value !== "카테고리" || "카테고리를 선택해주세요."
+                })}
+              />
+              {errors.selectedCategory && <p className="pl-[15px] text-red-500">{errors.selectedCategory.message}</p>}
             </div>
             <div>
               문서 타입
@@ -132,54 +154,75 @@ export default function page() {
                 onClick={() => {
                   setIsDocType((prev) => !prev);
                 }}
-                label={selectedDocType}
+                label={watch("selectedDocType")}
               />
               {isDocType ? (
                 <CategoryItems
                   toggleType={"docs"}
                   onSelect={(selected) => {
-                    setSelectedDocType(selected);
+                    setValue("selectedDocType", selected);
                     setIsDocType(false);
                   }}
                 />
               ) : null}
+              <input
+                type="hidden"
+                {...register("selectedDocType", {
+                  validate: (value) => value !== "카테고리" || "문서 타입을 선택해주세요."
+                })}
+              />
+              {errors.selectedDocType && <p className="pl-[15px] text-red-500">{errors.selectedDocType.message}</p>}
             </div>
           </div>
         </div>
-        <Input type={"date"} deadline={deadline} setDeadline={setDeadline} />
+        <Input
+          type={"date"}
+          deadline={watch("deadline")}
+          setDeadline={(val) => {
+            setValue("deadline", val);
+            trigger("deadline");
+          }}
+        />
+        <input
+          type="hidden"
+          {...register("deadline", {
+            required: "마감일을 선택해주세요."
+          })}
+        />
+
         <div>
           <Input
             title={"최대 인원"}
             placeholder={"인원을 입력해주세요"}
-            value={maxParticipant ?? ""}
-            onChange={(e) => {
-              const value = e.target.value;
-              if (value === "") {
-                setMaxParticipant("");
-              } else {
-                const num = Number(value);
-                if (!isNaN(num)) {
-                  setMaxParticipant(num);
-                }
-              }
-            }}
+            {...register("maxParticipant", {
+              required: "인원 수를 입력해주세요.",
+              valueAsNumber: true,
+              validate: (value) => (value > 0 && value <= 99) || "참여자는 1~99명 사이여야 합니다."
+            })}
           />
-          {maxParticipantErrorMessage ? (
-            <div className="pl-[15px] text-red-500">{maxParticipantErrorMessage}</div>
-          ) : null}
+          {errors.maxParticipant && <p className="pl-[15px] text-red-500">{errors.maxParticipant.message}</p>}
         </div>
-        <Input
-          title={"내용"}
-          placeholder={"내용을 입력해주세요"}
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          height={"h-[219px]"}
-        />
+        <div>
+          <Input
+            title={"내용"}
+            placeholder={"내용을 입력해주세요"}
+            height={"h-[219px]"}
+            {...register("description", { required: "내용을 입력해주세요." })}
+          />
+          {errors.description && <p className="pl-[15px] text-red-500">{errors.description.message}</p>}
+        </div>
       </div>
 
-      <BtnText theme="solidblack" className="h-[48px] w-full" disabled={!isFormValid} onClick={handlePost}>
-        신청하기
+      <BtnText theme="solidblack" className="h-[48px] w-full" disabled={isPending} type="submit">
+        {isPending ? (
+          <div className="flex items-center justify-center">
+            <ClipLoader color="#fff" size={20} />
+            <span className="ml-2">신청 중...</span>
+          </div>
+        ) : (
+          "신청하기"
+        )}
       </BtnText>
-    </div>
+    </form>
   );
 }
