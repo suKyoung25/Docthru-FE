@@ -19,8 +19,18 @@ export default function page() {
   const { challengeId, workId } = useParams();
 
   const { modalState, updateModalState } = useModalControl();
-  const { content, setContent, workMeta, isLoading, isError, isSubmitted, handleUpdateWork, handleDeleteWork } =
-    useWorkData(challengeId, workId, updateModalState);
+  const {
+    content,
+    setContent,
+    workMeta,
+    isClosed,
+    isLoading,
+    isAuthor,
+    isError,
+    isSubmitted,
+    handleUpdateWork,
+    handleDeleteWork
+  } = useWorkData(challengeId, workId, updateModalState);
   const { draftState, updateDraftState, toggleDraftModal, saveDraft, loadDraft } = useDraft(workId, setContent);
 
   return (
@@ -97,9 +107,17 @@ export default function page() {
         />
       )}
 
+      {isClosed && (
+        <RedirectNoticeModal
+          text="이미 종료된 챌린지 입니다."
+          buttonText="돌아가기"
+          redirectUrl={`/challenges/${challengeId}`}
+        />
+      )}
+
       {isError && (
         <RedirectNoticeModal
-          text="존재하지 않는 작업물 이거나 작업물을 불러오는데 실패하였습니다. 다시 시도해주세요."
+          text="존재하지 않는 작업물 이거나 작업물 수정 권한이 없습니다. 오류가 지속될 경우 관리자에게 문의해주세요."
           buttonText="돌아가기"
           redirectUrl={`/challenges/${challengeId}`}
         />

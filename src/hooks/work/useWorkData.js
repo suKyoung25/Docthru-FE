@@ -10,8 +10,10 @@ export const useWorkData = (challengeId, workId, updateModalState) => {
   // 에디터 핵심 상태
   const [content, setContent] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isClosed, setIsClosed] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
+  const [isContinue, setIsContinue] = useState(false);
 
   // 작업물 메타 정보
   const [workMeta, setWorkMeta] = useState({
@@ -31,6 +33,7 @@ export const useWorkData = (challengeId, workId, updateModalState) => {
           });
           setContent(response.data.content);
           setIsSubmitted(response.data.content === "");
+          setIsClosed(response.data.isClosed);
         }
       } catch (error) {
         console.error("작업물 상세 조회 실패:", error.message);
@@ -90,6 +93,8 @@ export const useWorkData = (challengeId, workId, updateModalState) => {
     handleUpdateWork,
     handleDeleteWork,
     isLoading,
-    isError
+    isError,
+    isClosed,
+    isContinue
   };
 };
