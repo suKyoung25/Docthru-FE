@@ -113,7 +113,7 @@ export default function Reply({
         ) : null}
       </div>
 
-      {/* 내용 or 수정창 */}
+      {/* 피드백내용 & 수정창 */}
       {isEditMode ? (
         <TextBox value={editedContent} onChange={(e) => setEditedContent(e.target.value)} onSubmit={handleSubmitEdit} />
       ) : (

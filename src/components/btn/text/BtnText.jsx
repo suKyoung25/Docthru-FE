@@ -31,12 +31,12 @@ export default function BtnText({ theme, icon, disabled, onClick, className = ""
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`box-border flex items-center justify-center gap-2 rounded-[10px] px-4 py-2 text-sm font-semibold sm:rounded-xl sm:text-base ${themes[theme]} ${className} ${disabled ? "cursor-not-allowed opacity-50" : ""}`}
+      className={`box-border flex items-center justify-center gap-2 rounded-[10px] px-4 py-2 text-sm font-semibold md:rounded-xl md:text-base ${themes[theme]} ${className} ${disabled ? "cursor-not-allowed opacity-50" : ""}`}
     >
       {/* 포기 버튼 */}
       {icon && theme === "tonal" ? (
         <>
-          <span className="mr-[2.5px] hidden sm:inline">포기</span>
+          <span className="mr-[2.5px] hidden md:inline">포기</span>
           <Image src={iconWithDraw} alt="포기하기" className="h-4 w-4 sm:h-5 sm:w-5" />
         </>
       ) : (
@@ -49,11 +49,12 @@ export default function BtnText({ theme, icon, disabled, onClick, className = ""
   );
 }
 
-export function BtnRoundedWithIcon({ themes ="outline", children, iconType = "continueChallenge" , onClick}) {
+export function BtnRoundedWithIcon({ themes = "outline", children, iconType = "continueChallenge", onClick }) {
   return (
-    <button 
-      onClick={onClick} 
-      className={`flex items-center justify-center gap-1 rounded-full bg-gray-50 px-4 h-8 text-sm font-semibold ${themes} text-gray-800`}>
+    <button
+      onClick={onClick}
+      className={`flex h-8 items-center justify-center gap-1 rounded-full bg-gray-50 px-4 text-sm font-semibold ${themes} text-gray-800`}
+    >
       <span>{children}</span>
       <Image src={iconMap[iconType].src} alt={iconMap[iconType].alt} className="h-4 w-4 sm:h-6 sm:w-6" />
     </button>
