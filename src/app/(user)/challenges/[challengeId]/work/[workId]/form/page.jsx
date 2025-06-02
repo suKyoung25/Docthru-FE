@@ -9,18 +9,29 @@ import OriginalPageModalBtn from "./_components/OriginalPageModalBtn";
 import ConfirmActionModal from "@/components/modal/ConfirmActionModal";
 import EditorHeader from "./_components/EditorHeader";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useDraft } from "@/hooks/work/useDraft";
 import { useModalControl } from "@/hooks/work/useModalControl";
 import { useWorkData } from "@/hooks/work/useWorkData";
 import RedirectNoticeModal from "@/components/modal/RedirectNoticeModal";
 
 export default function page() {
+  const router = useRouter();
+
   const { challengeId, workId } = useParams();
 
   const { modalState, updateModalState } = useModalControl();
-  const { content, setContent, workMeta, isLoading, isError, isSubmitted, handleUpdateWork, handleDeleteWork } =
-    useWorkData(challengeId, workId, updateModalState);
+  const {
+    content,
+    setContent,
+    workMeta,
+    isClosed,
+    isLoading,
+    isError,
+    isSubmitted,
+    handleUpdateWork,
+    handleDeleteWork
+  } = useWorkData(challengeId, workId, updateModalState);
   const { draftState, updateDraftState, toggleDraftModal, saveDraft, loadDraft } = useDraft(workId, setContent);
 
   return (
@@ -92,14 +103,34 @@ export default function page() {
         <ConfirmActionModal
           text={`${isSubmitted ? "제출" : "수정"}하시겠습니까?`}
           onClose={() => updateModalState("isSubmitConfirmOpen", false)}
-          onConfirm={handleUpdateWork}
+          onConfirm={() => {
+            handleUpdateWork();
+            updateModalState("isContinue", true);
+          }}
           isLoggedIn={true}
+        />
+      )}
+
+      {modalState.isContinue && (
+        <ConfirmActionModal
+          text="작업물 수정이 완료되었습니다. 계속 수정하시겠습니까?"
+          onClose={() => router.push(`/challenges/${challengeId}`)}
+          onConfirm={() => updateModalState("isContinue", false)}
+          isLoggedIn={true}
+        />
+      )}
+
+      {isClosed && (
+        <RedirectNoticeModal
+          text="이미 종료된 챌린지 입니다."
+          buttonText="돌아가기"
+          redirectUrl={`/challenges/${challengeId}`}
         />
       )}
 
       {isError && (
         <RedirectNoticeModal
-          text="존재하지 않는 작업물 이거나 작업물을 불러오는데 실패하였습니다. 다시 시도해주세요."
+          text="존재하지 않는 작업물 이거나 작업물 수정 권한이 없습니다. 오류가 지속될 경우 관리자에게 문의해주세요."
           buttonText="돌아가기"
           redirectUrl={`/challenges/${challengeId}`}
         />
