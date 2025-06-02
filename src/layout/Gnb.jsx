@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import notiOff from "@/assets/icon/ic_noti_off.svg";
 import notiOn from "@/assets/icon/ic_noti_on.svg";
 import member from "@/assets/img/profile_member.svg";
@@ -31,16 +31,9 @@ export default function Gnb({ userRole }) {
   // 알림 목록 조회
   const handleClickNoti = async (e) => {
     e.stopPropagation();
-    try {
-      const data = await getUnreadNotificationsAction();
-      setNotifications(data);
-      setIsNotiModalOpen((prev) => !prev);
-      setIsProfileOpen(false);
-    } catch (error) {
-      console.error("알림 목록 조회 실패:", error);
-      setIsNotiModalOpen((prev) => !prev);
-      setIsProfileOpen(false);
-    }
+    fetchNotifications();
+    setIsNotiModalOpen((prev) => !prev);
+    setIsProfileOpen(false);
   };
 
   const fetchNotifications = async () => {
@@ -51,6 +44,10 @@ export default function Gnb({ userRole }) {
       console.error("알림 목록 조회 실패:", error);
     }
   };
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
 
   return (
     <header className="flex h-14 items-center justify-center border-b-1 border-gray-100 bg-white px-4 sm:px-6 md:h-15 lg:px-8">
