@@ -16,10 +16,10 @@ export function useChallengeStatus(challenge) {
     const participants = challenge.participants?.length || 0;
     const maxParticipant = challenge.maxParticipant || 0;
 
-    if (participants >= maxParticipant) {
-      setStatus("closed");
-    } else if (now > deadline) {
+    if (now > deadline) {
       setStatus("expired");
+    } else if (participants >= maxParticipant) {
+      setStatus("closed");
     } else {
       setStatus("");
     }
