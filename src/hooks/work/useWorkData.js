@@ -13,7 +13,6 @@ export const useWorkData = (challengeId, workId, updateModalState) => {
   const [isClosed, setIsClosed] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
-  const [isContinue, setIsContinue] = useState(false);
 
   // 작업물 메타 정보
   const [workMeta, setWorkMeta] = useState({
@@ -94,7 +93,6 @@ export const useWorkData = (challengeId, workId, updateModalState) => {
     handleDeleteWork,
     isLoading,
     isError,
-    isClosed,
-    isContinue
+    isClosed
   };
 };
