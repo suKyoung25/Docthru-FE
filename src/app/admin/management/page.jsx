@@ -7,6 +7,7 @@ import Sort from "@/components/sort/Sort";
 import { ITEM_COUNT } from "@/constant/constant";
 import { adminService } from "@/lib/service/adminService";
 import { useEffect, useState } from "react";
+import LoadingSpinner from "@/components/loading/LoadingSpinner";
 
 export default function AdminManagementPage() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -16,9 +17,11 @@ export default function AdminManagementPage() {
   const [selectedSortLabel, setSelectedSortLabel] = useState("신청 시간 느린순");
   const [sort, setSort] = useState("appliedAt_desc");
   const [keyword, setKeyword] = useState("");
+  const [isLoading, setIsLoading] = useState(true)
   const pageSize = ITEM_COUNT.APPLICATION;
 
   const fetchApplications = async () => {
+    setIsLoading(true);
     try {
       const { totalCount, applications } = await adminService.getApplications(page, pageSize, sort, keyword);
       setApplications(applications);
@@ -26,6 +29,8 @@ export default function AdminManagementPage() {
     } catch (err) {
       console.error("신청 목록 조회 실패:", err.message);
       alert(err.message);
+    } finally {
+      setIsLoading(false)
     }
   };
 
@@ -50,13 +55,19 @@ export default function AdminManagementPage() {
           {isDropdownOpen && <ApplyDropdown onSelect={handleSortSelect} className="absolute right-0 mt-2" />}
         </div>
       </div>
-      <AppliedChallenges
-        resultData={applications}
-        totalCount={totalCount}
-        page={page}
-        pageSize={pageSize}
-        onPageChange={(newPage) => setPage(newPage)}
-      />
+      {isLoading ? (
+        <div className="flex justify-center items-center h-[300px]">
+          <LoadingSpinner />
+        </div>
+      ) : (
+        <AppliedChallenges
+          resultData={applications}
+          totalCount={totalCount}
+          page={page}
+          pageSize={pageSize}
+          onPageChange={(newPage) => setPage(newPage)}
+        />
+      )}
     </>
   );
 }
