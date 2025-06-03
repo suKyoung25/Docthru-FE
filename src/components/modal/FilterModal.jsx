@@ -49,6 +49,7 @@ export default function FilterModal({
   // 적용
   const handleApply = () => {
     onApply?.({ fields, docType, status });
+    onClose();
   };
 
   return (

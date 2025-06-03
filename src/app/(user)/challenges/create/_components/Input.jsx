@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Image from "next/image";
 import calender from "@/assets/icon/calendar_48px.svg";
+import { addDays } from "date-fns";
 
 // Input 컴포넌트
 const Input = forwardRef(function Input(
@@ -38,7 +39,7 @@ const Input = forwardRef(function Input(
           onChange={(date) => setDeadline(date)}
           dateFormat="yy/MM/dd"
           placeholderText="YYYY-MM-DD"
-          minDate={new Date()}
+          minDate={addDays(new Date(), 1)} // 내일부터 선택 가능
           className={`h-[48px] w-full rounded-xl border px-4 py-2 focus:ring-1 focus:outline-none ${hasError ? "border-red-500" : "border-gray-200"}`}
           calendarClassName="!z-50"
         />
