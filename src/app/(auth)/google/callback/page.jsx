@@ -1,45 +1,17 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useAuth } from "@/providers/AuthProvider";
 import LoadingSpinner from "@/components/loading/LoadingSpinner";
-import SuccessModal from "@/components/modal/SuccessModal";
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
+
+/**
+ * useSearchParams(클라이언트 훅)이 들어 있는 컴포넌트를
+ * 서버 컴포넌트에서 안전하게 로딩할 수 있도록 Suspense로 감쌈
+ */
+const GoogleCallbackClient = dynamic(() => import("./Client"), { ssr: false });
 
 export default function GoogleCallbackPage() {
-  const [showModal, setShowModal] = useState(false);
-  const searchParams = useSearchParams();
-  const router = useRouter();
-
-  const { googleLogin } = useAuth();
-
-  useEffect(() => {
-    const code = searchParams.get("code");
-    if (!code) return;
-
-    async () => {
-      try {
-        await googleLogin(code);
-      } catch {
-        setShowModal(true);
-      }
-    };
-  }, [searchParams]);
-
   return (
-    <>
-      <div className="flex items-center justify-center">
-        <LoadingSpinner />
-      </div>
-      {showModal && (
-        <SuccessModal
-          text="구글 로그인에 실패했습니다."
-          onClose={() => {
-            setShowModal(false);
-            router.replace("/signIn");
-          }}
-        />
-      )}
-    </>
+    <Suspense fallback={<LoadingSpinner />}>
+      <GoogleCallbackClient />
+    </Suspense>
   );
 }
