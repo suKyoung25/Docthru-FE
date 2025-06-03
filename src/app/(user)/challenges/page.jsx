@@ -6,33 +6,25 @@ import SearchInput from "@/components/input/SearchInput";
 import ChallengeCard from "@/components/card/Card";
 import FilterModal from "@/components/modal/FilterModal";
 import Pagination from "@/components/pagination/Pagination";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useChallenges from "@/hooks/useChallengeList";
 import { useAuth } from "@/providers/AuthProvider";
 import Container from "@/components/container/PageContainer";
 import LoadingSpinner from "@/components/loading/LoadingSpinner";
 
 export default function ChallengesPage() {
-  const [shouldFetch, setShouldFetch] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [keywordInput, setKeywordInput] = useState("");
-  const { user, isLoading: authLoading } = useAuth();
+  const { user } = useAuth();
 
   //현재 사용자가 일반유저인지, 관리자인지 확인
   const isAdmin = user?.role === "ADMIN";
-
-  useEffect(() => {
-    if (!authLoading && user) {
-      setShouldFetch(true); // 로그인 상태 확인 후에만 데이터 패칭
-    }
-  }, [user, authLoading]);
 
   const {
     challenges,
     totalCount,
     page,
     pageSize,
-    keyword,
     filters,
     filterCount,
     isLoading,
@@ -46,7 +38,6 @@ export default function ChallengesPage() {
 
   const handleApplyFilters = (newFilters) => {
     applyFilters(newFilters);
-    setIsModal(false);
   };
 
   return (
@@ -55,17 +46,19 @@ export default function ChallengesPage() {
         챌린지 목록 <ApplyChallenge />
       </div>
 
-      <div className="mt-[16px] flex flex-row gap-[8px]">
+      <div className="relative mt-[16px] flex flex-row gap-[8px]">
         <div className="w-[99px] md:w-[106px] lg:w-[112px]">
           <Sort onClick={() => setIsModal(true)} isFiltered={filterCount > 0} count={filterCount} />
           {isModal && (
-            <FilterModal
-              onApply={handleApplyFilters}
-              onClose={() => setIsModal(false)}
-              initialFields={filters.categories}
-              initialDocType={filters.docType}
-              initialStatus={filters.status}
-            />
+            <div className="fixed top-0 left-0 z-50 h-screen w-screen md:absolute md:top-[50px] md:w-[343px]">
+              <FilterModal
+                onApply={handleApplyFilters}
+                onClose={() => setIsModal(false)}
+                initialFields={filters.categories}
+                initialDocType={filters.docType}
+                initialStatus={filters.status}
+              />
+            </div>
           )}
         </div>
 

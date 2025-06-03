@@ -52,8 +52,8 @@ export default function FilterModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-      <div className="relative h-screen max-w-[375px] overflow-y-auto rounded-none border-2 border-solid border-gray-200 bg-white py-6 shadow-xl">
+    <div>
+      <div className="min-h-screen rounded-none border-2 border-solid border-gray-200 bg-white py-6 shadow-xl md:relative md:min-h-[541px] md:rounded-xl">
         {/* 헤더 */}
         <div className="mb-4 flex items-center justify-between px-6">
           <span className="text-base font-semibold text-gray-800">필터</span>
@@ -147,16 +147,16 @@ export default function FilterModal({
         </div>
 
         {/* 버튼 */}
-        <div className="flex gap-2 px-6 py-2">
+        <div className="fixed flex w-full gap-2 px-6 py-2 sm:bottom-[24px] md:static">
           <button
             onClick={handleReset}
-            className="h-10 w-[134px] cursor-pointer rounded-lg border border-gray-300 bg-white py-2 text-base font-semibold text-gray-800"
+            className="h-10 w-full cursor-pointer rounded-lg border border-gray-300 bg-white py-2 text-base font-semibold text-gray-800 md:w-[134px]"
           >
             초기화
           </button>
           <button
             onClick={handleApply}
-            className="h-10 w-[169px] cursor-pointer rounded-lg bg-black py-2 text-base font-semibold text-white"
+            className="h-10 w-full cursor-pointer rounded-lg bg-black py-2 text-base font-semibold text-white md:w-[169px]"
           >
             적용하기
           </button>

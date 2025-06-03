@@ -110,9 +110,6 @@ const useChallenges = (myChallengeStatus) => {
     setFilterCount(currentFilterCount);
   };
 
-  //디버깅
-  console.log("challengesResults", challengesResults);
-
   return {
     challenges,
     totalCount: challengesResults?.totalCount || 0,
