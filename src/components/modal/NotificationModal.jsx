@@ -43,7 +43,7 @@ export default function NotificationModal({ notifications = [], onClose, buttonR
 
   return (
     <div
-      className="rounded-0 fixed top-0 right-0 z-50 flex h-screen w-screen sm:right-0 md:absolute md:top-[53px] md:right-[50px] md:h-[465px] md:w-[343px] md:justify-end md:rounded-lg"
+      className="rounded-0 fixed top-0 left-0 z-50 flex h-screen w-screen sm:right-0 md:absolute md:top-[53px] md:right-[50px] md:h-[465px] md:w-[343px] md:justify-end md:rounded-lg"
       onClick={onClose}
     >
       <div
