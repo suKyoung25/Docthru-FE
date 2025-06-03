@@ -155,3 +155,48 @@ export async function updateChallengeAction(challengeId, updatedData) {
 
   return res.json();
 }
+
+// 어드민 - 작업물 소프트 삭제
+/* 
+### 작업물 소프트삭제 (작업물 비활성화 필드 true)
+PATCH http://localhost:8080/admin/works/4
+Cookie: accessToken={{accessToken}}
+Content-Type: application/json
+
+{
+  "deletionReason": "사용자 요청에 의한 삭제 사유456"
+}
+*/
+export async function deleteWorkAdminAction(workId, deletionReason) {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("accessToken")?.value;
+
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+
+  if (!accessToken) {
+    throw new Error("인증되지 않았습니다: 액세스 토큰이 없습니다.");
+  }
+
+  try {
+    const response = await fetch(`${API_URL}/admin/works/${workId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: `accessToken=${accessToken}`
+      },
+      body: JSON.stringify({
+        deletionReason: deletionReason
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "작업물 삭제에 실패했습니다.");
+    }
+
+    return await response.json();
+  } catch (err) {
+    console.error("서버 액션 - 작업물 삭제 오류:", err);
+    throw err;
+  }
+}

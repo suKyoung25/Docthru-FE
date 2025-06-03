@@ -12,7 +12,7 @@ import Menu from "./Menu";
 import { useAuth } from "@/providers/AuthProvider";
 import { getWorkDetailAction, deleteWorkAction } from "@/lib/actions/work";
 import DeclineModal from "@/components/modal/DeclineModal";
-import { deleteChallengeAction } from "@/lib/actions/admin";
+import { deleteWorkAdminAction } from "@/lib/actions/admin";
 
 const categoryComponentMap = {
   "Next.js": NextjsChip,
@@ -77,7 +77,7 @@ export default function Header() {
   // 삭제 (Server Action 활용)
   const handleDelete = async () => {
     try {
-      await deleteWorkAction(workId);
+      await deleteWorkAdminAction(workId, deletionReason);
       // 삭제 성공 시, 해당 챌린지 페이지로 이동
       router.push(`/challenges/${challengeId}`);
     } catch (error) {
@@ -96,7 +96,7 @@ export default function Header() {
 
   const handleConfirmDelete = async (adminMessage) => {
     try {
-      await deleteChallengeAction(challengeId, adminMessage);
+      await deleteWorkAction(workId, adminMessage);
       // 삭제 성공 시, 해당 챌린지 페이지로 이동
       router.push(`/challenges/${challengeId}`);
     } catch (error) {
