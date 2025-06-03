@@ -1,6 +1,6 @@
 "use client";
 
-import { getRefreshToken, googleLoginAction, loginAction, logoutAction, registerAction } from "@/lib/actions/auth";
+import { getRefreshToken, loginAction, logoutAction, registerAction } from "@/lib/actions/auth";
 import { userService } from "@/lib/service/userService";
 import { createContext, useContext, useState, useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
@@ -11,7 +11,6 @@ const AuthContext = createContext({
   register: () => {},
   updateUser: () => {},
   autoLogin: () => {},
-  googleLogin: () => {},
   user: null,
   isLoading: true
 });
@@ -123,26 +122,6 @@ export default function AuthProvider({ children }) {
     }
   };
 
-  const googleLogin = async (code) => {
-    setIsLoading(true);
-    try {
-      const result = await googleLoginAction(code);
-      if (result?.error) {
-        throw new Error(result.message);
-      }
-
-      startRefreshTokenTimer(14);
-      await getUser();
-      router.push("/challenges");
-    } catch (error) {
-      console.error("구글 로그인 실패:", error.message);
-      setUser(null);
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const logout = async () => {
     try {
       await logoutAction();
@@ -166,7 +145,7 @@ export default function AuthProvider({ children }) {
   }, [pathname]);
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, autoLogin, register, googleLogin, isLoading }}>
+    <AuthContext.Provider value={{ user, login, logout, autoLogin, register, isLoading }}>
       {children}
     </AuthContext.Provider>
   );
