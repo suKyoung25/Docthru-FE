@@ -21,7 +21,6 @@ export default function DevNavigation() {
   const routes = [
     // 공통 라우트
     { path: "/", name: "랜딩 페이지", group: "common" },
-    { path: "/example", name: "공통컴포넌트 예시", group: "common" },
     { path: "/signIn", name: "로그인", group: "common" },
     { path: "/signUp", name: "회원가입", group: "common" },
 
