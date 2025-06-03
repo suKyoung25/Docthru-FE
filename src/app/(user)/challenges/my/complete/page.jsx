@@ -30,8 +30,6 @@ export default function CompletedChallengesPage() {
     };
   }, [hasNextPage, isFetchingNextPage]);
 
-  console.log(challenges);
-
   return (
     <Mychallenges
       data={challenges}
