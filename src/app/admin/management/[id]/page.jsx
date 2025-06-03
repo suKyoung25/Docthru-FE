@@ -111,6 +111,17 @@ export default function AdminApplicationPage() {
         </div>
       )}
       {isModalOpen && <DeclineModal onClose={() => setisModalOpen(false)} onConfirm={handleConfirmDecline} />}
+      {application?.adminStatus === "ACCEPTED" && (
+        <iframe
+          src={`/challenges/${challenge.id}`}
+          title="원문 페이지"
+          className="mt-8 h-full w-full border-0"
+          style={{ height: "calc(100vh - 200px)" }}
+          loading="lazy"
+          allow="clipboard-read; clipboard-write"
+          sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+        />
+      )}
     </div>
   );
 }
