@@ -15,19 +15,66 @@ Docthru는 개발 관련 영어 문서를 함께 번역하는 챌린지 플랫�
 
 ## 👥 팀 소개
 
-| 이름   | 역할    | GitHub                                   | 개인 개발 보고서                                                 | 회고록       |
-| ------ | ------- | ---------------------------------------- | ---------------------------------------------------------------- | ------------ |
-| 조성빈 | 🍉 팀장 | [github](https://github.com/JJOBO/)      | [보고서](https://www.notion.so/1ec2facab63c81eca07af4d8f2bd39c0) | [회고](링크) |
-| 심유빈 | 🍒 팀원 | [github](https://github.com/shimyubin/)  | [보고서](https://www.notion.so/1f32facab63c8063af31e35ceaf5e7a8) | [회고](링크) |
-| 오하영 | 🍑 팀원 | [github](https://github.com/fiivxyxxng/) | [보고서](https://www.notion.so/1f32facab63c8096b969da4f5399bd3a) | [회고](링크) |
-| 김홍섭 | 🍇 팀원 | [github](https://github.com/rakaso598/)  | [보고서](https://www.notion.so/1f32facab63c80088ad2eba91feb3155) | [회고](링크) |
-| 황수정 | 🍎 팀원 | [github](https://github.com/suejeong/)   | [보고서](https://www.notion.so/1f32facab63c80b08333f61e56fa361e) | [회고](링크) |
-| 김수경 | 🍊 팀원 | [github](https://github.com/suKyoung25/) | [보고서](https://www.notion.so/1f32facab63c806bb835c90523b6869b) | [회고](링크) |
-| 박민규 | 🍈 팀원 | [github](https://github.com/gksktl111/)  | [보고서](https://www.notion.so/1f32facab63c80b4b1c0f468d3656e78) | [회고](링크) |
+| 이름   | 역할    | GitHub                                   | 개인 개발 보고서                                                 |
+| ------ | ------- | ---------------------------------------- | ---------------------------------------------------------------- |
+| 조성빈 | 🍉 팀장 | [github](https://github.com/JJOBO/)      | [보고서](https://www.notion.so/1ec2facab63c81eca07af4d8f2bd39c0) |
+| 심유빈 | 🍒 팀원 | [github](https://github.com/shimyubin/)  | [보고서](https://www.notion.so/1f32facab63c8063af31e35ceaf5e7a8) |
+| 오하영 | 🍑 팀원 | [github](https://github.com/fiivxyxxng/) | [보고서](https://www.notion.so/1f32facab63c8096b969da4f5399bd3a) |
+| 김홍섭 | 🍇 팀원 | [github](https://github.com/rakaso598/)  | [보고서](https://www.notion.so/1f32facab63c80088ad2eba91feb3155) |
+| 황수정 | 🍎 팀원 | [github](https://github.com/suejeong/)   | [보고서](https://www.notion.so/1f32facab63c80b08333f61e56fa361e) |
+| 김수경 | 🍊 팀원 | [github](https://github.com/suKyoung25/) | [보고서](https://www.notion.so/1f32facab63c806bb835c90523b6869b) |
+| 박민규 | 🍈 팀원 | [github](https://github.com/gksktl111/)  | [보고서](https://www.notion.so/1f32facab63c80b4b1c0f468d3656e78) |
+
+## 팀 문서
+
+📝 [팀 노션](https://www.notion.so/1ec2facab63c808d9b80ca0759018768?v=1ec2facab63c8156b3aa000c4b136520)
+
+## 배포 주소
+
+🚀 [DocThru](https://6-docthru-3team-fe-dev.vercel.app/)
 
 ## 작업 내역
 
-#### 조성빈 (팀장)
+### 조성빈 (팀장)
+
+- **챌린지 카드 컴포넌트**
+
+  - 챌린지 정보를 카드 형태로 시각적 구현
+  - 카테고리/상태를 위한 chip 컴포넌트 개발
+  - 참여 인원, 마감일, 드롭다운 UI 구현
+  - 모바일/태블릿/PC 대응 반응형 디자인 적용
+
+- **유저 관련 API 구조 설계**
+
+  - 사용자 정보 조회 API 구현 (/users/me)
+  - 나의 챌린지 목록 API 구현 (필터링, 페이지네이션)
+  - 챌린지 신청 목록 API 구현
+  - 서버 액션을 통한 인증 토큰 처리
+
+- **챌린지 상세 페이지**
+  - 챌린지 상세 데이터 조회 및 연동
+  - 참가/마감 상태에 따른 UI 분기 처리
+  - 작업물 작성 플로우 구현
+  - 최다 추천 작업물 슬라이드 UI 개발
+  - 랭킹 리스트 페이지네이션 구현 (5개 단위)
+  - 1등 작업물 강조 표시 및 아이콘 적용
+  - 상태별 조건부 UI 렌더링 (빈 상태, 마감 상태)
+
+### 심유빈
+
+- **작업물 상세 페이지**
+
+  - 작업물 수정 및 삭제 버튼 구현
+  - 피드백 등록과 수정 및 삭제
+  - useInfiniteQuery를 사용한 무한 스크롤 피드백 목록 구현
+  - useMutation을 활용한 피드백 CRUD 및 캐시 자동 갱신
+
+- **알림 모달**
+  - 알림 내용 및 알림 일자 출력 구현
+  - 읽지 않은 알림 불러오기 기능 구현
+  - 알림을 클릭하여 읽음 처리 기능 구현
+
+### 오하영
 
 - **담당 기능**
   - 기능 1
@@ -37,7 +84,7 @@ Docthru는 개발 관련 영어 문서를 함께 번역하는 챌린지 플랫�
     - 세부 구현 내용
     - 세부 구현 내용
 
-#### 심유빈
+### 김홍섭
 
 - **담당 기능**
   - 기능 1
@@ -47,7 +94,7 @@ Docthru는 개발 관련 영어 문서를 함께 번역하는 챌린지 플랫�
     - 세부 구현 내용
     - 세부 구현 내용
 
-#### 오하영
+### 황수정
 
 - **담당 기능**
   - 기능 1
@@ -57,45 +104,29 @@ Docthru는 개발 관련 영어 문서를 함께 번역하는 챌린지 플랫�
     - 세부 구현 내용
     - 세부 구현 내용
 
-#### 김홍섭
+### 김수경
 
-- **담당 기능**
-  - 기능 1
-    - 세부 구현 내용
-    - 세부 구현 내용
-  - 기능 2
-    - 세부 구현 내용
-    - 세부 구현 내용
+- **챌린지 목록 조회**
+  - 필터를 통해 챌린지의 분야, 문서타입, 진행 상태 별로 데이터를 조회할 수 있다,
+  - 검색어를 통해 데이터를 조회할 수 있다. (초성, 띄어쓰기 적용 가능)
+- **챌린지 생성**
+  - 챌린지 데이터 정보를 입력하여 챌린지를 생성할 수 있다.,
+  - UX를 고려한 각 input에 에러 메세지 적용
 
-#### 황수정
+### 박민규
 
-- **담당 기능**
-  - 기능 1
-    - 세부 구현 내용
-    - 세부 구현 내용
-  - 기능 2
-    - 세부 구현 내용
-    - 세부 구현 내용
+- **작업물 form 페이지**
 
-#### 김수경
+  - tipTap 라이브러리를 이용한 문서 에디터 기능 (bold, italic, underline, text alignment to the left, center, or right, as well as bullet lists, numbered lists, and text color customization 기능 포함)
+  - 문서 작업에 대한 작업물 CRUD 기능
+  - 로컬스토리지를 이용한 임시 저장 기능과 저장물 불러오기 기능 (window는 "ctrl + s", Mac은 "cmd + s" 단축키를 통해 저장 가능 )
+  - iframe을 활용한 번역 원문 페이지를 보여주는 사이드 모달 구현
+  - UX 향상을 위한 다양한 에러처리 모달과 애니메이션 구현
 
-- **담당 기능**
-  - 기능 1
-    - 세부 구현 내용
-    - 세부 구현 내용
-  - 기능 2
-    - 세부 구현 내용
-    - 세부 구현 내용
-
-#### 박민규
-
-- **담당 기능**
-  - 기능 1
-    - 세부 구현 내용
-    - 세부 구현 내용
-  - 기능 2
-    - 세부 구현 내용
-    - 세부 구현 내용
+- **리프레쉬 토큰을 이용한 액세스 토큰 재발급 및 자동 로그인**
+  - refreshToken이 쿠키에 존재하면 서버로 토큰 재발급 로직을 요청하여 자동 로그인 구현
+  - 서버에선 refreshToken의 만료 시간에 따라 JWT 슬라이딩 세션이 내부에서 동작
+  - 프론트에선 14분을 기준으로 settimeout 함수가 동작해 내부적으로 액세스 토큰 재발급 로직을 실행
 
 ### 🔒 팀 규칙
 
@@ -329,7 +360,7 @@ src/
 
 ### 상태 관리 구조
 
-#### 1. Providers
+#### Providers
 
 - **AuthProvider**: 사용자 인증 상태 관리
   - 로그인/로그아웃 상태

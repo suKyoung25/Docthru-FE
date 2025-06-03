@@ -92,7 +92,7 @@ export default function page() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="font-pretendard px-[16px] pt-[16px] pb-[87px] text-[18px] text-[var(--color-gray-900)] [@media(min-width:376px)]:px-[77px]"
+      className="font-pretendard mx-auto max-w-[590px] px-[16px] pt-[16px] pb-[87px] text-[18px] text-[var(--color-gray-900)]"
     >
       <div className="font-bold">신규 챌린지 신청</div>
 
