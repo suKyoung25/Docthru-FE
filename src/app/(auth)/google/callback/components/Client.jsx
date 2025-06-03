@@ -6,7 +6,7 @@ import { useAuth } from "@/providers/AuthProvider";
 import LoadingSpinner from "@/components/loading/LoadingSpinner";
 import SuccessModal from "@/components/modal/SuccessModal";
 
-export default function GoogleCallbackClient() {
+export default function GoogleClient() {
   const [showModal, setShowModal] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
