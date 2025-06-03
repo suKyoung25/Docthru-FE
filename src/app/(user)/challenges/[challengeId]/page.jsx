@@ -20,6 +20,7 @@ import { useChallengeStatus } from "@/hooks/useChallengeStatus";
 import ChipCardStatus from "@/components/chip/chipComplete/ChipCardStatus";
 import ChallengeContent from "./_components/ChallengeContent";
 import Container from "@/components/container/PageContainer";
+import Modal from "@/components/modal/FailedChallengeModal";
 
 function useIsTablet() {
   const [isTablet, setIsTablet] = useState(false);
@@ -29,12 +30,16 @@ function useIsTablet() {
     window.addEventListener("resize", checkWidth);
     return () => window.removeEventListener("resize", checkWidth);
   }, []);
+
   return isTablet;
 }
 
 export default function ChallengeDetailPage() {
   const isTablet = useIsTablet();
   const { challengeId } = useParams();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
   const [challenge, setChallenge] = useState(null);
   const [rankingData, setRankingData] = useState([]);
@@ -59,7 +64,8 @@ export default function ChallengeDetailPage() {
       router.push(`/challenges/${challenge.id}/work/${workId}/form`);
     } catch (err) {
       console.error("작업 생성 실패:", err);
-      alert("작업 생성에 실패했습니다.");
+      setModalMessage("이미 작성한 작업물이 있어요! 작업은 1인 1개만 작성할 수 있어요.");
+      setIsModalOpen(true);
     }
   };
 
@@ -188,6 +194,10 @@ export default function ChallengeDetailPage() {
             )}
           </div>
         </section>
+
+        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="작업 생성 실패">
+          {modalMessage}
+        </Modal>
       </div>
     </Container>
   );
