@@ -42,19 +42,22 @@ export default function NotificationModal({ notifications = [], onClose, buttonR
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end sm:top-[53px] sm:right-18 xl:justify-center" onClick={onClose}>
+    <div
+      className="rounded-0 fixed top-0 right-0 z-50 flex h-screen w-screen sm:right-0 md:absolute md:top-[53px] md:right-[50px] md:h-[465px] md:w-[343px] md:justify-end md:rounded-lg"
+      onClick={onClose}
+    >
       <div
         ref={modalRef}
-        className="h-[465px] w-[343px] rounded-lg border-2 border-gray-200 bg-white p-4 shadow-xl max-sm:h-full max-sm:w-full xl:relative xl:top-auto xl:left-105"
+        className="h-full w-full border-2 border-gray-200 bg-white p-4 shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between">
           <div className="text-base font-semibold text-gray-800">알림</div>
           <button onClick={onClose}>
-            <Image src={closeIcon} alt="알림 닫기" width={24} height={24} className="sm:hidden" />
+            <Image src={closeIcon} alt="알림 닫기" width={24} height={24} className="md:hidden" />
           </button>
         </div>
-        <div className="max-h-full overflow-y-auto sm:max-h-[400px] [&::-webkit-scrollbar]:w-[5px] [&::-webkit-scrollbar]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-200 [&::-webkit-scrollbar-thumb:hover]:bg-gray-300">
+        <div className="max-h-full overflow-y-auto [&::-webkit-scrollbar]:w-[5px] [&::-webkit-scrollbar]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-200 [&::-webkit-scrollbar-thumb:hover]:bg-gray-300">
           <ul>
             {notifications.length === 0 ? (
               <li className="py-8 text-center text-sm text-gray-400">알림이 없습니다.</li>
