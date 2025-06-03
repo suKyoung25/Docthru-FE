@@ -9,7 +9,7 @@ import nextBtn from "@/assets/btn/btn_right.svg";
 import arrowDown from "@/assets/icon/ic_arrow_down.svg";
 import arrowUp from "@/assets/icon/ic_arrow_up.svg";
 import dayjs from "dayjs";
-import DOMPurify from "dompurify"; // ✅ 추가
+import DOMPurify from "dompurify";
 
 export default function TopRecommendedWork({ rankingData }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -45,15 +45,19 @@ export default function TopRecommendedWork({ rankingData }) {
           return (
             <div
               key={work.workId}
-              className={`relative ${isSingle ? "mr-0 w-full" : "mr-4 max-w-[95%] min-w-full"} min-h-[324px] w-full shrink-0 rounded-[16px] border-2 border-gray-200 bg-gray-50 shadow-sm transition-all duration-300 ${
+              className={`relative ${
+                isSingle ? "mr-0 w-full" : "mr-4 max-w-[95%] min-w-full"
+              } w-full shrink-0 rounded-[16px] border-2 border-gray-200 bg-gray-50 shadow-sm transition-all duration-300 ${
                 isCurrent || isSingle ? "opacity-100" : "opacity-30"
               }`}
             >
+              {/* 최다 추천 배지 */}
               <div className="absolute top-0 left-0 z-10 flex items-center gap-1 rounded-tl-[16px] rounded-br-[16px] bg-black px-5 py-2 text-sm font-semibold text-white">
                 <Image src={bestIcon} alt="메달" width={20} height={20} />
                 최다 추천 번역
               </div>
 
+              {/* 상단 사용자 정보 */}
               <div className="m-3 flex items-center justify-between pt-10">
                 <div className="flex items-center gap-3 px-6">
                   <Image src={userIcon} alt="작성자" width={24} height={24} className="rounded-full" />
@@ -69,17 +73,21 @@ export default function TopRecommendedWork({ rankingData }) {
                 <span className="px-6 text-xs text-gray-400">{dayjs(work.createdAt).format("YYYY/MM/DD HH:mm")}</span>
               </div>
 
+              {/* 내용 영역 (더보기/접기 포함) */}
               <div className="px-6">
                 <hr className="mb-2 border-t border-gray-300" />
+
+                {/* 내용 */}
                 <div
-                  className={`prose prose-sm max-w-none pb-2 text-sm leading-relaxed whitespace-pre-line text-gray-700 ${
-                    !isExpanded ? "line-clamp-5" : ""
+                  className={`prose prose-sm max-w-none text-sm leading-relaxed whitespace-pre-line text-gray-700 ${
+                    isExpanded ? "" : "line-clamp-5"
                   }`}
                   dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(work.content) }}
                 />
 
-                {work.content.length > 100 && isCurrent && (
-                  <div className="mt-4 flex justify-center bg-transparent pb-6">
+                {/* 버튼 - 내용 아래에 항상 위치 */}
+                {work.content.length > 100 && (
+                  <div className="my-4 flex justify-center">
                     <button
                       onClick={() => toggleExpand(index)}
                       className="flex items-center gap-1 text-sm text-gray-600 hover:underline"
@@ -96,6 +104,7 @@ export default function TopRecommendedWork({ rankingData }) {
                 )}
               </div>
 
+              {/* 다음 버튼 */}
               {!isSingle && isCurrent && (
                 <div className="absolute top-1/2 -right-6 z-20 -translate-y-1/2">
                   <button onClick={handleNext}>
