@@ -1,25 +1,56 @@
 "use client";
 
 import Container from "@/components/container/PageContainer";
-import EditorSection from "./_components/EditorSection";
-import DraftModal from "@/components/modal/DraftModal";
-import OriginalPageModal from "./_components/OriginalPageModal";
-import DraftCheckModal from "./_components/DraftCheckModal";
-import OriginalPageModalBtn from "./_components/OriginalPageModalBtn";
-import ConfirmActionModal from "@/components/modal/ConfirmActionModal";
 import EditorHeader from "./_components/EditorHeader";
-
 import { useParams, useRouter } from "next/navigation";
 import { useDraft } from "@/hooks/work/useDraft";
 import { useModalControl } from "@/hooks/work/useModalControl";
 import { useWorkData } from "@/hooks/work/useWorkData";
-import RedirectNoticeModal from "@/components/modal/RedirectNoticeModal";
+import dynamic from "next/dynamic";
 
-export default function page() {
+// 동적 임포트로 변경하여 초기 로딩 최적화
+const DraftModal = dynamic(() => import("@/components/modal/DraftModal"), {
+  ssr: false
+});
+const OriginalPageModal = dynamic(() => import("./_components/OriginalPageModal"), {
+  ssr: false
+});
+const DraftCheckModal = dynamic(() => import("./_components/DraftCheckModal"), {
+  ssr: false
+});
+const OriginalPageModalBtn = dynamic(() => import("./_components/OriginalPageModalBtn"), {
+  ssr: false
+});
+const ConfirmActionModal = dynamic(() => import("@/components/modal/ConfirmActionModal"), {
+  ssr: false
+});
+const RedirectNoticeModal = dynamic(() => import("@/components/modal/RedirectNoticeModal"), {
+  ssr: false
+});
+const Editor = dynamic(() => import("./_components/Editor"), {
+  loading: () => <EditorSkeleton />,
+  ssr: false
+});
+
+// 스켈레톤 UI를 별도 컴포넌트로 분리
+function EditorSkeleton() {
+  return (
+    <div className="flex h-full flex-col items-center justify-center gap-2">
+      <div
+        className="mx-auto h-[100px] w-full rounded-md bg-gray-100"
+        style={{ animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite" }}
+      />
+      <div
+        className="mx-auto h-[700px] w-full rounded-md bg-gray-100"
+        style={{ animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite" }}
+      />
+    </div>
+  );
+}
+
+export default function Page() {
   const router = useRouter();
-
   const { challengeId, workId } = useParams();
-
   const { modalState, updateModalState } = useModalControl();
   const {
     content,
@@ -37,7 +68,6 @@ export default function page() {
 
   return (
     <div className="relative">
-      {/* 에디터 */}
       <Container
         maxWidth="max-w-4xl"
         className={
@@ -56,34 +86,37 @@ export default function page() {
           onDiscardModal={() => updateModalState("isDeleteConfirmOpen", true)}
         />
 
-        {isLoading ? (
-          <div className="flex h-full flex-col items-center justify-center gap-2">
-            <div className="mx-auto h-[100px] w-full animate-pulse rounded-md bg-gray-100" />
-            <div className="mx-auto h-[700px] w-full animate-pulse rounded-md bg-gray-100" />
-          </div>
-        ) : (
-          <EditorSection
-            challengeTitle={workMeta.challengeTitle}
-            content={content}
-            handleContent={setContent}
-            onDraft={saveDraft}
-            isDrafting={draftState.isDrafting}
-          />
-        )}
+        <div className="flex flex-col gap-4">
+          {/* 제목을 항상 먼저 렌더링하여 LCP 개선 */}
+          <span className="text-2xl font-bold">{workMeta.challengeTitle || "로딩 중..."}</span>
+
+          {isLoading ? (
+            <EditorSkeleton />
+          ) : (
+            <Editor
+              content={content}
+              handleContent={setContent}
+              onDraft={saveDraft}
+              isDrafting={draftState.isDrafting}
+            />
+          )}
+        </div>
       </Container>
 
-      {/* 원문 페이지 모달 on/off 버튼 */}
-      <OriginalPageModalBtn
-        isOriginalPageModal={modalState.isOriginalPageOpen}
-        onOpenOriginalPageModal={() => updateModalState("isOriginalPageOpen", !modalState.isOriginalPageOpen)}
-      />
-
-      {/* 원문 페이지 모달 */}
-      <OriginalPageModal
-        originalPageUrl={workMeta.originalUrl}
-        onClose={() => updateModalState("isOriginalPageOpen", false)}
-        modalState={modalState.isOriginalPageOpen}
-      />
+      {/* 모달 컴포넌트들은 필요할 때만 동적으로 로드 */}
+      {modalState.isOriginalPageOpen && (
+        <>
+          <OriginalPageModalBtn
+            isOriginalPageModal={modalState.isOriginalPageOpen}
+            onOpenOriginalPageModal={() => updateModalState("isOriginalPageOpen", !modalState.isOriginalPageOpen)}
+          />
+          <OriginalPageModal
+            originalPageUrl={workMeta.originalUrl}
+            onClose={() => updateModalState("isOriginalPageOpen", false)}
+            modalState={modalState.isOriginalPageOpen}
+          />
+        </>
+      )}
 
       {draftState.hasDraft && (
         <DraftCheckModal setHasDraft={(value) => updateDraftState("hasDraft", value)} onDraftModal={toggleDraftModal} />
@@ -146,4 +179,23 @@ export default function page() {
       )}
     </div>
   );
+}
+
+// CSS 키프레임 애니메이션 추가
+const styles = `
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .5;
+  }
+}
+`;
+
+// 스타일 태그 추가
+if (typeof document !== "undefined") {
+  const styleSheet = document.createElement("style");
+  styleSheet.textContent = styles;
+  document.head.appendChild(styleSheet);
 }
