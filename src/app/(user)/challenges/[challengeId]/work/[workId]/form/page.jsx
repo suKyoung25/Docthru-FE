@@ -90,6 +90,7 @@ export default function Page() {
             <EditorSkeleton />
           ) : (
             <Editor
+              challengeTitle={workMeta.challengeTitle}
               content={content}
               handleContent={setContent}
               onDraft={saveDraft}
