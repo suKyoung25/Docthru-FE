@@ -221,3 +221,63 @@ export async function getRefreshToken() {
     throw new Error("토큰 재발급 실패!");
   }
 }
+
+export async function googleLoginAction(code) {
+  try {
+    const res = await fetch(`${BASE_URL}/auth/google/callback?code=${code}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      cache: "no-store"
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      console.error("Google Login 실패 응답:", data);
+      return { error: true, message: data.message || "구글 로그인 실패" };
+    }
+
+    const setCookieHeader = res.headers.get("Set-Cookie");
+    if (setCookieHeader) {
+      const cookieParts = setCookieHeader.split(", ").flatMap((part) => part.split(","));
+      const cookieStore = cookies();
+
+      const cookiePromises = cookieParts.map(async (cookieString) => {
+        const [nameValuePair, ...attributes] = cookieString.split(";").map((s) => s.trim());
+        const [name, value] = nameValuePair.split("=");
+
+        const cookieOptions = {};
+        attributes.forEach((attr) => {
+          const lowerAttr = attr.toLowerCase();
+          if (lowerAttr.startsWith("max-age")) {
+            cookieOptions.maxAge = parseInt(attr.split("=")[1], 10);
+          } else if (lowerAttr.startsWith("path")) {
+            cookieOptions.path = attr.split("=")[1];
+          } else if (lowerAttr.startsWith("expires")) {
+            cookieOptions.expires = new Date(attr.split("=")[1]);
+          } else if (lowerAttr === "httponly") {
+            cookieOptions.httpOnly = true;
+          } else if (lowerAttr.startsWith("samesite")) {
+            cookieOptions.sameSite = attr.split("=")[1];
+          } else if (lowerAttr === "secure") {
+            cookieOptions.secure = true;
+          }
+        });
+
+        if (name && value) {
+          await cookieStore.set(name, value, cookieOptions);
+          console.log(`[googleLoginAction] Set cookie: ${name}`);
+        }
+      });
+
+      await Promise.all(cookiePromises);
+    }
+
+    return { success: true, user: data.user };
+  } catch (err) {
+    console.error("구글 로그인 오류:", err.message);
+    return { error: true, message: err.message || "구글 로그인 중 오류 발생" };
+  }
+}
