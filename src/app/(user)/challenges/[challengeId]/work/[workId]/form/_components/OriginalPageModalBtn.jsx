@@ -1,10 +1,7 @@
 import Image from "next/image";
 import originalPageModalBtn from "@/assets/icon/ic_list.svg";
 
-export default function OriginalPageModalBtn({
-  isOriginalPageModal,
-  onOpenOriginalPageModal,
-}) {
+export default function OriginalPageModalBtn({ isOriginalPageModal, onOpenOriginalPageModal }) {
   return (
     <>
       {!isOriginalPageModal && (
@@ -13,11 +10,7 @@ export default function OriginalPageModalBtn({
           onClick={onOpenOriginalPageModal}
         >
           <div className="flex items-center gap-2 md:flex-col">
-            <Image
-              src={originalPageModalBtn}
-              alt="원본 on/off 모달"
-              className="h-6 w-6"
-            />
+            <Image src={originalPageModalBtn} alt="원본 on/off 모달" className="h-6 w-6" priority />
             <span className="text-[16px] font-semibold text-gray-500 transition-all duration-300 hover:text-gray-800">
               원문
             </span>
