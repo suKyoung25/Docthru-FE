@@ -7,18 +7,14 @@ import { useDraft } from "@/hooks/work/useDraft";
 import { useModalControl } from "@/hooks/work/useModalControl";
 import { useWorkData } from "@/hooks/work/useWorkData";
 import dynamic from "next/dynamic";
+import OriginalPageModal from "./_components/OriginalPageModal";
+import OriginalPageModalBtn from "./_components/OriginalPageModalBtn";
 
 // 동적 임포트로 변경하여 초기 로딩 최적화
 const DraftModal = dynamic(() => import("@/components/modal/DraftModal"), {
   ssr: false
 });
-const OriginalPageModal = dynamic(() => import("./_components/OriginalPageModal"), {
-  ssr: false
-});
 const DraftCheckModal = dynamic(() => import("./_components/DraftCheckModal"), {
-  ssr: false
-});
-const OriginalPageModalBtn = dynamic(() => import("./_components/OriginalPageModalBtn"), {
   ssr: false
 });
 const ConfirmActionModal = dynamic(() => import("@/components/modal/ConfirmActionModal"), {
@@ -103,20 +99,17 @@ export default function Page() {
         </div>
       </Container>
 
-      {/* 모달 컴포넌트들은 필요할 때만 동적으로 로드 */}
-      {modalState.isOriginalPageOpen && (
-        <>
-          <OriginalPageModalBtn
-            isOriginalPageModal={modalState.isOriginalPageOpen}
-            onOpenOriginalPageModal={() => updateModalState("isOriginalPageOpen", !modalState.isOriginalPageOpen)}
-          />
-          <OriginalPageModal
-            originalPageUrl={workMeta.originalUrl}
-            onClose={() => updateModalState("isOriginalPageOpen", false)}
-            modalState={modalState.isOriginalPageOpen}
-          />
-        </>
-      )}
+      {/* 원문 페이지 버튼은 항상 표시 */}
+      <OriginalPageModalBtn
+        isOriginalPageModal={modalState.isOriginalPageOpen}
+        onOpenOriginalPageModal={() => updateModalState("isOriginalPageOpen", !modalState.isOriginalPageOpen)}
+      />
+
+      <OriginalPageModal
+        originalPageUrl={workMeta.originalUrl}
+        onClose={() => updateModalState("isOriginalPageOpen", false)}
+        modalState={modalState.isOriginalPageOpen}
+      />
 
       {draftState.hasDraft && (
         <DraftCheckModal setHasDraft={(value) => updateDraftState("hasDraft", value)} onDraftModal={toggleDraftModal} />
