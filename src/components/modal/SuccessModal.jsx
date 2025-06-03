@@ -7,10 +7,10 @@ import { useEffect } from "react";
  * @param {string} text - 모달에 표시할 메시지
  * @param {string} [className] - 추가적인 커스텀 클래스
  * @param {() => void} onClose - 모달 닫기 핸들러 (상위 컴포넌트에서 전달)
- * @param {number} [duration] - 모달이 유지되는 시간(ms), 기본값은 2000(2초)
+ * @param {number} [duration] - 모달이 유지되는 시간(ms), 기본값은 1000(1초)
  * @returns {JSX.Element}
  */
-export default function SuccessModal({ text, className = "", onClose, duration = 2000 }) {
+export default function SuccessModal({ text, className = "", onClose, duration = 1000 }) {
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
@@ -30,12 +30,12 @@ export default function SuccessModal({ text, className = "", onClose, duration =
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex justify-center pt-[5rem] transition-opacity duration-300 ${
+      className={`fixed inset-0 z-50 flex items-end justify-center pb-10 transition-opacity duration-300 ${
         visible ? "opacity-100" : "opacity-0"
       } ${className}`}
     >
-      <div className="flex h-fit w-fit items-center justify-center rounded-4xl border border-gray-800 bg-white px-4 py-2">
-        <p className="text-sm font-medium text-gray-800">{text}</p>
+      <div className="flex h-fit w-fit items-center justify-center rounded-4xl border border-gray-800 bg-black px-4 py-2">
+        <p className="text-sm font-medium text-white">{text}</p>
       </div>
     </div>
   );
