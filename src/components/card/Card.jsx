@@ -11,6 +11,8 @@ import { usePathname, useRouter } from "next/navigation";
 import DeclineModal from "../modal/DeclineModal";
 import { deleteChallengeAction } from "@/lib/actions/admin";
 import { BtnRoundedWithIcon } from "../btn/text/BtnText";
+import SuccessModal from "../modal/SuccessModal";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function ChallengeCard({
   challengeId,
@@ -27,9 +29,11 @@ export default function ChallengeCard({
   const [status, setStatus] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDeclineModalOpen, setIsDeclineModalOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const dropdownRef = useRef(null);
   const pathname = usePathname();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const now = new Date();
@@ -81,7 +85,11 @@ export default function ChallengeCard({
   const handleConfirmDelete = async (adminMessage) => {
     try {
       await deleteChallengeAction(challengeId, adminMessage);
+
+      queryClient.invalidateQueries({ queryKey: ["challenges"] });
+
       setIsDeclineModalOpen(false);
+      setShowModal(true);
       router.refresh();
     } catch (error) {
       console.error("챌린지 삭제 실패:", error);
@@ -188,6 +196,14 @@ export default function ChallengeCard({
             setIsDeclineModalOpen(false);
           }}
           onConfirm={handleConfirmDelete}
+        />
+      )}
+      {showModal && (
+        <SuccessModal
+          text="삭제가 완료되었습니다!"
+          onClose={() => {
+            setShowModal(false);
+          }}
         />
       )}
     </div>
