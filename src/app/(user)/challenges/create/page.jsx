@@ -101,21 +101,23 @@ export default function page() {
           <Input
             title={"제목"}
             placeholder={"제목을 입력해주세요"}
+            hasError={!!errors.title}
             {...register("title", { required: "제목은 필수 항목입니다." })}
           />
-          {errors.title && <p className="pl-[15px] text-red-500">{errors.title.message}</p>}
+          {errors.title && <p className="pt-2 pl-[15px] text-red-500">{errors.title.message}</p>}
         </div>
 
         <div>
           <Input
             title={"원문 링크"}
             placeholder={"원문 링크를 입력해주세요"}
+            hasError={!!errors.originalUrl}
             {...register("originalUrl", {
               required: "원문 링크는 필수입니다.",
               validate: (value) => isValidURL(value) || "올바른 URL을 입력해주세요."
             })}
           />
-          {errors.originalUrl && <p className="pl-[15px] text-red-500">{errors.originalUrl.message}</p>}
+          {errors.originalUrl && <p className="pt-2 pl-[15px] text-red-500">{errors.originalUrl.message}</p>}
         </div>
 
         <div className="flex h-full flex-col gap-[8px]">
@@ -128,6 +130,7 @@ export default function page() {
                   setIsCategory((prev) => !prev);
                 }}
                 label={watch("selectedCategory")}
+                hasError={!!errors.selectedCategory}
               />
               {isCategory ? (
                 <CategoryItems
@@ -145,7 +148,9 @@ export default function page() {
                   validate: (value) => value !== "카테고리" || "카테고리를 선택해주세요."
                 })}
               />
-              {errors.selectedCategory && <p className="pl-[15px] text-red-500">{errors.selectedCategory.message}</p>}
+              {errors.selectedCategory && (
+                <p className="pt-2 pl-[15px] text-red-500">{errors.selectedCategory.message}</p>
+              )}
             </div>
             <div>
               문서 타입
@@ -155,6 +160,7 @@ export default function page() {
                   setIsDocType((prev) => !prev);
                 }}
                 label={watch("selectedDocType")}
+                hasError={!!errors.selectedDocType}
               />
               {isDocType ? (
                 <CategoryItems
@@ -171,42 +177,49 @@ export default function page() {
                   validate: (value) => value !== "카테고리" || "문서 타입을 선택해주세요."
                 })}
               />
-              {errors.selectedDocType && <p className="pl-[15px] text-red-500">{errors.selectedDocType.message}</p>}
+              {errors.selectedDocType && (
+                <p className="pt-2 pl-[15px] text-red-500">{errors.selectedDocType.message}</p>
+              )}
             </div>
           </div>
         </div>
-        <Input
-          type={"date"}
-          deadline={watch("deadline")}
-          setDeadline={(val) => {
-            setValue("deadline", val);
-            trigger("deadline");
-          }}
-        />
-        <input
-          type="hidden"
-          {...register("deadline", {
-            required: "마감일을 선택해주세요."
-          })}
-        />
-
+        <div>
+          <Input
+            type={"date"}
+            deadline={watch("deadline")}
+            hasError={!!errors.deadline}
+            setDeadline={(val) => {
+              setValue("deadline", val);
+              trigger("deadline");
+            }}
+          />
+          <input
+            type="hidden"
+            {...register("deadline", {
+              required: "마감일을 선택해주세요."
+            })}
+          />
+          {errors.deadline && <p className="pt-2 pl-[15px] text-red-500">{errors.deadline.message}</p>}
+        </div>
         <div>
           <Input
             title={"최대 인원"}
             placeholder={"인원을 입력해주세요"}
+            hasError={!!errors.maxParticipant}
             {...register("maxParticipant", {
               required: "인원 수를 입력해주세요.",
               valueAsNumber: true,
               validate: (value) => (value > 0 && value <= 99) || "참여자는 1~99명 사이여야 합니다."
             })}
           />
-          {errors.maxParticipant && <p className="pl-[15px] text-red-500">{errors.maxParticipant.message}</p>}
+          {errors.maxParticipant && <p className="pt-2 pl-[15px] text-red-500">{errors.maxParticipant.message}</p>}
         </div>
         <div>
           <Input
             title={"내용"}
             placeholder={"내용을 입력해주세요"}
             height={"h-[219px]"}
+            hasError={!!errors.description}
             {...register("description", { required: "내용을 입력해주세요." })}
           />
           {errors.description && <p className="pl-[15px] text-red-500">{errors.description.message}</p>}
