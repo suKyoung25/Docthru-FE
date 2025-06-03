@@ -21,6 +21,7 @@ import ChipCardStatus from "@/components/chip/chipComplete/ChipCardStatus";
 import ChallengeContent from "./_components/ChallengeContent";
 import Container from "@/components/container/PageContainer";
 import Modal from "@/components/modal/FailedChallengeModal";
+import AuthModal from "@/components/modal/AuthModal";
 
 function useIsTablet() {
   const [isTablet, setIsTablet] = useState(false);
@@ -195,9 +196,10 @@ export default function ChallengeDetailPage() {
           </div>
         </section>
 
-        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="작업 생성 실패">
+        {/* <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="작업 생성 실패">
           {modalMessage}
-        </Modal>
+        </Modal> */}
+        <AuthModal message={modalMessage} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       </div>
     </Container>
   );
