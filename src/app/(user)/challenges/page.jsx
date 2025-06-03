@@ -41,7 +41,7 @@ export default function ChallengesPage() {
   };
 
   return (
-    <Container className="mx-[16px] mt-[16px] mb-[65px]">
+    <Container maxWidth="max-w-[var(--container-challenge)]" className="mt-[16px] mb-[65px] px-6 2xl:px-0">
       <div className="font-pretendard flex flex-row items-center justify-between text-[20px] font-semibold">
         챌린지 목록 <ApplyChallenge />
       </div>
