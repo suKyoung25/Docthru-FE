@@ -115,11 +115,16 @@ export async function getApplicationAction(applicationId) {
 
 // 챌린지 작업물(랭킹) 조회
 export async function getRankingAction(challengeId) {
-  const cookieStore = await cookies();
+  const cookieStore = cookies();
   const accessToken = cookieStore.get("accessToken")?.value;
 
-  try {
-    const res = await fetch(`${BASE_URL}/challenges/${challengeId}/works`, {
+  const pageSize = 5;
+  let page = 1;
+  let hasMore = true;
+  let allWorks = [];
+
+  while (hasMore) {
+    const res = await fetch(`${BASE_URL}/challenges/${challengeId}/works?page=${page}&pageSize=${pageSize}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -129,17 +134,23 @@ export async function getRankingAction(challengeId) {
     });
 
     if (!res.ok) {
-      throw new Error("랭킹 데이터를 불러오는데 실패했습니다.");
+      const errorBody = await res.json();
+      throw new Error(errorBody.message || "랭킹 데이터를 불러오지 못했습니다.");
     }
 
     const result = await res.json();
+    const works = result.data;
 
-    // 구조가 { data: [...] } 형태라면 아래처럼 수정
-    return result.data;
-  } catch (err) {
-    console.error("getRankingAction 에러:", err);
-    throw err;
+    allWorks = [...allWorks, ...works];
+
+    if (works.length < pageSize) {
+      hasMore = false;
+    } else {
+      page += 1;
+    }
   }
+
+  return allWorks;
 }
 
 // 챌린지 삭제
