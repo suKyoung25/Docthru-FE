@@ -62,8 +62,14 @@ export default function ChallengeContent({
   };
 
   const handleDelete = () => {
+    if (isClosed) {
+      setErrorMessage("완료된 챌린지는 삭제가 불가능합니다.");
+      setErrorModalOpen(true);
+      return;
+    }
+
     setIsDeclineModalOpen(true);
-    setIsAdminDropdownOpen(false);
+    setIsDropdownOpen(false);
   };
 
   const handleConfirmDelete = async (adminMessage) => {
