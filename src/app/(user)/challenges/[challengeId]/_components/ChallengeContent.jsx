@@ -92,16 +92,16 @@ export default function ChallengeContent({
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsDropdownOpen(false);
+        setIsAdminDropdownOpen(false);
       }
     };
-    if (isDropdownOpen) {
+    if (isAdminDropdownOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     }
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isDropdownOpen]);
+  }, [isAdminDropdownOpen]);
 
   return (
     <article className="flex w-full flex-col gap-4">
