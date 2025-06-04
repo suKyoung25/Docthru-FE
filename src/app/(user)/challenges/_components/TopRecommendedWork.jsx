@@ -33,10 +33,10 @@ export default function TopRecommendedWork({ rankingData }) {
   };
 
   return (
-    <section className="relative w-full max-w-6xl">
+    <section className="relative w-full max-w-6xl overflow-hidden">
       <div
-        className="flex items-start transition-transform duration-500 ease-in-out"
-        style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+        className="flex transition-transform duration-500 ease-in-out"
+        style={{ transform: `translateX(-${currentIndex * 95}%)` }}
       >
         {topWorks.map((work, index) => {
           const isCurrent = index === currentIndex;
@@ -45,11 +45,9 @@ export default function TopRecommendedWork({ rankingData }) {
           return (
             <div
               key={work.workId}
-              className={`relative ${
-                isSingle ? "mr-0 w-full" : "mx-auto mr-4 max-w-[600px] min-w-[90%]"
-              } w-full shrink-0 rounded-[16px] border-2 border-gray-200 bg-gray-50 transition-all duration-300 ${
-                isCurrent || isSingle ? "opacity-100" : "opacity-30"
-              } flex min-h-[240px] flex-col`}
+              className={`relative flex min-h-[240px] shrink-0 flex-col rounded-[16px] border-2 border-gray-200 bg-gray-50 transition-all duration-300 ${
+                isSingle ? "w-full" : "mr-2 w-[95%]"
+              } ${isCurrent || isSingle ? "opacity-100" : "opacity-30"}`}
             >
               {/* 최다 추천 배지 */}
               <div className="absolute top-0 left-0 z-10 flex items-center gap-1 rounded-tl-[16px] rounded-br-[16px] bg-black px-5 py-2 text-sm font-semibold text-white">
@@ -79,11 +77,10 @@ export default function TopRecommendedWork({ rankingData }) {
                 </div>
               </div>
 
-              {/* 내용 영역 (더보기/접기 포함) */}
+              {/* 내용 영역 */}
               <div className="flex flex-grow flex-col px-6">
                 <hr className="mb-2 border-t border-gray-300" />
 
-                {/* 내용 */}
                 <div
                   className={`prose prose-sm max-w-none text-sm leading-relaxed whitespace-pre-line text-gray-700 ${
                     isExpanded ? "" : "line-clamp-5"
@@ -91,7 +88,7 @@ export default function TopRecommendedWork({ rankingData }) {
                   dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(work.content) }}
                 />
 
-                {/* 버튼 - 항상 아래쪽 정렬 */}
+                {/* 더보기 버튼 */}
                 {work.content.length > 500 && (
                   <div className="mt-auto mb-4 flex justify-center">
                     <button
@@ -112,7 +109,7 @@ export default function TopRecommendedWork({ rankingData }) {
 
               {/* 다음 버튼 */}
               {!isSingle && isCurrent && (
-                <div className="absolute top-1/2 -right-5 z-20 -translate-y-1/2">
+                <div className="absolute top-1/2 right-[-20px] z-20 -translate-y-1/2">
                   <button onClick={handleNext}>
                     <Image src={nextBtn} alt="다음 번역 보기" width={32} height={32} />
                   </button>
