@@ -40,6 +40,7 @@ export default function FeedbackBox() {
     },
     onError: (error) => {
       console.error("피드백 등록 실패:", error.message);
+      alert(error.message || "피드백 등록에 실패했습니다.");
     }
   });
 
@@ -51,6 +52,7 @@ export default function FeedbackBox() {
     },
     onError: (error) => {
       console.error("피드백 수정 실패:", error.message);
+      alert(error.message || "피드백 수정에 실패했습니다.");
     }
   });
 
@@ -62,6 +64,7 @@ export default function FeedbackBox() {
     },
     onError: (error) => {
       console.error("피드백 삭제 실패:", error.message);
+      alert(error.message || "피드백 삭제에 실패했습니다.");
     }
   });
 
