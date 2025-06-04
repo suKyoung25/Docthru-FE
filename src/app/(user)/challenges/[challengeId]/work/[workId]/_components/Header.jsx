@@ -109,7 +109,8 @@ export default function Header() {
       router.push(`/challenges/${challengeId}`);
     } catch (error) {
       console.error("작업물 삭제 실패:", error);
-      openErrorModal("작업물 삭제 실패", error.message || "작업물 삭제에 실패했습니다.");
+      setIsDeclineModalOpen(false);
+      openErrorModal("작업물 삭제 실패");
     }
   };
 
