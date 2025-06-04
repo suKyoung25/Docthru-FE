@@ -57,19 +57,16 @@ export default function ChallengeContent({
     if (isClosed) {
       setErrorMessage("완료된 챌린지는 수정이 불가능합니다.");
       setErrorModalOpen(true);
+    } else {
+      router.push(`/admin/challenges/${challengeId}/edit`);
       setIsAdminDropdownOpen(false);
-      return;
     }
-
-    router.push(`/admin/challenges/${challengeId}/edit`);
   };
 
   const handleDelete = () => {
     if (isClosed) {
       setErrorMessage("완료된 챌린지는 삭제가 불가능합니다.");
       setErrorModalOpen(true);
-      setIsAdminDropdownOpen(false);
-
       return;
     }
 
@@ -96,16 +93,16 @@ export default function ChallengeContent({
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsDropdownOpen(false);
+        setIsAdminDropdownOpen(false);
       }
     };
-    if (isDropdownOpen) {
+    if (isAdminDropdownOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     }
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isDropdownOpen]);
+  }, [isAdminDropdownOpen]);
 
   return (
     <article className="flex w-full flex-col gap-4">

@@ -80,11 +80,10 @@ export default function ChallengeCard({
     if (isClosed) {
       setErrorMessage("완료된 챌린지는 수정이 불가능합니다.");
       setErrorModalOpen(true);
-      return;
+    } else {
+      router.push(`/admin/challenges/${challengeId}/edit`);
+      setIsDropdownOpen(false);
     }
-
-    router.push(`/admin/challenges/${challengeId}/edit`);
-    setIsDropdownOpen(false);
   };
 
   const handleDelete = () => {
