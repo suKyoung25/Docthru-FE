@@ -74,7 +74,6 @@ export default function ChallengeContent({
     }
 
     setIsDeclineModalOpen(true);
-    setIsAdminDropdownOpen(false);
   };
 
   const handleConfirmDelete = async (adminMessage) => {
