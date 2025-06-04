@@ -15,7 +15,15 @@ import { deleteChallengeAction } from "@/lib/actions/admin";
 import { useQueryClient } from "@tanstack/react-query";
 import SuccessModal from "@/components/modal/SuccessModal";
 
-export default function ChallengeContent({ challengeId, title, description, category, docType, adminStatus }) {
+export default function ChallengeContent({
+  challengeId,
+  title,
+  description,
+  category,
+  docType,
+  adminStatus,
+  isClosed
+}) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -28,6 +36,8 @@ export default function ChallengeContent({ challengeId, title, description, cate
   const { user } = useAuth();
   const dropdownRef = useRef(null);
 
+  console.log("isClosed", isClosed);
+
   const deleteChallenge = async () => {
     try {
       await userService.deleteChallenge(challengeId);
@@ -37,18 +47,32 @@ export default function ChallengeContent({ challengeId, title, description, cate
       console.error("챌린지 삭제 실패: ", error);
       setisModalOpen(false);
 
-      router.push("/challenges/my/apply");
       setErrorMessage("완료된 챌린지는 취소가 불가능합니다.");
       setErrorModalOpen(true);
+      setIsDropdownOpen(false);
     }
   };
 
   const handleEdit = () => {
+    if (isClosed) {
+      setErrorMessage("완료된 챌린지는 수정이 불가능합니다.");
+      setErrorModalOpen(true);
+      setIsAdminDropdownOpen(false);
+      return;
+    }
+
     router.push(`/admin/challenges/${challengeId}/edit`);
-    setIsAdminDropdownOpen(false);
   };
 
   const handleDelete = () => {
+    if (isClosed) {
+      setErrorMessage("완료된 챌린지는 삭제가 불가능합니다.");
+      setErrorModalOpen(true);
+      setIsAdminDropdownOpen(false);
+
+      return;
+    }
+
     setIsDeclineModalOpen(true);
     setIsAdminDropdownOpen(false);
   };
@@ -136,7 +160,7 @@ export default function ChallengeContent({ challengeId, title, description, cate
         {typeChipMap[docType] ?? null}
       </div>
       <p className="text-sm font-medium text-gray-700 md:text-base">{description}</p>
-      <Modal isOpen={errorModalOpen} onClose={() => setErrorModalOpen(false)} title="챌린지 삭제 실패">
+      <Modal isOpen={errorModalOpen} onClose={() => setErrorModalOpen(false)} title={errorMessage}>
         {errorMessage}
       </Modal>
       {isDeclineModalOpen && (
