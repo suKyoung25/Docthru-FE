@@ -45,7 +45,6 @@ export default function ChallengeContent({
       console.error("챌린지 삭제 실패: ", error);
       setisModalOpen(false);
 
-      router.push("/challenges/my/apply");
       setErrorMessage("완료된 챌린지는 취소가 불가능합니다.");
       setErrorModalOpen(true);
     }
@@ -57,7 +56,6 @@ export default function ChallengeContent({
       setErrorModalOpen(true);
     } else {
       router.push(`/admin/challenges/${challengeId}/edit`);
-      setIsAdminDropdownOpen(false);
     }
   };
 
@@ -68,8 +66,8 @@ export default function ChallengeContent({
       return;
     }
 
-    setIsDeclineModalOpen(true);
     setIsDropdownOpen(false);
+    setIsDeclineModalOpen(true);
   };
 
   const handleConfirmDelete = async (adminMessage) => {
@@ -155,7 +153,7 @@ export default function ChallengeContent({
         {typeChipMap[docType] ?? null}
       </div>
       <p className="text-sm font-medium text-gray-700 md:text-base">{description}</p>
-      <Modal isOpen={errorModalOpen} onClose={() => setErrorModalOpen(false)} title="챌린지 삭제 실패">
+      <Modal isOpen={errorModalOpen} onClose={() => setErrorModalOpen(false)} title={errorMessage}>
         {errorMessage}
       </Modal>
       {isDeclineModalOpen && (
