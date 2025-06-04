@@ -13,6 +13,7 @@ import { useAuth } from "@/providers/AuthProvider";
 import { getWorkDetailAction, deleteWorkAction } from "@/lib/actions/work";
 import DeclineModal from "@/components/modal/DeclineModal";
 import { deleteWorkAdminAction } from "@/lib/actions/admin";
+import Modal from "@/components/modal/FailedChallengeModal";
 
 const categoryComponentMap = {
   "Next.js": NextjsChip,
@@ -32,11 +33,20 @@ export default function Header() {
   const [challenge, setChallenge] = useState(null);
   const [work, setWork] = useState(null);
   const [isDeclineModalOpen, setIsDeclineModalOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalContent, setModalContent] = useState("");
   const { user } = useAuth();
   const router = useRouter();
 
   const isAdmin = user?.role === "ADMIN";
   const isAuthor = work?.author?.authorId === user?.id;
+
+  const openErrorModal = (title, content) => {
+    setModalTitle(title);
+    setModalContent(content);
+    setModalOpen(true);
+  };
 
   useEffect(() => {
     const fetchChallenge = async () => {
@@ -78,11 +88,10 @@ export default function Header() {
   const handleDelete = async () => {
     try {
       await deleteWorkAction(workId);
-      // 삭제 성공 시, 해당 챌린지 페이지로 이동
       router.push(`/challenges/${challengeId}`);
     } catch (error) {
       console.error("작업물 삭제 에러:", error.message);
-      alert(error.message || "작업물 삭제에 실패했습니다.");
+      openErrorModal("작업물 삭제 실패", error.message || "작업물 삭제에 실패했습니다.");
     }
   };
 
@@ -97,11 +106,10 @@ export default function Header() {
   const handleConfirmDelete = async (adminMessage) => {
     try {
       await deleteWorkAdminAction(workId, adminMessage);
-      // 삭제 성공 시, 해당 챌린지 페이지로 이동
       router.push(`/challenges/${challengeId}`);
     } catch (error) {
-      console.error("챌린지 삭제 실패:", error);
-      alert("챌린지 삭제에 실패했습니다: " + error.message);
+      console.error("작업물 삭제 실패:", error);
+      openErrorModal("작업물 삭제 실패", error.message || "작업물 삭제에 실패했습니다.");
     }
   };
 
@@ -126,6 +134,9 @@ export default function Header() {
       {isDeclineModalOpen && (
         <DeclineModal text="삭제" onClose={handleCloseDeclineModal} onConfirm={handleConfirmDelete} />
       )}
+      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title={modalTitle}>
+        {modalContent}
+      </Modal>
     </div>
   );
 }
