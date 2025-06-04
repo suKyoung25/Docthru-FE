@@ -64,7 +64,11 @@ export default function ChallengeDetailPage() {
       router.push(`/challenges/${challenge.id}/work/${workId}/form`);
     } catch (err) {
       console.error("작업 생성 실패:", err);
-      setModalMessage("이미 작성한 작업물이 있어요! 작업은 1인 1개만 작성할 수 있어요.");
+      setModalMessage([
+        "이미 작성한 작업물이 있어요!",
+        <br key="line-break" />,
+        "작업물은 1인 1개만 작성할 수 있어요."
+      ]);
       setIsModalOpen(true);
     }
   };
@@ -195,7 +199,9 @@ export default function ChallengeDetailPage() {
           </div>
         </section>
 
-        <AuthModal message={modalMessage} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+        {isModalOpen && (
+          <AuthModal message={modalMessage} onClose={() => setIsModalOpen(false)} className="mt-15 md:mt-20" />
+        )}
       </div>
     </Container>
   );
