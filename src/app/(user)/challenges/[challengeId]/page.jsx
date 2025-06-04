@@ -103,7 +103,7 @@ export default function ChallengeDetailPage() {
         <section className="flex w-full max-w-6xl flex-col gap-4 md:flex-row md:items-start md:justify-center md:gap-6">
           <div className="flex w-full flex-col gap-3 pt-4 md:w-2/3 md:pt-6">
             {challengeStatus && <ChipCardStatus status={challengeStatus} />}
-            <ChallengeContent {...challenge} />
+            <ChallengeContent challengeId={challengeId} {...challenge} />
             <div className="flex items-center gap-2">
               <Image src={userIcon} alt="작성자 프로필" width={32} height={32} className="rounded-full" />
               <span className="text-sm font-medium text-gray-700">{challenge.user?.nickname || "작성자 없음"}</span>

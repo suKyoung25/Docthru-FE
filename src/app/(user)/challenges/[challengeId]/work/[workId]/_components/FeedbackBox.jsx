@@ -8,12 +8,22 @@ import TextBox from "@/components/reply/TextBox";
 import { useParams } from "next/navigation";
 import { fetchFeedbacks, addFeedback, updateFeedback, deleteFeedback } from "@/lib/api/feedback";
 import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import Modal from "@/components/modal/FailedChallengeModal";
 
 export default function FeedbackBox() {
   const [feedback, setFeedback] = useState("");
   const params = useParams();
   const workId = params.workId;
   const queryClient = useQueryClient();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalContent, setModalContent] = useState("");
+
+  const openErrorModal = (title) => {
+    setModalTitle(title);
+    setModalContent("완료된 챌린지입니다.");
+    setModalOpen(true);
+  };
 
   // 피드백 목록 조회
   const {
@@ -39,7 +49,8 @@ export default function FeedbackBox() {
       setFeedback("");
     },
     onError: (error) => {
-      console.error("피드백 등록 실패:", error.message);
+      console.log(error);
+      openErrorModal("피드백 등록 실패");
     }
   });
 
@@ -50,7 +61,8 @@ export default function FeedbackBox() {
       queryClient.invalidateQueries({ queryKey: ["feedbacks", workId] });
     },
     onError: (error) => {
-      console.error("피드백 수정 실패:", error.message);
+      console.log(error);
+      openErrorModal("피드백 수정 실패");
     }
   });
 
@@ -61,7 +73,8 @@ export default function FeedbackBox() {
       queryClient.invalidateQueries({ queryKey: ["feedbacks", workId] });
     },
     onError: (error) => {
-      console.error("피드백 삭제 실패:", error.message);
+      console.log(error);
+      openErrorModal("피드백 삭제 실패");
     }
   });
 
@@ -141,6 +154,11 @@ export default function FeedbackBox() {
           </button>
         </div>
       )}
+
+      {/* 에러 모달 */}
+      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title={modalTitle}>
+        {modalContent}
+      </Modal>
     </div>
   );
 }
