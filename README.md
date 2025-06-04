@@ -2,8 +2,9 @@
   <img src="./public/images/readmeMain.png" alt="Docthru 메인 페이지" width="100%" />
 </div>
 
-<br/>
-<br/>
+# 어려운 영어 공식문서! 같이 공부해 보실래요? 독스루 보러가기 -> [DocThru](https://6-docthru-3team-fe.vercel.app/)
+
+### Back-end 깃허브 [Back-end](https://github.com/JJOBO/6-Docthru-3team-BE/tree/dev)
 
 # 📜 목차
 
@@ -11,14 +12,14 @@
 2. [기능 구현 영상](#💻-기능-구현-영상)
 3. [시스템 아키텍처](#🚧-시스템-아키텍쳐)
 4. [기술 스택](#⚙️-기술-스택)
-5. [팀 소개 및 문서](#👥-팀-소개-및-문서)
-6. [개인별 주요 작업 내역](#📋-개인별-주요-작업-내역)
-7. [프로젝트 구조](#📁-프로젝트-구조)
-8. [주요 기능 상세](#🌟-주요-기능-상세)
-9. [성능 최적화 전략](#🚀-성능-최적화-전략)
-10. [트러블 슈팅](#💣-트러블-슈팅)
+5. [주요 라이브러리](#📚-주요-라이브러리)
+6. [팀 소개 및 문서](#👥-팀-소개-및-문서)
+7. [개인별 주요 작업 내역](#📋-개인별-주요-작업-내역)
+8. [프로젝트 구조](#📁-프로젝트-구조)
+9. [주요 기능 상세](#🌟-주요-기능-상세)
+10. [성능 최적화 전략](#🚀-성능-최적화-전략)
+11. [트러블 슈팅](#💣-트러블-슈팅)
 
-<br/>
 <br/>
 
 # 📝 프로젝트 소개
@@ -28,25 +29,53 @@
   개발자들이 지식을 나누고 함께 성장할 수 있는 협업 기반의 번역 커뮤니티를 지향합니다.
 
 <br/>
-<br/>
-
-# 📦 배포 주소
-
-📄 [DocThru](https://6-docthru-3team-fe.vercel.app/)
-
-<br/>
-<br/>
 
 # 💻 기능 구현 영상
 
-- 번역 챌린지 참여 및 관리
-- 사용자 등급 시스템 (일반/전문가)
-- 번역 작업 에디터
-- 피드백 시스템
-- 알림 시스템
-- 관리자 시스템 (챌린지 승인/거절, 콘텐츠 관리)
+### 👤 일반 사용자
 
-<br/>
+#### 1. 챌린지 참여 플로우
+
+- 챌린지 목록 조회 및 필터링
+- 원문과 번역 에디터 동시 확인
+- 임시 저장 및 최종 제출
+- 작업물 수정 및 관리
+
+#### 2. 챌린지 생성 플로우
+
+- 번역하고 싶은 문서 등록
+- 챌린지 정보 입력 (제목, 분야, 문서타입)
+- 마감일 및 참여 인원 설정
+- 신청 현황 확인
+
+#### 3. 챌린지 조회 플로우
+
+- 분야별/상태별 필터링
+- 제목 검색 (초성 검색 지원)
+- 참여자 순위 및 추천 확인
+- 마감된 챌린지의 베스트 작업물
+
+#### 4. 피드백 시스템
+
+- 작업물 상세 보기
+- 피드백 작성 및 토론
+- 추천(하트) 기능
+- 알림을 통한 피드백 확인
+
+### 👑 관리자
+
+#### 1. 챌린지 관리
+
+- 신규 챌린지 승인/거절
+- 진행 중인 챌린지 수정
+- 부적절한 챌린지 삭제
+
+#### 2. 콘텐츠 관리
+
+- 작업물 관리 (수정/삭제)
+- 피드백 관리
+- 신고 처리
+
 <br/>
 
 # 🚧 시스템 아키텍쳐
@@ -55,7 +84,6 @@
   <img src="./public/images/architecture.png" alt="시스템 아키텍처" width="100%" />
 </div>
 
-<br/>
 <br/>
 
 # ⚙️ 기술 스택
@@ -81,6 +109,62 @@
 ![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)
 
 <br/>
+
+# 📚 주요 라이브러리
+
+<details>
+<summary>상태 관리</summary>
+
+- **@tanstack/react-query**: 서버 상태 관리 및 캐싱
+- **@tanstack/react-query-devtools**: React Query 개발자 도구
+</details>
+
+<details>
+<summary>에디터</summary>
+
+- **@tiptap/react**: 리치 텍스트 에디터 코어
+- **@tiptap/starter-kit**: 기본 에디터 기능 모음
+- **@tiptap/extension-bullet-list**: 글머리 기호 목록
+- **@tiptap/extension-ordered-list**: 번호 매기기 목록
+- **@tiptap/extension-list-item**: 목록 아이템
+- **@tiptap/extension-color**: 텍스트 색상
+- **@tiptap/extension-text-align**: 텍스트 정렬
+- **@tiptap/extension-text-style**: 텍스트 스타일
+- **@tiptap/extension-underline**: 밑줄
+- **@tiptap/extension-placeholder**: 플레이스홀더
+</details>
+
+<details>
+<summary>UI 컴포넌트</summary>
+
+- **react-textarea-autosize**: 자동 크기 조절 텍스트 영역
+- **react-datepicker**: 날짜 선택기
+- **react-spinners**: 로딩 스피너
+- **react-intersection-observer**: 무한 스크롤 구현
+</details>
+
+<details>
+<summary>폼 & 데이터</summary>
+
+- **react-hook-form**: 폼 상태 관리
+- **dompurify**: HTML 새니타이징
+- **dayjs**: 날짜 처리
+</details>
+
+<details>
+<summary>보안</summary>
+
+- **jose**: JWT 토큰 처리
+</details>
+
+<details>
+<summary>개발 도구</summary>
+
+- **@tailwindcss/typography**: 타이포그래피 스타일
+- **prettier-plugin-tailwindcss**: Tailwind CSS 클래스 정렬
+- **@eslint/eslintrc**: ESLint 설정
+</details>
+
 <br/>
 
 # 👥 팀 소개 및 문서
@@ -102,12 +186,13 @@
 📝 [팀 노션](https://www.notion.so/1ec2facab63c808d9b80ca0759018768?v=1ec2facab63c8156b3aa000c4b136520)
 
 <br/>
-<br/>
 
 # 📋 개인별 주요 작업 내역
 
 <details>
-<summary>👑 조성빈 (팀장)</summary>
+<summary>🍉 조성빈 (팀장)</summary>
+
+## frontend
 
 - **챌린지 카드 컴포넌트**
 
@@ -132,10 +217,64 @@
   - 1등 작업물 강조 표시 및 아이콘 적용
   - 상태별 조건부 UI 렌더링 (빈 상태, 마감 상태)
 
+## backend
+
+### 유저 API 상세 구현
+
+#### 1. 내 정보 조회 (GET /users/me)
+
+**동작 방식**
+
+- 인증된 사용자의 JWT에서 userId를 추출
+- DB에서 해당 유저의 기본 정보 조회
+
+**응답 필드**
+
+- id
+- email
+- nickname
+- grade (NORMAL | EXPERT)
+- role
+- createdAt
+
+**사용 목적**
+
+- 프론트의 마이페이지 및 헤더 정보 구성
+- 등급에 따라 UI 달리 렌더링 (예: 전문가 배지)
+
+#### 2. 나의 챌린지 목록 조회 (GET /users/me/challenges)
+
+**쿼리 파라미터**
+
+- myChallengeStatus: applied, participated, completed
+- keyword: 챌린지 제목 검색
+
+**동작 방식**
+
+- 유저의 챌린지 참여 이력(신청, 참여 중, 완료)을 구분하여 필터링
+- Prisma에서 조건 조합 쿼리 작성
+  - 신청: Application 기준
+  - 참여: Participant 기준
+  - 완료: 마감일 + 작업물 여부 기준
+
+**사용 목적**
+
+- 프론트에서 마이페이지 챌린지 목록 구성
+
+#### 3. 등급 관리 (User.grade)
+
+**등급 체계**
+
+- 초기 등급: NORMAL
+- 승격 조건: 특정 조건 만족 시 EXPERT로 승격
+  // ... existing code ...
+
 </details>
 
 <details>
-<summary>🧠 심유빈</summary>
+<summary>🍒 심유빈</summary>
+
+## frontend
 
 - **작업물 상세 페이지**
 
@@ -149,10 +288,14 @@
   - 읽지 않은 알림 불러오기 기능 구현
   - 알림을 클릭하여 읽음 처리 기능 구현
 
+## backend
+
 </details>
 
 <details>
-<summary>🛠 오하영</summary>
+<summary>🍑 오하영</summary>
+
+## frontend
 
 - **어드민 챌린지 신청 페이지**
 
@@ -169,23 +312,45 @@
 - 참여중/완료한 챌린지: 목록 조회 API 구현 및 연동, 무한스크롤, 키워드 검색 기능
 - 신청한 챌린지: UI, 목록/상세 조회 API 구현 및 연동
 
-</details>
-
-<details>
-<summary>🧩 김홍섭</summary>
-
-- **담당 기능**
-  - 기능 1
-    - 세부 구현 내용
-    - 세부 구현 내용
-  - 기능 2
-    - 세부 구현 내용
-    - 세부 구현 내용
+## backend
 
 </details>
 
 <details>
-<summary>🧾 황수정</summary>
+<summary>🍇 김홍섭</summary>
+
+## frontend
+
+- **기초 프로젝트 세팅 및 공통 컴포넌트 분할**
+
+  - 프로젝트의 주요 라우팅 및 구조 설계 공통 컴포넌트 분할
+
+- **관리자 작업물/피드백 관리**
+
+  - 관리자 권한 사용자의 작업물 및 피드백 CRUD 기능 구현
+  - 다른 사용자의 작업물과 피드백을 직접 수정/삭제할 수 있는 권한 관리
+
+## backend
+
+- **데이터베이스 및 스키마 관리**
+
+  - Render 배포 환경의 PostgreSQL 데이터베이스 구축 및 관리
+  - Express + Prisma ORM 기반의 데이터베이스 인터페이스 구현
+  - 팀원 피드백 기반 스키마 지속적 개선 및 최적화
+  - 목(Mock) 데이터 시딩을 위한 데이터 구조 설계 및 구현
+
+- **백엔드 레포지토리 초기화**
+  - Express 기본 설정 및 필수 라이브러리 구성
+  - 데이터베이스 연결 및 환경 변수 설정
+  - 프로젝트 요구사항에 맞는 폴더 구조 설계
+  - 팀 개발을 위한 백엔드 기반 환경 구축
+
+</details>
+
+<details>
+<summary>🍎 황수정</summary>
+
+## frontend
 
 - **나의 챌린지 페이지 제작 및 컴포넌트**
 
@@ -194,15 +359,17 @@
     - `MyApplicationsPage`: 신청 목록을 조회하고 챌린지 신청 상태를 조회할 수 있는 페이지
     - `AppliedChallenges`: 지원한 챌린지 리스트 컴포넌트
 
-- **챌린지 상세 조회, 챌린지 수정 API**
+- **챌린지 상세 조회, 챌린지 수정 API 연결**
+
+## backend
 
 </details>
 
 <details>
-<summary>📚 김수경</summary>
-
+<summary>🍊 김수경</summary>
+ 
+ ## frontend 
 - **챌린지 목록 조회**
-
   - 필터를 통해 챌린지의 분야, 문서타입, 진행 상태 별로 데이터를 조회
   - 검색어를 통해 데이터를 조회 (초성, 띄어쓰기 적용 가능)
 
@@ -210,27 +377,43 @@
   - 챌린지 데이터 정보를 입력하여 챌린지를 생성할 수 있음
   - UX를 고려한 각 input에 에러 메세지 적용
 
+## backkend
+
+- **챌린지 조회 쿼리**
+  - 다중 쿼리 스트링을 이용하여 중복되는 필터의 목록을 가져올 수 있음
+  - 검색어를 initial로 분해하여 초성 검색 가능
+  - 쿼리 전송 시 띄어쓰기와 관계없이 데이터를 불러올 수 있음
+
 </details>
 
 <details>
-<summary>🖊 박민규</summary>
+<summary>🍈 박민규</summary>
+
+## frontend
 
 - **작업물 form 페이지**
 
   - TipTap 기반 문서 에디터 기능: bold, italic, underline, 정렬, 리스트, 텍스트 컬러 등
-  - 작업물 CRUD 기능
+  - 작업물 CRUD 기능 연결
   - 로컬스토리지 임시 저장 및 단축키(`Ctrl + S`, `Cmd + S`) 기능
-  - iframe을 통한 원문 확인 사이드 모달 구현
+  - iframe을 통한 원본 사이트 확인 사이드 모달 구현
   - UX 향상을 위한 에러처리 모달 및 애니메이션 적용
 
-- **리프레시 토큰을 이용한 액세스 토큰 재발급 및 자동 로그인**
+- **refreshToken을 이용한 액세스 토큰 재발급 및 자동 로그인**
   - refreshToken이 있으면 자동 로그인 처리
-  - 서버: refreshToken 기반 JWT 슬라이딩 세션
-  - 프론트: 14분 타이머로 액세스 토큰 재발급
+  - 프론트: 타이머 함수를 활용하여 14분 간격으로(만료가 15분이기 때문) refreshToken을 전달해 accessToken 재발급
+
+## backend
+
+- **작업물 관련 CRUD**
+  - "works/" 관련 api 설계
+  - 레이어 아키텍쳐를 준수한 작업물 CRUD 구현
+  - prisma를 사용한 DB 관리 및 트랜잭션을 활용한 최적화 진행
+- **JWT 슬라이딩 세션**
+  - refreshToken 기반 JWT 슬라이딩 세션 적용
 
 </details>
 
-<br/>
 <br/>
 
 # 📁 프로젝트 구조
@@ -256,62 +439,77 @@ src/
 ```
 
 <br/>
-<br/>
 
 # 🌟 주요 기능 상세
 
 <details>
 <summary>1. 인증 시스템</summary>
 
-- 회원가입/로그인
-- Google OAuth 인증
-- 사용자 등급 시스템 (일반/전문가)
-
-</details>
+- **회원가입/로그인**
+  - 이메일 기반 회원가입 및 로그인
+  - Google OAuth 소셜 로그인 지원
+- **사용자 등급 시스템**
+  - 일반 등급: 기본 등급으로 부여
+  - 전문가 등급: 다음 조건 중 하나 충족 시 자동 승급 - 챌린지 참여 5회 이상 + 추천 선정 5회 이상 - 챌린지 참여 10회 이상 - 추천 선정 10회 이상
+  </details>
 
 <details>
 <summary>2. 번역 챌린지</summary>
 
-- 챌린지 목록 조회 및 필터링
-- 번역 작업 에디터
-- 작업물 임시 저장 (LocalStorage)
-- 피드백 시스템
-- 추천(하트) 시스템
+- **챌린지 조회**
 
-</details>
+  - 목록 조회: 제목, 분야, 문서타입, 마감일, 상태, 참여 인원 등
+  - 검색 및 필터링: 제목 검색, 분야/문서타입/상태 필터
+  - 상세 조회: 원문 보기, 참여 현황, 순위 등
 
-<details>
-<summary>3. 알림 시스템</summary>
+- **챌린지 참여**
 
-- 챌린지 상태 변경 알림
-- 새로운 작업물 알림
-- 피드백 알림
-- 마감 알림
+  - 도전하기: 마감 전 챌린지 참여
+  - 번역 작성: 에디터 제공, 임시 저장 기능
+  - 원문 조회: 임베디드 원문 확인
+  - 작업물 관리: 임시 저장, 불러오기, 제출
 
-</details>
-
-<details>
-<summary>4. 등급 시스템</summary>
-
-- **일반 등급**: 기본 등급으로 부여
-- **전문가 등급**: 다음 조건 중 하나 충족 시 자동 승급
-  - 챌린지 참여 5회 이상 + 추천 선정 5회 이상
-  - 챌린지 참여 10회 이상
-  - 추천 선정 10회 이상
-- 등급별 차등 기능 제공
-
-</details>
+- **챌린지 신청 및 관리**
+  - 신규 챌린지 신청: 문서 정보, 마감일, 인원 설정
+  - 어드민 관리: 승인/거절, 수정, 삭제 기능
+  - 작업물/피드백 관리: 수정, 삭제 권한 관리
+  </details>
 
 <details>
-<summary>5. 관리자 기능</summary>
+<summary>3. 작업물 및 피드백</summary>
 
-- 챌린지 관리 (승인/거절/수정/삭제)
-- 작업물 관리
-- 피드백 관리
+- **작업물 관리**
 
-</details>
+  - 상세 조회: 번역 내용, 피드백, 추천 수 확인
+  - 피드백 작성: 무한 스크롤 피드백 목록
+  - 추천 시스템: 작업물 하트 기능
 
-<br/>
+- **나의 챌린지**
+  - 참여 중인 챌린지: 진행 중인 챌린지 목록, 작업물 수정
+  - 완료한 챌린지: 마감된 챌린지, 제출 번역문 조회
+  - 신청 챌린지: 승인 상태 확인, 신청 취소 기능
+  </details>
+
+<details>
+<summary>4. 알림 시스템</summary>
+
+- **변경사항 알림**
+
+  - 작업물/챌린지/피드백 수정/삭제 알림
+  - 상태 변경 날짜 포함
+
+- **챌린지 관련 알림**
+
+  - 승인/거절/삭제 알림
+  - 새로운 작업물 알림
+  - 새로운 피드백 알림
+  - 마감 알림
+
+- **알림 관리**
+  - 읽음 처리 기능
+  - 어드민 처리 알림 (수정/삭제 사유 포함)
+  </details>
+
 <br/>
 
 # 🚀 성능 최적화 전략
@@ -391,7 +589,6 @@ src/
 
 </details>
 
-<br/>
 <br/>
 
 # 💣 트러블 슈팅

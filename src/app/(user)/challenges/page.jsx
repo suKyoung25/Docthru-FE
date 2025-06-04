@@ -92,6 +92,7 @@ export default function ChallengesPage() {
                   participants={challenge.participants.length}
                   maxParticipant={challenge.maxParticipant}
                   isAdmin={isAdmin}
+                  isClosed={challenge.isClosed}
                 />
               </div>
             ))}

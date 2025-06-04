@@ -25,7 +25,8 @@ export default function ChallengeCard({
   maxParticipant,
   variant = "default",
   isAdmin,
-  workId
+  workId,
+  isClosed
 }) {
   const [status, setStatus] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -86,6 +87,12 @@ export default function ChallengeCard({
   };
 
   const handleDelete = () => {
+    if (isClosed) {
+      setErrorMessage("완료된 챌린지는 삭제가 불가능합니다.");
+      setErrorModalOpen(true);
+      return;
+    }
+
     setIsDeclineModalOpen(true);
     setIsDropdownOpen(false);
   };
@@ -216,7 +223,7 @@ export default function ChallengeCard({
           }}
         />
       )}
-      <Modal isOpen={errorModalOpen} onClose={() => setErrorModalOpen(false)} title="챌린지 삭제 실패">
+      <Modal isOpen={errorModalOpen} onClose={() => setErrorModalOpen(false)} title={errorMessage}>
         {errorMessage}
       </Modal>
     </div>
