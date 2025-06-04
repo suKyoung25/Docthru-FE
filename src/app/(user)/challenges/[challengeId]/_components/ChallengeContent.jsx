@@ -36,8 +36,6 @@ export default function ChallengeContent({
   const { user } = useAuth();
   const dropdownRef = useRef(null);
 
-  console.log("isClosed", isClosed);
-
   const deleteChallenge = async () => {
     try {
       await userService.deleteChallenge(challengeId);
@@ -49,7 +47,6 @@ export default function ChallengeContent({
 
       setErrorMessage("완료된 챌린지는 취소가 불가능합니다.");
       setErrorModalOpen(true);
-      setIsDropdownOpen(false);
     }
   };
 
@@ -59,7 +56,6 @@ export default function ChallengeContent({
       setErrorModalOpen(true);
     } else {
       router.push(`/admin/challenges/${challengeId}/edit`);
-      setIsAdminDropdownOpen(false);
     }
   };
 
@@ -70,6 +66,7 @@ export default function ChallengeContent({
       return;
     }
 
+    setIsDropdownOpen(false);
     setIsDeclineModalOpen(true);
   };
 
