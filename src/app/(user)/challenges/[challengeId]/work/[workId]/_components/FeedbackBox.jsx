@@ -19,9 +19,9 @@ export default function FeedbackBox() {
   const [modalTitle, setModalTitle] = useState("");
   const [modalContent, setModalContent] = useState("");
 
-  const openErrorModal = (title, content) => {
+  const openErrorModal = (title) => {
     setModalTitle(title);
-    setModalContent(content);
+    setModalContent("완료된 챌린지입니다.");
     setModalOpen(true);
   };
 
@@ -49,7 +49,8 @@ export default function FeedbackBox() {
       setFeedback("");
     },
     onError: (error) => {
-      openErrorModal("피드백 등록 실패", error.message);
+      console.log(error);
+      openErrorModal("피드백 등록 실패");
     }
   });
 
@@ -60,7 +61,8 @@ export default function FeedbackBox() {
       queryClient.invalidateQueries({ queryKey: ["feedbacks", workId] });
     },
     onError: (error) => {
-      openErrorModal("피드백 수정 실패", error.message);
+      console.log(error);
+      openErrorModal("피드백 수정 실패");
     }
   });
 
@@ -71,7 +73,8 @@ export default function FeedbackBox() {
       queryClient.invalidateQueries({ queryKey: ["feedbacks", workId] });
     },
     onError: (error) => {
-      openErrorModal("피드백 삭제 실패", error.message);
+      console.log(error);
+      openErrorModal("피드백 삭제 실패");
     }
   });
 

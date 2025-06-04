@@ -42,9 +42,9 @@ export default function Header() {
   const isAdmin = user?.role === "ADMIN";
   const isAuthor = work?.author?.authorId === user?.id;
 
-  const openErrorModal = (title, content) => {
+  const openErrorModal = (title) => {
     setModalTitle(title);
-    setModalContent(content);
+    setModalContent("완료된 챌린지입니다.");
     setModalOpen(true);
   };
 
@@ -84,14 +84,14 @@ export default function Header() {
     router.push(`/challenges/${challengeId}/work/${workId}/form`);
   };
 
-  // 삭제 (Server Action 활용)
+  // 삭제
   const handleDelete = async () => {
     try {
       await deleteWorkAction(workId);
       router.push(`/challenges/${challengeId}`);
     } catch (error) {
       console.error("작업물 삭제 에러:", error.message);
-      openErrorModal("작업물 삭제 실패", error.message || "작업물 삭제에 실패했습니다.");
+      openErrorModal("작업물 삭제 실패");
     }
   };
 
