@@ -1,10 +1,13 @@
-import React from "react";
+import Container from "@/components/container/PageContainer";
+import Gnb from "@/layout/Gnb";
 
 export default function AdminLayout({ children }) {
   return (
-    <div>
-      <h1>Admin Layout</h1>
-      {children}
-    </div>
+    <>
+      <Gnb userRole="admin" />
+      <Container maxWidth="max-w-[var(--container-challenge)]" className="px-4 md:px-6 2xl:px-0">
+        {children}
+      </Container>
+    </>
   );
 }
