@@ -92,7 +92,7 @@ export default function TopRecommendedWork({ rankingData }) {
                 />
 
                 {/* 버튼 - 항상 아래쪽 정렬 */}
-                {work.content.length > 100 && (
+                {work.content.length > 500 && (
                   <div className="mt-auto mb-4 flex justify-center">
                     <button
                       onClick={() => toggleExpand(index)}
