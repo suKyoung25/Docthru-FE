@@ -13,6 +13,7 @@ import { deleteChallengeAction } from "@/lib/actions/admin";
 import { BtnRoundedWithIcon } from "../btn/text/BtnText";
 import SuccessModal from "../modal/SuccessModal";
 import { useQueryClient } from "@tanstack/react-query";
+import Modal from "../modal/FailedChallengeModal";
 
 export default function ChallengeCard({
   challengeId,
@@ -30,6 +31,8 @@ export default function ChallengeCard({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDeclineModalOpen, setIsDeclineModalOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [errorModalOpen, setErrorModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const dropdownRef = useRef(null);
   const pathname = usePathname();
   const router = useRouter();
@@ -88,12 +91,14 @@ export default function ChallengeCard({
 
       queryClient.invalidateQueries({ queryKey: ["challenges"] });
 
-      setIsDeclineModalOpen(false);
-      setShowModal(true);
       router.refresh();
+      setShowModal(true);
     } catch (error) {
       console.error("챌린지 삭제 실패:", error);
-      alert("챌린지 삭제에 실패했습니다: " + error.message);
+      setErrorMessage("완료된 챌린지는 삭제가 불가능합니다.");
+      setErrorModalOpen(true);
+    } finally {
+      setIsDeclineModalOpen(false);
     }
   };
 
@@ -206,6 +211,9 @@ export default function ChallengeCard({
           }}
         />
       )}
+      <Modal isOpen={errorModalOpen} onClose={() => setErrorModalOpen(false)} title="챌린지 삭제 실패">
+        {errorMessage}
+      </Modal>
     </div>
   );
 }

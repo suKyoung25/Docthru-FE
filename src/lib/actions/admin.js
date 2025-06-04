@@ -15,6 +15,15 @@ export async function deleteChallengeAction(challengeId, adminMessage) {
   }
 
   try {
+    const challengeRes = await fetch(`${API_URL}/challenges/${challengeId}`);
+    if (!challengeRes.ok) throw new Error("챌린지 조회 실패");
+    const challenge = await challengeRes.json();
+
+    // 2. isClosed 체크
+    if (challenge.isClosed) {
+      throw new Error("닫힌 챌린지는 삭제할 수 없습니다.");
+    }
+
     const response = await fetch(`${API_URL}/admin/challenges/${challengeId}`, {
       method: "PATCH",
       headers: {
@@ -27,12 +36,19 @@ export async function deleteChallengeAction(challengeId, adminMessage) {
       })
     });
 
+    const data = await response.json();
+
+    // 1. HTTP 상태 코드 체크
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "챌린지 삭제에 실패했습니다.");
+      throw new Error(data.message || "서버 오류가 발생했습니다.");
     }
 
-    return await response.json();
+    // 2. 실제 업데이트 여부 체크
+    if (data.adminStatus !== "DELETED") {
+      throw new Error(data.message || "챌린지 상태 변경에 실패했습니다.");
+    }
+
+    return data;
   } catch (err) {
     console.error("서버 액션 - 챌린지 삭제 오류:", err);
     throw err;

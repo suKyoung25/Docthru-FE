@@ -44,7 +44,7 @@ export default function editChallengePageAdmin() {
         setDescription(prevChallenge.description);
       } catch (error) {
         console.log("기존 챌린지 불러오기 실패");
-        alert("존재하지 않는 챌린지입니다.");
+        alert("완료된 챌린지 혹은 존재하지 않는 챌린지입니다.");
         router.push("/challenges");
       }
     };
