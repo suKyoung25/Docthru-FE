@@ -77,7 +77,7 @@ export default function Header() {
   // 삭제 (Server Action 활용)
   const handleDelete = async () => {
     try {
-      await deleteWorkAdminAction(workId, deletionReason);
+      await deleteWorkAction(workId);
       // 삭제 성공 시, 해당 챌린지 페이지로 이동
       router.push(`/challenges/${challengeId}`);
     } catch (error) {
@@ -96,7 +96,7 @@ export default function Header() {
 
   const handleConfirmDelete = async (adminMessage) => {
     try {
-      await deleteWorkAction(workId, adminMessage);
+      await deleteWorkAdminAction(workId, adminMessage);
       // 삭제 성공 시, 해당 챌린지 페이지로 이동
       router.push(`/challenges/${challengeId}`);
     } catch (error) {
