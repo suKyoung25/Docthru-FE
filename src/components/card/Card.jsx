@@ -76,8 +76,13 @@ export default function ChallengeCard({
   };
 
   const handleEdit = () => {
-    router.push(`/admin/challenges/${challengeId}/edit`);
-    setIsDropdownOpen(false);
+    if (isClosed) {
+      setErrorMessage("완료된 챌린지는 수정이 불가능합니다.");
+      setErrorModalOpen(true);
+    } else {
+      router.push(`/admin/challenges/${challengeId}/edit`);
+      setIsDropdownOpen(false);
+    }
   };
 
   const handleDelete = () => {

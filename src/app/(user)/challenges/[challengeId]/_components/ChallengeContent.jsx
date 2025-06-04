@@ -15,7 +15,15 @@ import { deleteChallengeAction } from "@/lib/actions/admin";
 import { useQueryClient } from "@tanstack/react-query";
 import SuccessModal from "@/components/modal/SuccessModal";
 
-export default function ChallengeContent({ challengeId, title, description, category, docType, adminStatus }) {
+export default function ChallengeContent({
+  challengeId,
+  title,
+  description,
+  category,
+  docType,
+  adminStatus,
+  isClosed
+}) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -44,8 +52,13 @@ export default function ChallengeContent({ challengeId, title, description, cate
   };
 
   const handleEdit = () => {
-    router.push(`/admin/challenges/${challengeId}/edit`);
-    setIsAdminDropdownOpen(false);
+    if (isClosed) {
+      setErrorMessage("완료된 챌린지는 수정이 불가능합니다.");
+      setErrorModalOpen(true);
+    } else {
+      router.push(`/admin/challenges/${challengeId}/edit`);
+      setIsAdminDropdownOpen(false);
+    }
   };
 
   const handleDelete = () => {
