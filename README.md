@@ -1,27 +1,43 @@
-# 📚Docthru (독스루) - 개발 문서 번역 챌린지 플랫폼
+<div align="center">
+  <img src="./public/images/readmeMain.png" alt="Docthru 메인 페이지" width="100%" />
+</div>
 
-## 목차
+<br/>
+<br/>
 
-1. [프로젝트 소개](#-프로젝트-소개)
-2. [주요 기능](#주요-기능-추후-gif-로-대체-예정)
-3. [시스템 아키텍처](#-시스템-아키텍처)
-4. [기술 스택](#️-기술-스택)
-5. [팀 소개 및 문서](#-팀-소개)
-6. [배포 주소](#배포-주소)
-7. [개인별 주요 작업 내역](#개인별-주요-작업-내역)
-8. [프로젝트 구조](#-프로젝트-구조)
-9. [성능 최적화 전략](#-성능-최적화-전략)
-10. [트러블 슈팅](#-트러블-슈팅)
+# 📜 목차
 
-## 📝 프로젝트 소개
+1. [프로젝트 소개](#📝-프로젝트-소개)
+2. [기능 구현 영상](#💻-기능-구현-영상)
+3. [시스템 아키텍처](#🚧-시스템-아키텍쳐)
+4. [기술 스택](#⚙️-기술-스택)
+5. [팀 소개 및 문서](#👥-팀-소개-및-문서)
+6. [개인별 주요 작업 내역](#📋-개인별-주요-작업-내역)
+7. [프로젝트 구조](#📁-프로젝트-구조)
+8. [주요 기능 상세](#🌟-주요-기능-상세)
+9. [성능 최적화 전략](#🚀-성능-최적화-전략)
+10. [트러블 슈팅](#💣-트러블-슈팅)
 
-Docthru는 개발 관련 영어 문서를 함께 번역하는 챌린지 플랫폼입니다. 영어로 작성된 개발 문서를 한국어로 번역하고, 피드백을 주고받으며 함께 성장하는 공간을 제공합니다.
+<br/>
+<br/>
 
-## 배포 주소
+# 📝 프로젝트 소개
 
-🚀 [DocThru](https://6-docthru-3team-fe-dev.vercel.app/)
+- Docthru는 개발 관련 영어 문서를 함께 번역하며 성장하는 번역 챌린지 플랫폼입니다.
+  혼자 보기엔 어려운 기술 문서도, 함께 번역하고 피드백을 주고받는 과정 속에서 더 쉽게 이해하고, 더 깊이 학습할 수 있도록 돕습니다.
+  개발자들이 지식을 나누고 함께 성장할 수 있는 협업 기반의 번역 커뮤니티를 지향합니다.
 
-### 주요 기능 (추후 gif 로 대체 예정)
+<br/>
+<br/>
+
+# 📦 배포 주소
+
+📄 [DocThru](https://6-docthru-3team-fe.vercel.app/)
+
+<br/>
+<br/>
+
+# 💻 기능 구현 영상
 
 - 번역 챌린지 참여 및 관리
 - 사용자 등급 시스템 (일반/전문가)
@@ -30,13 +46,19 @@ Docthru는 개발 관련 영어 문서를 함께 번역하는 챌린지 플랫�
 - 알림 시스템
 - 관리자 시스템 (챌린지 승인/거절, 콘텐츠 관리)
 
-## 📚 시스템 아키텍처
+<br/>
+<br/>
+
+# 🚧 시스템 아키텍쳐
 
 <div align="center">
   <img src="./public/images/architecture.png" alt="시스템 아키텍처" width="100%" />
 </div>
 
-## ⚙️ 기술 스택
+<br/>
+<br/>
+
+# ⚙️ 기술 스택
 
 ### ✅ Language
 
@@ -58,9 +80,12 @@ Docthru는 개발 관련 영어 문서를 함께 번역하는 챌린지 플랫�
 ![Git](https://img.shields.io/badge/Git-F05032?style=flat&logo=git&logoColor=white)
 ![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)
 
-## 👥 팀 소개 및 문서
+<br/>
+<br/>
 
-### 팀원 소개
+# 👥 팀 소개 및 문서
+
+## 팀원 소개
 
 | 이름   | 역할            | GitHub                                        | 개인 개발 보고서                                                 |
 | ------ | --------------- | --------------------------------------------- | ---------------------------------------------------------------- |
@@ -72,11 +97,14 @@ Docthru는 개발 관련 영어 문서를 함께 번역하는 챌린지 플랫�
 | 김수경 | 🍊 팀원         | [@suKyoung25](https://github.com/suKyoung25/) | [보고서](https://www.notion.so/1f32facab63c806bb835c90523b6869b) |
 | 박민규 | 🍈 프론트마스터 | [@gksktl111](https://github.com/gksktl111/)   | [보고서](https://www.notion.so/1f32facab63c80b4b1c0f468d3656e78) |
 
-### 팀 문서
+## 팀 문서
 
 📝 [팀 노션](https://www.notion.so/1ec2facab63c808d9b80ca0759018768?v=1ec2facab63c8156b3aa000c4b136520)
 
-## 개인별 주요 작업 내역
+<br/>
+<br/>
+
+# 📋 개인별 주요 작업 내역
 
 <details>
 <summary>👑 조성빈 (팀장)</summary>
@@ -106,8 +134,6 @@ Docthru는 개발 관련 영어 문서를 함께 번역하는 챌린지 플랫�
 
 </details>
 
----
-
 <details>
 <summary>🧠 심유빈</summary>
 
@@ -124,8 +150,6 @@ Docthru는 개발 관련 영어 문서를 함께 번역하는 챌린지 플랫�
   - 알림을 클릭하여 읽음 처리 기능 구현
 
 </details>
-
----
 
 <details>
 <summary>🛠 오하영</summary>
@@ -147,8 +171,6 @@ Docthru는 개발 관련 영어 문서를 함께 번역하는 챌린지 플랫�
 
 </details>
 
----
-
 <details>
 <summary>🧩 김홍섭</summary>
 
@@ -161,8 +183,6 @@ Docthru는 개발 관련 영어 문서를 함께 번역하는 챌린지 플랫�
     - 세부 구현 내용
 
 </details>
-
----
 
 <details>
 <summary>🧾 황수정</summary>
@@ -178,8 +198,6 @@ Docthru는 개발 관련 영어 문서를 함께 번역하는 챌린지 플랫�
 
 </details>
 
----
-
 <details>
 <summary>📚 김수경</summary>
 
@@ -193,8 +211,6 @@ Docthru는 개발 관련 영어 문서를 함께 번역하는 챌린지 플랫�
   - UX를 고려한 각 input에 에러 메세지 적용
 
 </details>
-
----
 
 <details>
 <summary>🖊 박민규</summary>
@@ -214,39 +230,35 @@ Docthru는 개발 관련 영어 문서를 함께 번역하는 챌린지 플랫�
 
 </details>
 
-## 📁 프로젝트 구조
+<br/>
+<br/>
+
+# 📁 프로젝트 구조
 
 ```
 src/
 ├── app/              # Next.js 페이지 및 라우팅
+│   ├── (auth)/        # 인증 관련 페이지
+│   ├── (challenge)/   # 챌린지 관련 페이지
+│   └── admin/       # 관리자 페이지
 ├── assets/           # 이미지, 폰트 등 정적 자산
 ├── components/       # 재사용 가능한 공용 컴포넌트
 ├── constant/         # 상수 및 설정 값
 ├── hooks/           # 커스텀 훅
+│   ├── api/        # API 관련 훅
+│   └── common/     # 공통 기능 훅
 ├── layout/          # 레이아웃 컴포넌트
 ├── lib/             # 유틸리티 함수 및 api
+│   ├── api/        # API 관련 설정 및 인터페이스
+│   └── utils/      # 유틸리티 함수
 ├── providers/       # 인증 및 React Query Provider
 └── middleware.js    # Next.js 미들웨어 (인증/인가 처리)
 ```
 
-### 📁 디렉토리 설명
+<br/>
+<br/>
 
-<details>
-<summary>디렉토리 구조 상세 보기</summary>
-
-- **app/**: Next.js의 App Router를 사용한 페이지 및 라우팅 구성
-- **assets/**: 프로젝트에서 사용되는 이미지, 폰트 등의 정적 파일
-- **components/**: 재사용 가능한 UI 컴포넌트
-- **constant/**: 프로젝트 전역에서 사용되는 상수 값 정의
-- **hooks/**: 커스텀 React 훅
-- **layout/**: 페이지 레이아웃 컴포넌트 (헤더, 푸터, 사이드바 등)
-- **lib/**: 유틸리티 함수, API 클라이언트, 헬퍼 함수 등
-- **providers/**: AuthProvider(인증 상태 관리)와 QueryProvider(React Query 설정) 구현
-- **middleware.js**: 인증/인가 처리 및 요청/응답 미들웨어
-
-</details>
-
-## 🌟 주요 기능 상세
+# 🌟 주요 기능 상세
 
 <details>
 <summary>1. 인증 시스템</summary>
@@ -256,8 +268,6 @@ src/
 - 사용자 등급 시스템 (일반/전문가)
 
 </details>
-
----
 
 <details>
 <summary>2. 번역 챌린지</summary>
@@ -270,8 +280,6 @@ src/
 
 </details>
 
----
-
 <details>
 <summary>3. 알림 시스템</summary>
 
@@ -281,8 +289,6 @@ src/
 - 마감 알림
 
 </details>
-
----
 
 <details>
 <summary>4. 등급 시스템</summary>
@@ -296,8 +302,6 @@ src/
 
 </details>
 
----
-
 <details>
 <summary>5. 관리자 기능</summary>
 
@@ -307,7 +311,10 @@ src/
 
 </details>
 
-## 🚀 성능 최적화 전략
+<br/>
+<br/>
+
+# 🚀 성능 최적화 전략
 
 <details>
 <summary>1. 초기 로딩 최적화</summary>
@@ -325,8 +332,6 @@ src/
 
 </details>
 
----
-
 <details>
 <summary>2. 렌더링 성능</summary>
 
@@ -340,8 +345,6 @@ src/
   - 이벤트 핸들러 최적화
 
 </details>
-
----
 
 <details>
 <summary>3. 데이터 관리</summary>
@@ -357,8 +360,6 @@ src/
 
 </details>
 
----
-
 <details>
 <summary>4. 사용자 경험</summary>
 
@@ -373,8 +374,6 @@ src/
   - 무한 스크롤
 
 </details>
-
----
 
 <details>
 <summary>5. 모니터링 및 분석</summary>
@@ -392,55 +391,142 @@ src/
 
 </details>
 
-## 🔧 트러블 슈팅
+<br/>
+<br/>
+
+# 💣 트러블 슈팅
 
 <details>
-<summary>1. 문제 상황 제목</summary>
+<summary>1. [챌린지] 리프레시 토큰 만료 이슈</summary>
 
-- **문제 상황**
+## 🔍 문제 상황
 
-  - 구체적인 문제 상황 설명
+리프레시 토큰이 만료되었을 때 사용자가 자동으로 로그아웃되지 않고, 무한 로딩 상태에 빠지는 현상이 발생
 
-- **문제 원인**
+## ❓ 원인 분석
 
-  - 문제가 발생한 원인 분석
+- 리프레시 토큰 만료 시 처리 로직 부재
+- 에러 핸들링이 제대로 이루어지지 않음
+- 사용자에게 적절한 피드백이 제공되지 않음
 
-- **해결 방법**
-  - 문제 해결을 위해 시도한 방법들
-  - 최종적으로 선택한 해결 방안과 그 이유
-  - 적용 후 개선된 결과
-  </details>
+## ✅ 해결 방법
+
+<div align="center">
+  <img src="./public/images/workTrouble.png" alt="임시 저장 UI" width="100%" />
+</div>
+
+1. **토큰 만료 확인 로직 추가**
+
+   ```typescript
+   const checkTokenExpiration = (token: string) => {
+     // 토큰 만료 체크 로직
+   };
+   ```
+
+2. **에러 핸들링 개선**
+
+   - 만료 시 자동 로그아웃 처리
+   - 사용자에게 알림 메시지 표시
+
+3. **결과**
+   - 토큰 만료 시 자동 로그아웃 및 로그인 페이지 리다이렉트
+   - 사용자 경험 개선
+   </details>
 
 <details>
-<summary>2. 문제 상황 제목</summary>
+<summary>2. [작업물] 임시 저장 시 사용자 피드백 부족</summary>
 
-- **문제 상황**
+## 🔍 문제 상황
 
-  - 구체적인 문제 상황 설명
+- 사용자는 `Ctrl/Cmd + S` 단축키로 **작업물을 임시 저장**할 수 있도록 설계했으나, 저장이 완료되었는지 여부를 **직관적으로 인지할 수 있는 시각적 피드백이 부족**
+- 피드백이 없을경우 사용자는 **"정말 저장이 된 건가?"** 라는 불확실함을 경험함
+- 노션의 저장 UI에서 영감을 얻어 구현
 
-- **문제 원인**
+## ✅ 해결 방법
 
-  - 문제가 발생한 원인 분석
+<div align="center">
+  <img src="./public/images/workTrouble.png" alt="임시 저장 UI" width="100%" />
+</div>
 
-- **해결 방법**
-  - 문제 해결을 위해 시도한 방법들
-  - 최종적으로 선택한 해결 방안과 그 이유
-  - 적용 후 개선된 결과
-  </details>
+1. **로딩 스피너 기반 피드백 구현**
+
+   ```typescript
+   // useDraft 훅 내부 (임시 저장 중 로딩 피드백 처리)
+   updateDraftState("isDrafting", true); // 스피너 표시 시작
+
+   // 로컬스토리지 저장 로직 수행
+
+   timeoutRef.current = setTimeout(() => {
+     updateDraftState("isDrafting", false); // 800ms 뒤 스피너 종료
+   }, 800);
+   ```
+
+2. **시각적 피드백 처리**
+   - 임시 저장 동작 시점에 **로딩 스피너를 잠시 표시**하여 저장 진행 상태 전달
+   - 로컬스토리지 저장의 즉각성을 고려한 인위적 대기 시간(`setTimeout`) 구현
+   - 스피너는 최소 800ms 이상 유지되어 **저장 완료 과정을 시각적으로 인지 가능**하게 함
+
+## 🎯 개선 효과
+
+- 저장 동작에 대한 **즉각적이고 확실한 피드백** 제공
+- 사용자는 로딩 스피너를 통해 **"지금 저장 중이구나" → "저장 완료" 흐름을 명확하게 인지**
+- 빠르게 반복되는 작업 흐름에서도 **심리적 안정감과 시스템 신뢰성** 확보
+</details>
 
 <details>
-<summary>3. 문제 상황 제목</summary>
+<summary>3. [어드민] 유저 정보 조회 에러</summary>
 
-- **문제 상황**
+## 🔍 문제 상황
 
-  - 구체적인 문제 상황 설명
+<div align="center">
+  <img src="./public/images/admiTrouble1.png" alt="에러 상황" width="100%" />
+</div>
 
-- **문제 원인**
+- 로그인 시 accessToken은 `HttpOnly` 쿠키로 저장되지만, 유저 정보 조회 요청 시 accessToken을 읽지 못해 인증 실패
+- 클라이언트에서 `credentials: "include"` 로 쿠키를 자동 전송했지만, 여전히 유저 정보 조회 시 role, grade 등의 정보가 누락됨
+- 백엔드에서 토큰 누락으로 인증 실패 처리되어 401 에러 발생
 
-  - 문제가 발생한 원인 분석
+## ❓ 원인 분석
 
-- **해결 방법**
-  - 문제 해결을 위해 시도한 방법들
-  - 최종적으로 선택한 해결 방안과 그 이유
-  - 적용 후 개선된 결과
-  </details>
+1. **쿠키 접근 제한**
+
+   - `HttpOnly` 쿠키는 클라이언트(`document.cookie`)에서 직접 접근 불가
+   - 기존 방식처럼 클라이언트에서 accessToken을 꺼내 `Authorization` 헤더로 전달할 수 없음
+
+2. **토큰 전달 실패**
+   - accessToken은 쿠키에 있지만 클라이언트가 읽을 수 없어 헤더에 넣지 못함
+   - 백엔드는 토큰이 누락된 것으로 판단하여 인증 실패 처리
+
+## ✅ 해결 방법
+
+<div align="center">
+  <img src="./public/images/admiTrouble2.png" alt="해결 방안" width="100%" />
+</div>
+
+1. **컴포넌트 계층 구조 재설계**
+
+   - 서버 액션(`getUserAction`) → 서버 컴포넌트(`UserService`) → 클라이언트 컴포넌트(`AuthProvider`) 로직 분리
+   - 각 계층의 역할과 책임을 명확히 구분
+
+2. **서버 액션에서 토큰 처리**
+
+   ```typescript
+   const getUserAction = async () => {
+     const cookies = headers().get("cookie");
+     // 서버 액션에서 쿠키를 읽어 요청 헤더에 수동 삽입
+     const response = await fetch(`${API_URL}/users/me`, {
+       method: "GET",
+       headers: {
+         "Content-Type": "application/json",
+         Cookie: `accessToken=${accessToken}`
+       }
+     });
+     // ... 응답 처리
+   };
+   ```
+
+3. **결과**
+   - 서버 액션에서 안전하게 쿠키 접근 및 토큰 처리
+   - 클라이언트는 서버 액션의 결과로 받은 유저 정보 사용
+   - 보안성을 유지하면서도 정상적인 인증 플로우 구현
+   </details>
