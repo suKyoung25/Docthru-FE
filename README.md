@@ -5,6 +5,7 @@
 # 어려운 영어 공식문서! 같이 공부해 보실래요? 독스루 보러가기 -> [DocThru](https://6-docthru-3team-fe.vercel.app/)
 
 ### Back-end 깃허브 [Back-end](https://github.com/JJOBO/6-Docthru-3team-BE/tree/dev)
+### 원본 레포지토리 [https://github.com/JJOBO/6-Docthru-3team-FE#]
 
 # 📜 목차
 
